@@ -1,0 +1,60 @@
+<header>
+  <!-- Usuario -->
+  <nav class="nav-user"> <!-- User -->
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/login" ng-reflect-router-link="login" href="/login">
+                    <i class="fas fa-user"></i>
+                    &nbsp;Iniciar Sesión
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-heart"></i>
+                    &nbsp;Mi Lista
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Registro
+                </a>
+            </li>
+        </ul>
+  </nav>
+
+  <!-- Logo Buscar Carrito-->
+  <div class="container">
+    <!-- logo -->
+    <img src="images/Icono.png" alt="Logotipo" width="60px">
+
+    <!-- Buscar -->
+    <label class="open-search" for="open-search">
+      <i class="fas fa-search"></i>
+            <input class="input-open-search" id="open-search" type="checkbox" name="menu" />
+      <div class="search">
+        <button class="button-search"><i class="fas fa-search"></i></button>
+        <input type="text" placeholder="Buscar" class="input-search"/>
+      </div>
+    </label>
+    <a class="cart-link" routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito">
+        <i class="fas fa-shopping-cart"></i>
+    </a>
+    
+  </div>
+
+  <!-- Navegacion Categorias-->
+  <nav class="nav-categories"> 
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" routerLink="/inicio" ng-reflect-router-link="inicio" href="/inicio">Inicio</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" routerLink="/producto" ng-reflect-router-link="producto" href="/producto">Productos</a>
+        </li>
+    </ul>
+  </nav>
+
+</header>
+
+ 

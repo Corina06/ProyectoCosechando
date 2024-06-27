@@ -1,0 +1,15 @@
+/*
+===========================================
+    Footer
+===========================================
+*/
+.footer {
+    background-color: #385723 ;
+    color: white;
+    text-align: center;
+    height: 40px;
+}
+
+.footer p {
+    margin: 8px 0 0 0;
+}
