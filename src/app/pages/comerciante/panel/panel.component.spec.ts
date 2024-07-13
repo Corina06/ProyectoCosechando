@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InicioadminComponent } from './inicioadmin.component';
+import { PanelComponent } from './panel.component';
 
-describe('InicioadminComponent', () => {
-  let component: InicioadminComponent;
-  let fixture: ComponentFixture<InicioadminComponent>;
+describe('PanelComponent', () => {
+  let component: PanelComponent;
+  let fixture: ComponentFixture<PanelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InicioadminComponent]
+      imports: [PanelComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InicioadminComponent);
+    fixture = TestBed.createComponent(PanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -10,7 +10,7 @@ import { DetalleproductoComponent } from './pages/cliente/detalleproducto/detall
 //Rutas Comerciante
 import { PedidosComponent } from './pages/comerciante/pedidos/pedidos.component';
 import { ProductosComponent } from './pages/comerciante/productos/productos.component';
-import { InicioadminComponent } from './pages/comerciante/inicioadmin/inicioadmin.component';
+import { PanelComponent } from './pages/comerciante/panel/panel.component';
 import { InventarioComponent } from './pages/comerciante/inventario/inventario.component';
 //Rutas Cuenta
 import { LoginComponent } from './pages/cuenta/login/login.component';
@@ -28,7 +28,7 @@ export const routes: Routes = [
    //Rutas Comerciante
    {path: 'pedidos', component: PedidosComponent},
    {path: 'productos', component: ProductosComponent},
-   {path: 'inicioadmin', component: InicioadminComponent},
+   {path: 'panel', component: PanelComponent},
    {path: 'inventario', component: InventarioComponent},
    //Rutas Cuenta
    {path: 'login', component: LoginComponent},

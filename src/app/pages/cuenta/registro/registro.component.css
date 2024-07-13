@@ -41,11 +41,16 @@ body {
   color: #333;
   font-weight: 600;
   transition: all 0.8s ease-out;
+  text-decoration: none;
 }
 
 .container .btn:hover {
   background-color: #2B3357 ;
   color: #fff;
+  
 }
 
+.container .btn:a {
+  text-decoration: none;
+}
 
