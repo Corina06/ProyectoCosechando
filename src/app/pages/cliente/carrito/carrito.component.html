@@ -1,1 +1,174 @@
-<p>carrito works!</p>
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+    <div class="text-center text-white display-6">
+        <h1>Carrito de Compras</h1>
+    </div>
+    
+</div>
+<!-- Single Page Header End -->
+
+<!-- Cart Page Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Productos</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Eliminar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <div class="d-flex align-items-center">
+                                <img src="images/banana.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                            </div>
+                        </th>
+                        <td>
+                            <p class="mb-0 mt-4">Guineo Nacional</p>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">2.99 $</p>
+                        </td>
+                        <td>
+                            <div class="input-group quantity mt-4" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                    <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">2.99 $</p>
+                        </td>
+                        <td>
+                            <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                        </td>
+                    
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <div class="d-flex align-items-center">
+                                <img src="images/papa.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
+                            </div>
+                        </th>
+                        <td>
+                            <p class="mb-0 mt-4">Papas</p>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">2.99 $</p>
+                        </td>
+                        <td>
+                            <div class="input-group quantity mt-4" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                    <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">2.99 $</p>
+                        </td>
+                        <td>
+                            <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <div class="d-flex align-items-center">
+                                <img src="images/brocoli.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
+                            </div>
+                        </th>
+                        <td>
+                            <p class="mb-0 mt-4">Brocoli</p>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">2.99 $</p>
+                        </td>
+                        <td>
+                            <div class="input-group quantity mt-4" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                    <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="mb-0 mt-4">2.99 $</p>
+                        </td>
+                        <td>
+                            <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                                <i class="fa fa-times text-danger"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__btns">
+                    <a href="#" class="primary-btn cart-btn"><span class="fa fa-shopping-cart"></span>Continuar Comprando</a>
+                    <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="fa fa-spinner"></span>
+                        Actualizar Carrito</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="shoping__continue">
+                    <div class="shoping__discount">
+                        <h5>Código de Descuento</h5>
+                        <form action="#">
+                            <input type="text" placeholder="Ingresa tu código">
+                            <button type="submit" class="site-btn">Aplicar Cupón</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="shoping__checkout">
+                    <h5>Total de Compra</h5>
+                    <ul>
+                        <li>Subtotal <span>$454.98</span></li>
+                        <li>Total <span>$454.98</span></li>
+                    </ul>
+                    <a class="primary-btn" routerLink="/checkout" ng-reflect-router-link="checkout" href="/checkout">Proceder Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Cart Page End -->
+
+
+
+
