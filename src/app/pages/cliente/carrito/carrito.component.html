@@ -1,15 +1,15 @@
-<!-- Single Page Header start -->
-<div class="container-fluid page-header py-5">
-    <div class="text-center text-white display-6">
-        <h1>Carrito de Compras</h1>
+<header class="bg-image py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="content">
+            <h1 class="display-4 fw-bolder">Carrito de Compras</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Verifica los productos que has seleccionado</p>
+        </div>
     </div>
-    
-</div>
-<!-- Single Page Header End -->
+</header>
 
 <!-- Cart Page Start -->
 <div class="container-fluid py-5">
-    <div class="container py-5">
+    <div class="borde py-5">
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -138,8 +138,8 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="shoping__cart__btns">
-                    <a href="#" class="primary-btn cart-btn"><span class="fa fa-shopping-cart"></span>Continuar Comprando</a>
-                    <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="fa fa-spinner"></span>
+                    <a routerLink="/producto" ng-reflect-router-link="producto" href="/producto" class="primary-btn cart-btn"><span class="fa fa-shopping-cart"></span>Continuar Comprando</a>
+                    <a routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito" class="primary-btn cart-btn cart-btn-right"><span class="fa fa-spinner"></span>
                         Actualizar Carrito</a>
                 </div>
             </div>
