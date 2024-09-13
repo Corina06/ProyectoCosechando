@@ -8,6 +8,7 @@ import { CarritoComponent } from './pages/cliente/carrito/carrito.component';
 import { ProductoComponent } from './pages/cliente/producto/producto.component';
 import { DetalleproductoComponent } from './pages/cliente/detalleproducto/detalleproducto.component';
 //Rutas Comerciante
+import { NavcomerComponent } from './pages/comerciante/navcomer/navcomer.component';
 import { PedidosComponent } from './pages/comerciante/pedidos/pedidos.component';
 import { ProductosComponent } from './pages/comerciante/productos/productos.component';
 import { PanelComponent } from './pages/comerciante/panel/panel.component';
@@ -26,6 +27,7 @@ export const routes: Routes = [
    {path: 'producto', component: ProductoComponent},
    {path: 'detalleproducto', component: DetalleproductoComponent},
    //Rutas Comerciante
+   {path: 'navcomer', component: NavcomerComponent},
    {path: 'pedidos', component: PedidosComponent},
    {path: 'productos', component: ProductosComponent},
    {path: 'panel', component: PanelComponent},

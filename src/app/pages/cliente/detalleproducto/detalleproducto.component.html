@@ -1,1 +1,80 @@
-<p>detalleproducto works!</p>
+<!-- Product Details Section Begin -->
+<section class="product-details spad">
+    <div class="borde">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__pic">
+                    <div class="product__details__pic__item">
+                        <img class="product__details__pic__item--large"
+                            src="images/fresa.jpg" width="250px" height="250px">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__text">
+                    <h3>Fresa</h3>
+                    <div class="product__details__price">$50.00</div>
+                    <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam
+                        vehicula elementum sed sit amet dui. Sed porttitor lectus nibh. Vestibulum ac diam sit amet
+                        quam vehicula elementum sed sit amet dui. Proin eget tortor risus.</p>
+                    <div class="product__details__quantity">
+                    
+                        <div class="quantity">
+                            <div class="pro-qty">
+                                <input type="text" value="1">
+                            </div>
+                        </div>
+                    </div>
+                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal" class="primary-btn">AÑADIR</a>
+                    
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Información del Comerciante</h5>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Nombre: Juan Pérez</li>
+                            <li class="list-group-item">Celular: 63457890</li>
+                            <li class="list-group-item">Dirección: Nave Cerro Punta, Local #223</li>
+                          </ul>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product__details__text">
+                    <ul>
+                        <li><b>Disponibilidad</b> <span>In Stock</span></li>
+                        <li><b>Envío</b> <span>Según el cliente</span></li>
+                        <li><b>Peso</b> <span>0.5 kg</span></li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Details Section End -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Mensaje</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>Se ha añadido el producto al carrito</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Continuar Comprando</button>
+          <a class="btn btn-success" routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito">Ver Carrito</a>
+        </div>
+      </div>
+    </div>
+  </div>

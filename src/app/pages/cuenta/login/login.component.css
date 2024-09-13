@@ -26,6 +26,7 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  
 }
 
 .wrapper h1 {
@@ -89,17 +90,18 @@ body {
 
 .wrapper .btn {
   width: 100%;
-  height: 45px;
+  height: 50px;
   background-color: #fff;
   border: none;
   outline: none;
-  border-radius: 40px;
+  border-radius: 140px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   font-size: 16px;
   color: #333;
   font-weight: 600;
   transition: all 0.8s ease-out;
+  line-height: 50px;
 }
 
 .wrapper .btn:hover {

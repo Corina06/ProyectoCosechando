@@ -3,21 +3,9 @@
   <nav class="nav-user"> <!-- User -->
         <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" routerLink="/login" ng-reflect-router-link="login" href="/login">
+                <a class="cart-link" routerLink="/login" ng-reflect-router-link="login" href="/login">
                     <i class="fas fa-user"></i>
                     &nbsp;Iniciar Sesión
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-heart"></i>
-                    &nbsp;Mi Lista
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Registro
                 </a>
             </li>
         </ul>
@@ -37,20 +25,21 @@
         <input type="text" placeholder="Buscar" class="input-search"/>
       </div>
     </label>
+    <div>
     <a class="cart-link" routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito">
         <i class="fas fa-shopping-cart"></i>
     </a>
-    
+    </div>
   </div>
 
   <!-- Navegacion Categorias-->
   <nav class="nav-categories"> 
     <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/inicio" ng-reflect-router-link="inicio" href="/inicio">Inicio</a>
+        <li class="nav-link">
+            <a class="" routerLink="/inicio" ng-reflect-router-link="inicio" href="/inicio">Inicio</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/producto" ng-reflect-router-link="producto" href="/producto">Productos</a>
+        <li class="nav-link">
+            <a  routerLink="/producto" ng-reflect-router-link="producto" href="/producto">Productos</a>
         </li>
     </ul>
   </nav>
