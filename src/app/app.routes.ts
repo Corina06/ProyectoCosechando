@@ -1,5 +1,6 @@
 
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core'; 
+import { RouterModule, Routes } from '@angular/router';
 //Rutas Cliente
 import { InicioComponent } from './pages/cliente/inicio/inicio.component';
 import { PedidoComponent } from './pages/cliente/pedido/pedido.component';
@@ -16,7 +17,7 @@ import { InventarioComponent } from './pages/comerciante/inventario/inventario.c
 //Rutas Cuenta
 import { LoginComponent } from './pages/cuenta/login/login.component';
 import { RegistroComponent } from './pages/cuenta/registro/registro.component';
-import { NgModule } from '@angular/core';
+
 
 export const routes: Routes = [
    //Rutas Cliente
@@ -38,3 +39,9 @@ export const routes: Routes = [
    {path: '**', redirectTo: '', pathMatch: 'full' },
 
 ];
+
+@NgModule({
+   imports: [RouterModule.forRoot(routes)],
+   exports: [RouterModule]
+ })
+ export class AppRoutingModule { }
