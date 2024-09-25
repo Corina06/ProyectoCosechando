@@ -1,6 +1,6 @@
 <body>
 <div class="container mt-6">
-    <form>
+    <form (submit)="register()">
       <div class="row jumbotron box8">
         <div class="title">
           <h1> Registro </h1>
@@ -8,56 +8,56 @@
         <h5>Datos Personales</h5>
         <div class="col-sm-6 form-group">
           <label for="name-f">Nombre</label>
-          <input type="text" class="form-control" name="fname" id="name-f" placeholder="Ingrese su nombre" required>
+          <input type="text" class="form-control" [(ngModel)]="name" name="nombre" id="nombre" placeholder="Ingrese su nombre" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="name-l">Apellido</label>
-          <input type="text" class="form-control" name="lname" id="name-l" placeholder="Ingrese su apellido" required>
+          <input type="text" class="form-control" [(ngModel)]="apellido" name="apellido" id="apellido" placeholder="Ingrese su apellido" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="email">Correo Electrónico</label>
-          <input type="email" class="form-control" name="email" id="email" placeholder="Ingrese su correo electrónico" required>
+          <input type="email" class="form-control" [(ngModel)]="email" name="email" id="email" placeholder="Ingrese su correo electrónico" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="address-1">Dirección</label>
-          <input type="address" class="form-control" name="Locality" id="address-1" placeholder="Distrito, Corregimiento, Calle, Casa" required>
+          <input type="address" class="form-control" [(ngModel)]="direccion" name="Locality" id="address-1" placeholder="Distrito, Corregimiento, Calle, Casa" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="name-p">Nombre del Puesto</label>
-          <input type="address" class="form-control" name="address" id="address-2" placeholder="Nombre de su local" required>
+          <input type="address" class="form-control" [(ngModel)]="local" name="address" id="address-2" placeholder="Nombre de su local" required>
         </div>
         <div class="col-sm-4 form-group">
           <label for="ubicacion">Ubicación del puesto</label>
-          <input type="address" class="form-control" name="ubicacion" id="ubicacion" placeholder="¿Cómo llegar a su local?" required>
+          <input type="address" class="form-control" [(ngModel)]="puesto" name="ubicacion" id="ubicacion" placeholder="¿Cómo llegar a su local?" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="Country">Celular</label>
-          <input type="tel" name="phone" class="form-control" id="tel" placeholder="Número de Contacto" required>
+          <input type="tel" name="phone" class="form-control" [(ngModel)]="celular" id="tel" placeholder="Número de Contacto" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="Date">Fecha de Nacimiento</label>
-          <input type="Date" name="dob" class="form-control" id="Date" placeholder="" required>
+          <input type="Date" name="dob" class="form-control" [(ngModel)]="fecha" id="Date" placeholder="" required>
         </div>
 
         <h5>Datos para Deposito Bancario</h5>
         <div class="col-sm-6 form-group">
           <label for="name-banco">Nombre del Banco</label>
-          <input type="name-banco" name="dob" class="form-control" id="name-banco" placeholder="Ingrese el nombre del banco" required>
+          <input type="name-banco" name="dob" class="form-control" [(ngModel)]="banco" id="name-banco" placeholder="Ingrese el nombre del banco" required>
         </div>
         <div class="col-sm-2 form-group">
           <label for="cuenta">Tipo de Cuenta</label>
-          <select id="cuenta" class="form-control browser-default custom-select" name="cuenta">
+          <select id="cuenta" class="form-control browser-default custom-select" [(ngModel)]="tipo" name="cuenta">
             <option value="ahorro">Ahorro</option>
             <option value="corriente">Corriente</option>
           </select>
         </div>
         <div class="col-sm-4 form-group">
           <label for="num">Número de Cuenta</label>
-          <input type="num" name="num" class="form-control" id="tel" placeholder="Ingrese su número de cuenta" required>
+          <input type="num" name="num" class="form-control" [(ngModel)]="cuenta" id="tel" placeholder="Ingrese su número de cuenta" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="pass">Contraseña</label>
-          <input type="Password" name="password" class="form-control" id="pass" placeholder="Ingrese su contraseña" required>
+          <input type="Password" name="password" class="form-control" [(ngModel)]="password" id="pass" placeholder="Ingrese su contraseña" required>
         </div>
         <div class="col-sm-6 form-group">
           <label for="pass2">Confirmar Contraseña</label>
@@ -65,7 +65,7 @@
         </div>
         <div class="col-sm-12 form-group mb-0">
           <br>
-          <a class="btn" routerLink="['/login']" ng-reflect-router-link="login" href="/login" >Registrar</a>
+          <button type="submit" class="btn" routerLink="['/login']" ng-reflect-router-link="login" href="/login" >Registrar</button>
         </div>
         
       </div>
