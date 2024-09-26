@@ -49,9 +49,11 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-  console.log('Login endpoint alcanzado'); // Log de prueba
+
   const { email, password } = req.body;
 
+  console.log('Login endpoint alcanzado'); // Log de prueba
+  
   // Agregar logs para depurar
   console.log('Email recibido:', email);
   console.log('Contraseña recibida:', password);

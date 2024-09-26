@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -15,17 +17,20 @@ export class LoginComponent {
 
   constructor(private authService: AuthService) {}
 
-  login() {
+  onLogin() {
     this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        console.log('Login exitoso', response);
-        // Aquí puedes redirigir al usuario o mostrar un mensaje
-      },
-      error: (error) => {
-        console.error('Error en login', error);
-        // Maneja el error de login
-      }
-    });
+       next: (response) => {
+         // Lógica de autenticación
+         console.log('Login exitoso', response);
+         
+         // Redirige al panel después del login exitoso
+         //this.router.navigate(['/panel']); 
+       },
+       error: (error) => {
+         console.error('Error en Iniciar Sesion', error);
+         // Maneja el error de login
+       }
+     });
   }
-  
+ 
 }
