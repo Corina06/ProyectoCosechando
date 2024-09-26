@@ -3,6 +3,7 @@ const express = require('express');
 const User = require('../models/user');
 //const jwt = require('jsonwebtoken'); // Para manejar tokens JWT
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 // Registro
 router.post('/register', async (req, res) => {
@@ -16,6 +17,10 @@ router.post('/register', async (req, res) => {
    if (existingUser) {
      return res.status(400).json({ message: 'El usuario ya existe' });
    }
+
+   // Hashear la contraseña antes de guardarla
+  const hashedPassword = await bcrypt.hash(password, 10);
+
  
    // Crear nuevo usuario
    const newUser = new User({
@@ -30,7 +35,7 @@ router.post('/register', async (req, res) => {
      banco,
      tipo,
      cuenta,
-     password,
+     password: hashedPassword, // Usar la contraseña hasheada,
    });
  
    try{
@@ -44,7 +49,14 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
+  console.log('Login endpoint alcanzado'); // Log de prueba
   const { email, password } = req.body;
+
+  // Agregar logs para depurar
+  console.log('Email recibido:', email);
+  console.log('Contraseña recibida:', password);
+
+  // Verificar si el usuario existe
   try {
     const user = await User.findOne({ email });
    
@@ -61,7 +73,8 @@ router.post('/login', async (req, res) => {
     res.status(200).json({ message: 'Login exitoso', user });
 
   } catch (error) {
-    res.status(400).send({ error: 'Error en Login' });
+    console.error('Error en el login:', error); // Agrega esta línea
+    res.status(500).send({ error: 'Error en Login', details: error.message }); // Muestra detalles del error
   }
 });
 

@@ -15,7 +15,7 @@ export class LoginComponent {
 
   constructor(private authService: AuthService) {}
 
-  onLogin() {
+  login() {
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         console.log('Login exitoso', response);

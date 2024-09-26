@@ -44,18 +44,15 @@ export class RegistroComponent {
       password: this.password,
     };
     
-    // // // // );
-    // Aquí puedes llamar al servicio de autenticación para registrar al usuario
-    this.authService.register(userData)
-    .subscribe({ next: response => {
+     // Aquí puedes llamar al servicio de autenticación para registrar al usuario
+    this.authService.register(userData).subscribe({
+      next: response => {
         console.log('Registro exitoso', response);
-      }, 
-      error: error => {
-        console.error('Error en registro', error);
       },
-      complete: () => {
-        console.log('Registro completado');
-      }  
-  });
+      error: err => {
+        console.error('Error en el registro', err);
+      }
+    });
+
  }
 }

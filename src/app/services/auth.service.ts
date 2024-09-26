@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-interface LoginResponse {  // Define la interfaz aquí
-  token: string;
-}
+// interface LoginResponse {  // Define la interfaz aquí
+//   token: string;
+// }
 
 @Injectable({
   providedIn: 'root'
