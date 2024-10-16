@@ -1,3 +1,5 @@
+<app-nav></app-nav>
+
 <header class="bg-image py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="content">
@@ -125,7 +127,8 @@
                             
                             
                             
-                            <button type="submit" class="btn btn-success">ENVIAR ORDEN</button>
+                            <button type="submit" class="btn btn-success">
+                                <a data-bs-toggle="modal" data-bs-target="#exampleModal">ENVIAR ORDEN</a></button>
                         </div>
                     </div>
                 </div>
@@ -134,3 +137,21 @@
     </div>
 </section>
 <!-- Checkout Section End -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Mensaje</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>Su orden ha sido enviada</p>
+        </div>
+        <div class="modal-footer">
+          <a class="btn btn-success" routerLink="/inicio" ng-reflect-router-link="inicio" href="/inicio">Aceptar</a>
+        </div>
+      </div>
+    </div>
+  </div>

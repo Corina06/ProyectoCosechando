@@ -1,6 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
+/* Webpixels CSS */
+/* Utility and component-centric Design System based on Bootstrap for fast, responsive UI development */
+/* URL: https://github.com/webpixels/css */
+
+
 /*
 ===========================================
     NAVBAR
@@ -64,6 +69,7 @@
   .cart-link {
     text-decoration: none; 
 	color: #385723 ;
+	margin-right: 15px;
   }
   
   .cart-link:hover {
@@ -74,23 +80,20 @@
     Nav Usuario
 ===========================================
 */
-.nav-user {
+
+.header{
   background-color: #385723 ;
   padding-right: 20%;
   color: white;
 }
 
-.nav-user a {
+.header a {
   text-align: center;
   font-size: 80%;
   color: inherit;
   padding: 3px 10px;
+  text-decoration: none ;
   
-}
-
-.nav-user .nav-item:hover {
-  background-color: white;
-  color: #385723 ;
 }
 
 /*
@@ -117,17 +120,70 @@
 }
 
 
-/*---------------------
- INICIO
------------------------*/
+  /*
+===========================================
+    Inicio
+===========================================
+*/
+.img-fluid {
+	max-width: 100%; /* Limita el ancho para que sea responsivo */
+    margin-bottom: 200px; /* Espacio debajo de la imagen */
+}
+/*** Hero Header ***/
+.container-fluid {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 
-/*** Banner ***/
+}
 .hero-header {
     background: linear-gradient(rgba(248, 223, 173, 0.1), rgba(248, 223, 173, 0.1)), url(/images/hero-img.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-	text-align: center;
+}
+
+.carousel-item {
+    position: relative;
+	height: 100%;
+	object-fit: cover;
+}
+
+.carousel-item a {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 25px;
+    background: linear-gradient(rgba(255, 181, 36, 0.7), rgba(255, 181, 36, 0.7));
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+    width: 48px;
+    height: 48px;
+    border-radius: 48px;
+    border: 1px solid var(--bs-white);
+    background: var(--bs-primary);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-next {
+    margin-right: 20px;
+}
+
+.carousel-control-prev {
+    margin-left: 20px;
+}
+
+.page-header {
+    position: relative;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(/images/cart-page-header-img.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 @media (min-width: 992px) {
@@ -137,14 +193,37 @@
     }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
     .hero-header,
     .page-header {
-        margin-top: 97px !important;
+        margin-top: 50px !important;
     }
 }
-/*** Banner Fin ***/
+/*** Hero Header end ***/
 
+/*** Facts Start ***/
+.counter {
+    height: 100%;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+}
+
+.counter i {
+    font-size: 60px;
+    margin-bottom: 25px;
+	color:#385723
+}
+
+.counter h4 {
+    color: #572C1A ;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.counter h1 {
+    margin-bottom: 0;
+}
+/*** Facts End ***/
 
 /*** Button ***/
 .btn {
@@ -368,6 +447,7 @@
 	height: 250px;
 	position: relative;
 	overflow: hidden;
+	
 }
 
 .featured__item__pic__hover {
@@ -385,7 +465,7 @@
 .featured__item__pic__hover li {
 	list-style: none;
 	display: inline-block;
-	margin-right: 15px;
+	margin-right: 50px;
 }
 
 .featured__item__pic__hover li:last-child {
@@ -1054,3 +1134,161 @@
 /*---------------------
  PANEL
 -----------------------*/
+
+/*Nav-Comerciante*/
+.nav-item :hover {
+	background-color: white;	
+	color: #385723;
+	
+}
+
+.nav-item-color {
+	color: #385723;
+}
+
+.nav-link {
+	font-style: bold;
+	color: green;
+}
+
+.nav-link-text:hover {
+	color: red;
+	background-color: blue;
+}
+
+.content-nav li a {
+	background-color: red;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/*Tabla*/
+
+th {
+    cursor: pointer; /* Cambia el cursor al pasar sobre los encabezados */
+}
+
+th:hover {
+    background-color: #f1f1f1; /* Cambia el fondo al pasar el mouse */
+}
+
+/** Ajustes **/
+
+
+
+/*** featurs Start ***/
+.featurs .featurs-item .featurs-icon {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.featurs .featurs-item .featurs-icon::after {
+    content: "";
+    width: 35px;
+    height: 35px;
+    background: var(--bs-secondary);
+    position: absolute;
+    bottom: -10px;
+    transform: translate(-50%);
+    transform: rotate(45deg);
+    background: var(--bs-secondary);
+    
+}
+/*** featurs End ***/
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+	margin-bottom: 4rem;
+  }
+  /* Since positioning the image, we need to help out the caption */
+  .carousel-caption {
+	bottom: 3rem;
+	z-index: 10;
+  }
+  
+  /* Declare heights because of positioning of img element */
+  .carousel-item {
+	height: 32rem;
+	background-color: #777;
+  }
+  .carousel-item > img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	min-width: 100%;
+	height: 32rem;
+  }
+  
+  
+  /* MARKETING CONTENT
+  -------------------------------------------------- */
+  
+  /* Center align the text within the three columns below the carousel */
+  .marketing .col-lg-4 {
+	margin-bottom: 1.5rem;
+	text-align: center;
+  }
+  .marketing h2 {
+	font-weight: 400;
+  }
+  .marketing .col-lg-4 p {
+	margin-right: .75rem;
+	margin-left: .75rem;
+  }
+  
+  
+  /* Featurettes
+  ------------------------- */
+  
+  .featurette-divider {
+	margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+  }
+  
+  /* Thin out the marketing headings */
+  .featurette-heading {
+	font-weight: 300;
+	line-height: 1;
+	letter-spacing: -.05rem;
+  }
+  
+  
+  /* RESPONSIVE CSS
+  -------------------------------------------------- */
+  
+  @media (min-width: 40em) {
+	/* Bump up size of carousel content */
+	.carousel-caption p {
+	  margin-bottom: 1.25rem;
+	  font-size: 1.25rem;
+	  line-height: 1.4;
+	}
+  
+	.featurette-heading {
+	  font-size: 50px;
+	}
+  }
+  
+  @media (min-width: 62em) {
+	.featurette-heading {
+	  margin-top: 7rem;
+	}
+  }
+  
+  /*
+===========================================
+    Footer
+===========================================
+*/
+/*==========Footer========*/
+.footer{
+    background:#385723 ;
+    text-align: center;
+	padding: 10px;
+}
+.footer p{
+color: #fff;
+}

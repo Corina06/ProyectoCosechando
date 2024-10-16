@@ -1,62 +1,123 @@
- <!-- Hero Start -->
+<app-nav></app-nav>
+<body>
 
-<div>
- <div class="container-fluid py-5 mb-5 hero-header">
-    <div>
-            <div>
-                <h4 class="mb-3">100% Productos Frescos</h4>
-                <h2 class="mb-5 display-3 text-success">Productos para tus mejores comidas</h2>
-            </div>
-    </div>
-    
-</div>
-<!-- Hero End -->
+    <!--Header===-->
+    <header class="header">
+        <div class="hero">
+            <h1 class="title">Productos 100% Frescos</h1>
 
-<div class="container-fluid featurs">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="featurs-item text-center rounded bg-light p-4">
-                <div class="featurs-icon btn-square rounded-circle mb-5 mx-auto">
-                    <i class="fas fa-car-side fa-3x text-white"></i>
-                </div>
-                <div class="featurs-content text-center">
-                    <h5>Envío Gratis</h5>
-                    <p class="mb-0">Pedidos superior a $50.00</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="featurs-item text-center rounded bg-light p-4">
-                <div class="featurs-icon btn-square rounded-circle mb-5 mx-auto">
-                    <i class="fas fa-user-shield fs-1 text-white"></i>
-                </div>
-                <div class="featurs-content text-center">
-                    <h5>Pago Seguro</h5>
-                    <p class="mb-0">Pago 100% seguro</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="featurs-item text-center rounded bg-light p-4">
-                <div class="featurs-icon btn-square rounded-circle mb-5 mx-auto">
-                    <i class="fa-solid fa-basket-shopping fa-3x text-white"></i>
-                </div>
-                <div class="featurs-content text-center">
-                    <h5>Calidad Garantizada</h5>
-                    <p class="mb-0">Productos de calidad y frescos</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="featurs-item text-center rounded bg-light p-4">
-                <div class="featurs-icon btn-square rounded-circle mb-5 mx-auto">
-                    <i class="fa fa-phone-alt fa-3x text-white"></i>
-                </div>
-                <div class="featurs-content text-center">
-                    <h5>Atención 24/7</h5>
-                    <p class="mb-0">Atención inmediata</p>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
+    </header>
+    <!--End of Header==================-->
+     <!---=====About Section=====-->
+      <section id="about">
+       <div>
+       <h2 class="title-text">Sobre Nosotros</h2>
+    </div>
+    <div class="about-center">
+        <!---Single item-->
+        <article class="about">
+            <div class="about-icon"><i class="fas fa-apple-whole"></i></div>
+            <div class="about-text">
+                <h2 class="about-subtitle">Frutas</h2>
+                <p class="about-info">Encuentra una variedad de frutas frescas 
+                    y jugosas, desde manzanas y guineos hasta deliciosas piñas y mangos, perfectas para batidos y postres.</p>
+            </div>
+        </article>
+        <!--End of single item-->
+        <!---Single item-->
+        <article class="about">
+            <div class="about-icon"><i class="fas fa-carrot"></i></div>
+            <div class="about-text">
+                <h2 class="about-subtitle">Vegetales</h2>
+                <p class="about-info">Explora una colorida selección de vegetales frescos, 
+                    desde lechugas y espinacas hasta tomates y cebolla, perfectos para ensaladas y guisos.</p>
+            </div>
+        </article>
+        <!--End of single item-->
+        <!---Single item-->
+        <article class="about">
+            <div class="about-icon"><i class="fas fa-seedling"></i></div>
+            <div class="about-text">
+                <h2 class="about-subtitle">Legumbres</h2>
+                <p class="about-info">Compra legumbres ricas en proteínas, 
+                    como lentejas y garbanzos, ideales para guisos, ensaladas y platillos vegetarianos.</p>
+            </div>
+        </article>
+        <!--End of single item-->
+        <!---Single item-->
+        <article class="about">
+            <div class="about-icon"><i class="fas fa-wheat-awn"></i></div>
+            <div class="about-text">
+                <h2 class="about-subtitle">Raíces</h2>
+                <p class="about-info">Descubre raíces frescas como yuca 
+                    y otoe, perfectas para nuestras comidas, añadiendo sabor y nutrición.</p>
+            </div>
+        </article>
+        <!--End of single item-->
+    </div>
+   </section>
+
+   <!--=====End of About Section============-->
+   <!---Menu Section---=========-->
+   <section class="menu" id="menu">
+       <article class="menu-image"></article>
+       <article class="menu-text">
+           <div class="menu-text-center">
+               <h1>Nuestros Productos</h1>
+               <p>Cada uno de nuestros productos está cuidadosamente 
+                seleccionado para ofrecerte lo mejor de la naturaleza, ayudándote a disfrutar de una dieta saludable y deliciosa. ¡Explora nuestro catálogo y encuentra tus favoritos!</p>
+                <a  routerLink="/producto" ng-reflect-router-link="producto" href="/producto">Explorar</a>
+           </div>
+       </article>
+   </section>
+   <!---End of Menu Section============-->
+
+   <!--=======-----------Card Section-----====================-->
+   <section id="card">
+      <div class="card-container">
+              <!--======Card Start ----============-->
+        <article class="card-card">
+            <div class="counter bg-white rounded p-5">
+                <i class="fa fa-users"></i>
+                <h4>Clientes Satisfechos</h4>
+                <h1>1963</h1>
+            </div>
+        </article>
+        <article class="card-card">
+            <div class="counter bg-white rounded p-5">
+                <i class="fa fa-check-circle"></i>
+                <h4>Calidad de Servicio</h4>
+                <h1>100%</h1>
+            </div>
+        </article>
+              <article class="card-card">
+                    <div class="counter bg-white rounded p-5">
+                        <i class="fa fa-certificate"></i>
+                        <h4>Calidad Certificada</h4>
+                        <h1>100%</h1>
+                    </div>
+                </article>
+                <article class="card-card">
+                    <div class="counter bg-white rounded p-5">
+                        <i class="fa fa-shopping-basket"></i>
+                        <h4>Productos Disponibles</h4>
+                        <h1>1,000</h1>
+                    </div>
+                    </article>
+       </div>
+
+
+
+   </section>
+       <!--======End of Card =========-->
+
+
+<script src="onClickMenu.js"></script>
+<!--Magnific POPup Jquery also-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="magnific/jquery.magnific-popup.min.js"></script>
+<script src="magnific/magnific.js"></script>
+</body>
+
+

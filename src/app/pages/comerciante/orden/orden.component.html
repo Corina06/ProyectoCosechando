@@ -1,0 +1,308 @@
+<app-navcomer></app-navcomer>
+
+<div class="card shadow border-0 mb-7">
+    <div class="card-header">
+        <h5 class="mb-0">Ordenes Recientes</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap" id="ordersTable">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" (click)="sortTable('name')">Nombre</th>
+                    <th scope="col" (click)="sortTable('date')">Fecha</th>
+                    <th scope="col" (click)="sortTable('total')">Total</th>
+                    <th scope="col" (click)="sortTable('status')">Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of orders">
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold">
+                            {{order.name}}
+                        </a>
+                    </td>
+                    <td>
+                        {{order.date}}
+                    </td>
+                    <td>
+                        {{order.total}}
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i [ngClass]="{
+                                'bg-success': order.status === 'Entregado',
+                                'bg-warning': order.status === 'Pendiente',
+                                'bg-danger': order.status === 'No Retirado'
+                              }"></i>{{ order.status }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Robert Fox
+                        </a>
+                    </td>
+                    <td>
+                        Apr 15, 2021
+                    </td>
+                    <td>
+                        $2.750
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-warning"></i>Pendiente
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1610878722345-79c5eaf6a48c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Theresa Webb
+                        </a>
+                    </td>
+                    <td>
+                        Mar 20, 2021
+                    </td>
+                    <td>
+                        $4.200
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-success"></i>Entregado
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1612422656768-d5e4ec31fac0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Kristin Watson
+                        </a>
+                    </td>
+                    <td>
+                        Feb 15, 2021
+                    </td>
+                    <td>
+                        $3.500
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-warning"></i>Pendiente
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1608976328267-e673d3ec06ce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Cody Fisher
+                        </a>
+                    </td>
+                    <td>
+                        Apr 10, 2021
+                    </td>
+                    <td>
+                        $1.500
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-danger"></i>No Retirado
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Robert Fox
+                        </a>
+                    </td>
+                    <td>
+                        Feb 15, 2021
+                    </td>
+                    <td>
+                        $3.500
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-success"></i>Entregado
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1610271340738-726e199f0258?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Darlene Robertson
+                        </a>
+                    </td>
+                    <td>
+                        Apr 15, 2021
+                    </td>
+                    <td>
+                        $2.750
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-warning"></i>Pendiente
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1610878722345-79c5eaf6a48c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Theresa Webb
+                        </a>
+                    </td>
+                    <td>
+                        Mar 20, 2021
+                    </td>
+                    <td>
+                        $4.200
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-success"></i>Entregado
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1612422656768-d5e4ec31fac0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Kristin Watson
+                        </a>
+                    </td>
+                    <td>
+                        Feb 15, 2021
+                    </td>
+                    <td>
+                        $3.500
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-success"></i>Entregado
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img alt="..." src="https://images.unsplash.com/photo-1608976328267-e673d3ec06ce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                        <a class="text-heading font-semibold" href="#">
+                            Cody Fisher
+                        </a>
+                    </td>
+                    <td>
+                        Apr 10, 2021
+                    </td>
+                    <td>
+                        $1.500
+                    </td>
+                    <td>
+                        <span class="badge badge-lg badge-dot">
+                            <i class="bg-danger"></i>No Retirado
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer border-0 py-5">
+        <span class="text-muted text-sm">Mostrar 10 pedidos de 250 resultados</span>
+    </div>
+</div>
+
+<script>
+    // Función para ordenar la tabla
+    function sortTable(columnIndex) {
+        const table = document.getElementById("ordersTable");
+        const rows = Array.from(table.rows).slice(1); // Obtiene todas las filas exceptuando el encabezado
+        const isAsc = table.getAttribute('data-sort') === 'asc'; // Verifica el estado de ordenamiento
+
+        rows.sort((a, b) => {
+            const cellA = a.cells[columnIndex].textContent.trim();
+            const cellB = b.cells[columnIndex].textContent.trim();
+
+            // Determina el tipo de comparación (numérica o alfabética)
+            if (columnIndex === 2) { // Total
+                return isAsc ? parseFloat(cellA.replace(/[$,]/g, '')) - parseFloat(cellB.replace(/[$,]/g, '')) : parseFloat(cellB.replace(/[$,]/g, '')) - parseFloat(cellA.replace(/[$,]/g, ''));
+            } else if (columnIndex === 1) { // Fecha
+                return isAsc ? new Date(cellA) - new Date(cellB) : new Date(cellB) - new Date(cellA);
+            } else { // Nombre y Estado
+                return isAsc ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+            }
+        });
+
+        // Reorganiza las filas en el DOM
+        rows.forEach(row => table.tBodies[0].appendChild(row));
+
+        // Cambia el atributo de ordenamiento
+        table.setAttribute('data-sort', isAsc ? 'desc' : 'asc');
+    }
+</script>
