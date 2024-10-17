@@ -355,24 +355,26 @@
 	text-align: center;
 }
 
-.product__pagination a {
-	display: inline-block;
-	width: 30px;
-	height: 30px;
-	border: 1px solid #b2b2b2;
-	font-size: 14px;
-	color: black;
-	font-weight: 700;
-	line-height: 28px;
-	text-align: center;
-	margin-right: 16px;
-	-webkit-transition: all, 0.3s;
-	-moz-transition: all, 0.3s;
-	-ms-transition: all, 0.3s;
-	-o-transition: all, 0.3s;
-	transition: all, 0.3s;
-	text-decoration: none;
+.product__pagination button {
+	margin: 0 10px;
+	padding: 8px 12px; 
+	background-color:#385723; /* Color verde */
+  color: white; /* Color del texto */
+  border: none; /* Sin borde */
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s; /* Transición suave al cambiar de color */
 }
+
+.product__pagination button:hover {
+	background-color:#385723; /* Color verde más oscuro al pasar el mouse */
+  }
+  
+  .product__pagination button:disabled {
+	background-color: #c3e6cb; /* Color más claro para botones deshabilitados */
+	color: #6c757d; /* Color de texto más claro para botones deshabilitados */
+	cursor: not-allowed; /* Cambia el cursor para botones deshabilitados */
+  }
 
 
 .product__pagination a:hover {

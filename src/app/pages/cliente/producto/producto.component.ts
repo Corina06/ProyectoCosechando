@@ -34,13 +34,40 @@ export class ProductoComponent {
     { name: 'Naranja', category: 'Frutas', price: 12.00, image: 'naranja.jpg' },
   ];
 
-  getFilteredProducts() {
-    return this.selectedFilter === 'Todos' ? this.products : this.products.filter(product => product.category === this.selectedFilter);
+  itemsPerPage: number = 8; // Número de productos por página
+  currentPage: number = 1; // Página actual
+
+  get filteredProducts() {
+    return this.selectedFilter === 'Todos' 
+     ? this.products
+     : this.products.filter(product => product.category === this.selectedFilter);
+  }
+
+  get paginatedProducts() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredProducts.slice(start, start + this.itemsPerPage);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
   }
 
    // Filtro
    setFilter(filter: string) {
     this.selectedFilter = filter;
+    this.currentPage = 1; // Reiniciar a la primera página al cambiar el filtro
   }
 
 }
