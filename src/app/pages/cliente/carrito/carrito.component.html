@@ -25,111 +25,38 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr *ngFor="let item of cart">
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="images/banana.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                <img src="images/{{ item.product.image }}" alt="{{ item.product.name }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
                         <td>
-                            <p class="mb-0 mt-4">Guineo Nacional</p>
+                            <p class="mb-0 mt-4">{{ item.product.name }}</p>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">2.99 $</p>
+                            <p class="mb-0 mt-4">{{ item.product.price | currency }}</p>
                         </td>
                         <td>
                             <div class="input-group quantity mt-4" style="width: 100px;">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" (click)="decrement(item)" >
                                     <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0" value="1">
+                                <input type="number" class="form-control form-control-sm text-center border-0" [(ngModel)]="item.quantity" min="1">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border" (click)="increment(item)">
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">2.99 $</p>
+                            <p class="mb-0 mt-4"> {{ item.product.price * item.quantity | currency }} </p>
                         </td>
                         <td>
-                            <button class="btn btn-md rounded-circle bg-light border mt-4" >
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-times text-danger"></i></a>
-                            </button>
-                        </td>
-                    
-                    </tr>
-                    <tr>
-                        <th scope="row">
-                            <div class="d-flex align-items-center">
-                                <img src="images/papa.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
-                            </div>
-                        </th>
-                        <td>
-                            <p class="mb-0 mt-4">Papas</p>
-                        </td>
-                        <td>
-                            <p class="mb-0 mt-4">2.99 $</p>
-                        </td>
-                        <td>
-                            <div class="input-group quantity mt-4" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <p class="mb-0 mt-4">2.99 $</p>
-                        </td>
-                        <td>
-                            <button class="btn btn-md rounded-circle bg-light border mt-4" >
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-times text-danger"></i></a>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">
-                            <div class="d-flex align-items-center">
-                                <img src="images/brocoli.jpg" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="" alt="">
-                            </div>
-                        </th>
-                        <td>
-                            <p class="mb-0 mt-4">Brocoli</p>
-                        </td>
-                        <td>
-                            <p class="mb-0 mt-4">2.99 $</p>
-                        </td>
-                        <td>
-                            <div class="input-group quantity mt-4" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                    <i class="fa fa-minus"></i>
-                                    </button>
-                                </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <p class="mb-0 mt-4">2.99 $</p>
-                        </td>
-                        <td>
-                            <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                            <button class="btn btn-md rounded-circle bg-light border mt-4" (click)="removeFromCart(item)">
                                 <a data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-times text-danger"></i></a>
                             </button>
                         </td>
@@ -140,7 +67,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="shoping__cart__btns">
-                    <a routerLink="/producto" ng-reflect-router-link="producto" href="/producto" class="primary-btn cart-btn"><span class="fa fa-shopping-cart"></span>Continuar Comprando</a>
+                    <a (click)="goToProducts()" class="primary-btn cart-btn"><span class="fa fa-shopping-cart"></span>Continuar Comprando</a>
                     <a routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito" class="primary-btn cart-btn cart-btn-right"><span class="fa fa-spinner"></span>
                         Actualizar Carrito</a>
                 </div>
@@ -160,8 +87,8 @@
                 <div class="shoping__checkout">
                     <h5>Total de Compra</h5>
                     <ul>
-                        <li>Subtotal <span>$454.98</span></li>
-                        <li>Total <span>$454.98</span></li>
+                        <li>Subtotal <span>{{ total() | currency }}</span></li>
+                        <li>Total <span>{{ total() | currency }}</span></li>
                     </ul>
                     <a class="primary-btn" routerLink="/checkout" ng-reflect-router-link="checkout" href="/checkout">Proceder Checkout</a>
                 </div>

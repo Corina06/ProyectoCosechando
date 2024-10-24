@@ -1,14 +1,11 @@
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavComponent } from '../nav/nav.component';
 import { FilterPipe } from '../../../componentes/filter.pipe';
-
-type Product = {
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-};
+import { ProductService } from '../../../services/product.service';
+import { CartService } from '../../../services/cart.service';
+import { Product } from '../../../models/product.model';
 
 @Component({
   selector: 'app-producto',
@@ -18,24 +15,15 @@ type Product = {
   styleUrls: ['./producto.component.css']
 })
 
-export class ProductoComponent {
-  selectedFilter: string = 'Todos';
+export class ProductoComponent implements OnInit{
+  selectedFilter: string = 'Todos'
 
-  //Agregar productos
-  products: Product[] = [
-    { name: 'Fresa', category: 'Frutas', price: 30.00, image: 'fresa.jpg' },
-    { name: 'Maíz', category: 'Legumbres', price: 20.00, image: 'maiz.jpg' },
-    { name: 'Brócoli', category: 'Verduras', price: 25.00, image: 'brocoli.jpg' },
-    { name: 'Yuca', category: 'Raíces', price: 15.00, image: 'yuca.jpg' },
-    { name: 'Ají', category: 'Verduras', price: 10.00, image: 'aji.jpg' },
-    { name: 'Manzana', category: 'Frutas', price: 12.00, image: 'manzana.jpg' },
-    { name: 'Guandú', category: 'Legumbres', price: 18.00, image: 'guandu.jpg' },
-    { name: 'Banana', category: 'Frutas', price: 22.00, image: 'banana1.jpg' },
-    { name: 'Naranja', category: 'Frutas', price: 12.00, image: 'naranja.jpg' },
-  ];
+  products: Product[] = []; // Inicializa el array de productos
 
   itemsPerPage: number = 8; // Número de productos por página
   currentPage: number = 1; // Página actual
+
+  quantity: number = 1;
 
   get filteredProducts() {
     return this.selectedFilter === 'Todos' 
@@ -70,4 +58,28 @@ export class ProductoComponent {
     this.currentPage = 1; // Reiniciar a la primera página al cambiar el filtro
   }
 
+  constructor(private productService: ProductService, 
+              private cartService: CartService,
+              private router: Router) { } 
+
+  ngOnInit(): void {
+    this.products = this.productService.getProducts(); 
+    console.log('ProductoComponent inicializado'); // Para verificar que el componente se carga
+  }
+
+  //Detalle del producto
+  viewDetails(product: Product): void {
+    this.productService.setProduct(product);
+    this.router.navigate(['/detalleproducto']);
+  }
+
+  //Añadir producto
+  addToCart(product: Product): void {
+    console.log('Intentando añadir al carrito:', product);
+    this.cartService.addToCart(product, this.quantity);
+    this.router.navigate(['/carrito']);
+
+ }
+
+  
 }
