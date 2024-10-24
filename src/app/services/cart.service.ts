@@ -35,4 +35,8 @@ export class CartService {
     this.cart = this.cart.filter(cartItem => cartItem.product.name !== item.product.name);
   }
 
+  getTotal(): number {
+    return this.cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  }
+
 }

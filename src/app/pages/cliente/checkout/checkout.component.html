@@ -1,11 +1,12 @@
-<app-nav></app-nav>
-
 <header class="bg-image py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="content">
             <h1 class="display-4 fw-bolder">Proceso de Pago</h1>
             <p class="lead fw-normal text-white-50 mb-0">Completa la información solicitada </p>
+
         </div>
+        <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="200px" style="cursor: pointer;" tabindex="0">
+
     </div>
 </header>
 
@@ -83,27 +84,27 @@
                         <div class="checkout__order">
                             <h4>Tu Orden</h4>
                             <div class="checkout__order__products">Productos <span>Total</span></div>
-                            <ul>
-                                <li>Guineo Nacional<span>$75.99</span></li>
-                                <li>Papas <span>$151.99</span></li>
-                                <li>Brocoli <span>$53.99</span></li>
+                            <ul *ngFor="let item of cart">
+                                <li>{{ item.product.name }}<span>{{ item.product.price * item.quantity | currency }}</span></li>
                             </ul>
-                            <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
-                            <div class="checkout__order__total">Total <span>$750.99</span></div>
+                            <div class="checkout__order__subtotal">Subtotal <span>{{ total | currency }}</span></div>
+                            <div class="checkout__order__subtotal">Costo de Envío <span>{{ shippingCost | currency }}</span></div>
+                            <div class="checkout__order__total">Total <span>{{ total | currency }}</span></div>
                             <div class="checkout__input__checkbox">
-                                <label>Tipo de Entrega</label>
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                                    <label class="custom-control-label" for="flexRadioDefault1">
-                                      Retiro en Local
-                                    </label>
+                                <div class="shipping-options">
+                                    <label class="shipping-label">Método de Envío</label>
+                                    
+                                    <div class="radio-option">
+                                      <input type="radio" id="local" name="shipping" value="local" (change)="onShippingChange($event)" checked>
+                                      <label for="local">Retiro en local</label>
+                                    </div>
+                                    
+                                    <div class="radio-option">
+                                      <input type="radio" id="delivery" name="shipping" value="delivery" (change)="onShippingChange($event)">
+                                      <label for="delivery">Envío a domicilio </label>
+                                    </div>
                                   </div>
-                                  <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
-                                    <label class="custom-control-label" for="flexRadioDefault2">
-                                      Entrega a Domicilio
-                                    </label>
-                                </div>
+                                  
                             </div>
                             <div class="checkout__input__checkbox">
                                 <form>

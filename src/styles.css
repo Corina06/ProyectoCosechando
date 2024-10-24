@@ -946,6 +946,39 @@
 	margin-top: 10px;
 }
 
+.shipping-options {
+	margin: 20px 0;
+	font-family: Arial, sans-serif;
+  }
+  
+  .shipping-label {
+	display: block;
+	font-size: 1.2em;
+	margin-bottom: 10px;
+	font-weight: bold;
+  }
+  
+  .radio-option {
+	display: flex;
+	align-items: center;
+	margin: 10px 0;
+	cursor: pointer;
+  }
+  
+  .radio-option input[type="radio"] {
+	margin-right: 10px;
+	accent-color: #007bff; /* Color del radio (opcional) */
+  }
+  
+  .radio-option label {
+	font-size: 1em;
+	color: #333;
+  }
+  
+  .radio-option input[type="radio"]:checked + label {
+	font-weight: bold; /* Resalta la opción seleccionada */
+  }
+  
 /*---------------------
   Shop Details
 -----------------------*/
@@ -1326,3 +1359,4 @@ th:hover {
 .footer p{
 color: #fff;
 }
+

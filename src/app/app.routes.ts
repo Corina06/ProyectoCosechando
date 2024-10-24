@@ -21,6 +21,7 @@ import { RegistroComponent } from './pages/cuenta/registro/registro.component';
 export const routes: Routes = [
    //Rutas Cliente
    {path: '', component: InicioComponent},
+   {path: 'inicio', component: InicioComponent},
    {path: 'carrito', component: CarritoComponent},
    {path: 'checkout', component: CheckoutComponent},
    {path: 'producto', component: ProductoComponent},

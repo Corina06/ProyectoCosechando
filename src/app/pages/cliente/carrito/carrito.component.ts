@@ -1,5 +1,4 @@
 import {Component, OnInit } from '@angular/core';
-import { NavComponent } from '../nav/nav.component';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -10,13 +9,14 @@ import { CartItem } from '../../../models/cart-item.model';
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [NavComponent, CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })
 export class CarritoComponent {
   cart: CartItem[] = [];
   quantity: number = 1; // Inicializa el contador
+  notificationMessage: string = '';
 
   constructor(private cartService: CartService,
     private router: Router
@@ -29,10 +29,8 @@ export class CarritoComponent {
         item.quantity = 1; 
       }
     });
-    console.log('Contenido del carrito en CarritoComponent:', this.cart);
+    
 }
-
-
 
   clearCart(): void {
     this.cartService.clearCart();
@@ -42,6 +40,8 @@ export class CarritoComponent {
   removeFromCart(item: CartItem): void {
     this.cartService.removeFromCart(item);
     this.cart = this.cartService.getCart(); // Actualiza el carrito visual
+    this.notificationMessage = `${item.product.name} ha sido eliminado del carrito.`;
+    setTimeout(() => this.notificationMessage = '', 3000); // Limpia el mensaje después de 3 segundos
   }
   
   //Volver a la lista de productos
@@ -51,17 +51,13 @@ export class CarritoComponent {
 
   //Cantidad
   increment(item: CartItem): void {
-    console.log('Antes de incrementar:', item);
     item.quantity++;
-    console.log('Después de incrementar:', item);
   }
 
   decrement(item: CartItem): void {
-    console.log('Antes de decrementar:', item);
     if (item.quantity > 1) {
         item.quantity--;
     }
-    console.log('Después de decrementar:', item);
     
   }
 
@@ -75,5 +71,16 @@ export class CarritoComponent {
     
     console.log('Total calculado:', totalValue);
     return totalValue;
+  }
+
+  //Checkout
+  goToCheckout(): void {
+    const total = this.total(); // Llama al método total()
+    this.router.navigate(['/checkout'], { queryParams: { total, cart: JSON.stringify(this.cart) } });
+  }
+  
+  navigateToInicio() {
+    console.log('Navegando a inicio');
+    this.router.navigate(['/inicio']);
   }
 }
