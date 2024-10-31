@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^18.2.4",
     "@angular/router": "^18.2.4",
     "@angular/service-worker": "^18.2.4",
+    "@stripe/stripe-js": "^4.9.0",
     "body-parser": "^1.20.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",

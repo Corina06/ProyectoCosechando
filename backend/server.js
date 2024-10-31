@@ -3,9 +3,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const User = require('./models/user'); // Asegúrate de que el camino es correcto
+const Stripe = require('stripe');
 
 const app = express();
-//const port = 3000;
+const port = 3000;
+
+const stripe = new Stripe('TU_SECRET_KEY_DE_STRIPE');
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -27,27 +30,20 @@ app.get('/', (req, res) => {
   res.send('API is running'); // Mensaje simple para verificar que el servidor está funcionando
 });
 
+//Pago
+app.post('/api/create-payment-intent', async (req, res) => {
+  const { amount } = req.body;
 
-// // Ruta para crear un nuevo usuario
-// app.post('/users', async (req, res) => {
-//   const user = new User(req.body);
-//   try {
-//     await user.save();
-//     res.status(201).send(user);
-//   } catch (error) {
-//     res.status(400).send(error);
-//   }
-// });
-
-// // Ruta para obtener todos los usuarios
-// app.get('/users', async (req, res) => {
-//   try {
-//     const users = await User.find();
-//     res.json(users); // Devuelve la lista de usuarios como JSON
-//   } catch (error) {
-//     res.status(500).send('Error al obtener usuarios');
-//   }
-// });
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: 'usd',
+    });
+    res.send({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
 
 // Inicia el servidor
 const PORT = process.env.PORT || 3000;

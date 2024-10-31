@@ -1,9 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-/* Webpixels CSS */
-/* Utility and component-centric Design System based on Bootstrap for fast, responsive UI development */
-/* URL: https://github.com/webpixels/css */
+@import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
+
+/* Bootstrap Icons */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
 
 
 /*
@@ -77,7 +78,7 @@
   }
   /*
 ===========================================
-    Nav Usuario
+    HEADER
 ===========================================
 */
 
@@ -98,18 +99,17 @@
 
 /*
 ===========================================
-    Nav Categorias
+    NAV
 ===========================================
 */
+.nav li a:hover {
+	color: white;
+}
+
 .nav-categories {
   display: flex;
   justify-content: center;
   background-color: #572C1A ;
-}
-
-.nav-link:hover {
-  background-color:  #385723;
-  
 }
 
 .nav-categories a {
@@ -119,6 +119,13 @@
 	text-decoration: none;
 }
 
+.nav-link:hover {
+  background-color:  #385723;
+}
+
+.nav-link a:hover{
+	color:white; 
+}
 
   /*
 ===========================================
@@ -1201,47 +1208,6 @@
 /*---------------------
  PANEL
 -----------------------*/
-
-/*Nav-Comerciante*/
-.nav-item :hover {
-	background-color: white;	
-	color: #385723;
-	
-}
-
-.nav-item-color {
-	color: #385723;
-}
-
-.nav-link {
-	font-style: bold;
-	color: green;
-}
-
-.nav-link-text:hover {
-	color: red;
-	background-color: blue;
-}
-
-.content-nav li a {
-	background-color: red;
-}
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-/*Tabla*/
-
-th {
-    cursor: pointer; /* Cambia el cursor al pasar sobre los encabezados */
-}
-
-th:hover {
-    background-color: #f1f1f1; /* Cambia el fondo al pasar el mouse */
-}
-
-/** Ajustes **/
-
-
 
 /*** featurs Start ***/
 .featurs .featurs-item .featurs-icon {
