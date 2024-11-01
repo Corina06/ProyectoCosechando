@@ -1,4 +1,5 @@
 export interface Product {
+    id: number;
     name: string;
     category: string;
     price: number;
@@ -7,5 +8,6 @@ export interface Product {
     location: string; 
     CName: string;
     Contact: string;
+    stock: boolean;
 }
 
