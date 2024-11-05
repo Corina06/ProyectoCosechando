@@ -1,6 +1,5 @@
 <app-navcomer></app-navcomer>
 
-<div class="container-fluid">
   <div class="text-center mb-4">
     <h2 class="display-4 font-weight-bold ">Productos</h2>
     <p class="lead text-muted">Gestiona y agrega productos fácilmente a tu inventario.</p>
@@ -95,34 +94,47 @@
       </div>
     </div>
 
-    <table class="product-table">
-        <thead>
-            <tr>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Categoria</th>
-                <th>Precio</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let product of filterProducts()">
-                <td><img src="images/{{ product.image }}" alt="{{ product.name }}" class="product-image"></td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.category }}</td>
-                <td>{{ product.price | currency }}</td>
-                
-                <td><span [ngClass]="{ 'badge badge-success': product.stock, 'badge badge-danger': !product.stock }">
-                  {{ product.stock ? 'Disponible' : 'Agotado' }}</span>
-                </td>
-            </tr>
-            
-            <!-- Agrega más productos según sea necesario -->
-            <div class="card-footer border-0 py-5">
-              <span class="text-muted text-sm">Mostrar 10 pedidos de 250 resultados</span>
-            </div>
-        </tbody>
-    </table>
-</div>
+
+  <div class="card shadow border-0 mb-7">
+    <div class="table-responsive">
+      <table class="table table-hover table-nowrap" id="ordersTable">
+          <thead class="thead-light">
+              <tr>
+                  <th>Imagen</th>
+                  <th>Nombre</th>
+                  <th>Categoria</th>
+                  <th>Precio</th>
+                  <th>Estado</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let product of productosPaginados">
+                  <td><img src="images/{{ product.image }}" alt="{{ product.name }}" class="product-image"></td>
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.category }}</td>
+                  <td>{{ product.price | currency }}</td>
+                  
+                  <td>
+      
+                  <span [ngClass]="{ 'text-success': product.stock, 'text-danger': !product.stock }">
+                    {{ product.stock ? 'Disponible' : 'Agotado' }}
+                </span>
+                  </td>
+              </tr>
+              
+              <!-- Agrega más productos según sea necesario -->
+              
+          </tbody>
+      </table>
+    </div>
+    <div class="card-footer border-0 py-5">
+      <span class="text-muted text-sm">Mostrar 10 de {{ totalProductos }} productos</span>
+    </div>
+  </div>
+
+
+
 
 <script src="script.js"></script>
+<app-paginacion [totalItems]="totalProductos" [itemsPerPage]="itemsPerPage" (pageChange)="onPageChange($event)"></app-paginacion>
+<br>

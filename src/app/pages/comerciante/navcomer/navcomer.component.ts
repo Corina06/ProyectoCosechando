@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navcomer',
@@ -9,4 +10,11 @@ import { Component } from '@angular/core';
 })
 export class NavcomerComponent {
 
+  constructor( 
+    private router: Router  ) {}
+    
+  navigateToInicio() {
+    console.log('Navegando a inicio');
+    this.router.navigate(['/inicio']);
+  }
 }

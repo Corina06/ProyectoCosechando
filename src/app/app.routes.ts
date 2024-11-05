@@ -17,6 +17,8 @@ import { InventarioComponent } from './pages/comerciante/inventario/inventario.c
 //Rutas Cuenta
 import { LoginComponent } from './pages/cuenta/login/login.component';
 import { RegistroComponent } from './pages/cuenta/registro/registro.component';
+//Rutas Componentes
+import { PaginacionComponent } from './componentes/paginacion/paginacion.component';
 
 export const routes: Routes = [
    //Rutas Cliente
@@ -36,6 +38,8 @@ export const routes: Routes = [
    {path: 'login', component: LoginComponent},
    {path: 'registro', component: RegistroComponent},
    {path: '**', redirectTo: '', pathMatch: 'full' },
+   //Rutas Componentes
+   {path: 'paginacion', component: PaginacionComponent},
 
 ];
 

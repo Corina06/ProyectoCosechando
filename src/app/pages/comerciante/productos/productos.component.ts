@@ -4,17 +4,24 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../../models/product.model';
 import { ProductService } from '../../../services/product.service';
+import { PaginacionComponent } from '../../../componentes/paginacion/paginacion.component';
 
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [NavcomerComponent, FormsModule, CommonModule],
+  imports: [NavcomerComponent, FormsModule, CommonModule,PaginacionComponent],
   templateUrl: './productos.component.html',
   styleUrl: './productos.component.css'
 })
 export class ProductosComponent implements OnInit {
   products: Product[] = [];
+  totalProductos: number = 0;
+  productosPaginados: Product[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+
+
   imagePreview: string | ArrayBuffer | null = null; // Para la vista previa
 
   sortDirection: { [key: string]: boolean } = {};
@@ -35,10 +42,14 @@ export class ProductosComponent implements OnInit {
     stock: true
   };
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService) {
+    this.products = this.productService.getProducts();
+    this.updatePaginatedProducts();
+  }
 
   ngOnInit(): void {
     this.loadProducts();
+    this.totalProductos = this.products.length;
   }
 
   loadProducts(): void {
@@ -69,9 +80,13 @@ export class ProductosComponent implements OnInit {
   
 
   filterProducts(): Product[] {
-    return this.products.filter(product =>
-      product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) &&
-      (this.selectedCategory ? product.category === this.selectedCategory : true)
+    return this.products.filter(product => {
+      const matchesTerm = product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesCategory = this.selectedCategory ? product.category === this.selectedCategory : true;
+      return matchesTerm && matchesCategory;
+    }
+      //product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) &&
+      //(this.selectedCategory ? product.category === this.selectedCategory : true)
     );
   }
 
@@ -107,4 +122,16 @@ export class ProductosComponent implements OnInit {
       }
     }
   }
+
+  updatePaginatedProducts(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.productosPaginados = this.products.slice(startIndex, endIndex);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.updatePaginatedProducts();
+  }
+  
 }

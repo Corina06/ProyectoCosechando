@@ -1371,19 +1371,31 @@ color: #fff;
 }
 
 .badge {
-	display: inline-block;
-    padding: 5px 10px;
-    border-radius: 0.25rem;
-    color: white;
+	display: inline-flex; /* Asegura que se comporten como un flexbox */
+    align-items: center; /* Centra el contenido verticalmente */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    font-size: 1em; /* Tamaño de fuente consistente */
+    line-height: 1;
+	
 }
-
 .badge-success {
     background-color: #385723;
 	color: white;
+	border-radius: 0.5em;
+	padding: 0.5em 1em;
 }
 
 .badge-danger {
     background-color: #dc3545;
+	color: white;
+	border-radius: 0.5em;
+	padding: 0.5em 1em;
+}
+
+.badge-icon {
+    font-size: 1.2em; /* Asegúrate de que el tamaño sea suficiente */
+    color: white; /* Color del icono */
+    margin-right: 0.5em; /* Espacio entre el icono y el texto */
 }
 
 .btn {
@@ -1486,3 +1498,53 @@ color: #fff;
 	background-color: #0056b3; 
   }
   
+    /*
+===========================================
+    Orden
+===========================================
+*/
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-select {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    transition: border-color 0.3s;
+}
+
+.filter-select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.btn-filter {
+    padding: 10px 15px;
+    background-color: #385723 ;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-filter:hover {
+    background-color: #38572385 ;
+	
+}
