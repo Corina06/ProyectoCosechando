@@ -1,4 +1,5 @@
-import { Component, NgModule } from '@angular/core';
+import { ProductService } from './../../../services/product.service';
+import { Component, OnInit } from '@angular/core';
 import { NavcomerComponent } from '../navcomer/navcomer.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -15,11 +16,12 @@ type OrderKey = keyof Order;
   styleUrl: './orden.component.css'
 })
 
-export class OrdenComponent {
+export class OrdenComponent implements OnInit{
 
   orders: Order[] = []; // Aquí van tus órdenes
   sortedOrders: Order[] = [];
-  sortDirection: { [key: string]: number } = { name: 1, date: 1, total: 1, status: 1 };
+  sortDirection: { [key in keyof Order]: number } = { name: 1, date: 1, total: 1, status: 1 };
+  selectedOrder: any; 
   
   filteredOrders: Order[] = [];
     selectedStatus: string = '';
@@ -28,7 +30,7 @@ export class OrdenComponent {
     pageSize: number = 10;    
     totalOrders: number = 0; 
 
-    constructor() {
+    constructor(private productService: ProductService) {
     
       this.orders = this.fetchOrders(); 
       this.sortedOrders = this.orders;
@@ -37,6 +39,30 @@ export class OrdenComponent {
       this.filterOrders();
   }
 
+  ngOnInit(): void {
+    // Obtener las órdenes cuando el componente se inicializa
+    this.orders = this.productService.getOrders(); // Asumimos que ProductService tiene este método
+  }
+
+   // Método para ordenar las órdenes
+   sortOrders(key: keyof Order) {
+    const direction = this.sortDirection[key]; // Obtener la dirección actual
+    this.sortDirection[key] = direction === 1 ? -1 : 1; // Alternar la dirección de ordenación
+
+    this.sortedOrders = [...this.filteredOrders].sort((a, b) => {
+      if (key === 'date') {
+        // Si la clave es 'date', convertir las fechas a objetos Date para comparar
+        const dateA = new Date(a[key]);
+        const dateB = new Date(b[key]);
+        return direction * (dateA.getTime() - dateB.getTime());
+      } else {
+        // Si no es 'date', comparar como texto o número (en este caso, 'name', 'total', etc.)
+        return direction * (a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0);
+      }
+    });
+  }
+
+  //Metodo para filtrar por estado
   filterOrders() {
     if (this.selectedStatus === '') {
         // Si no hay estado seleccionado, mostrar todas las órdenes
@@ -45,38 +71,57 @@ export class OrdenComponent {
         // Filtrar las órdenes por el estado seleccionado
         this.filteredOrders = this.orders.filter(order => order.status === this.selectedStatus);
     }
+    this.sortOrders('date'); 
     console.log('Filtered Orders:', this.filteredOrders); // Para verificar los resultados
 }
 
 fetchOrders(): Order[] {
-    // Aquí debes implementar la lógica para obtener tus órdenes
-    const orders =[
-        { name: 'Orden 1', date: '2024-01-01', total: 100, status: 'Entregado' },
-        { name: 'Orden 2', date: '2024-01-02', total: 150, status: 'Pendiente' },
-        { name: 'Orden 3', date: '2024-01-03', total: 200, status: 'No Retirado' },
-        { name: 'Orden 4', date: '2024-01-04', total: 250, status: 'Entregado' },
-        { name: 'Orden 5', date: '2024-01-05', total: 300, status: 'Pendiente' },
-        { name: 'Orden 6', date: '2024-01-06', total: 350, status: 'No Retirado' },
-        { name: 'Orden 7', date: '2024-01-07', total: 400, status: 'Entregado' },
-        { name: 'Orden 8', date: '2024-01-08', total: 450, status: 'Pendiente' },
-        { name: 'Orden 9', date: '2024-01-09', total: 500, status: 'No Retirado' },
-        { name: 'Orden 10', date: '2024-01-10', total: 550, status: 'Entregado' },
-        { name: 'Orden 11', date: '2024-01-11', total: 600, status: 'Pendiente' },
-        { name: 'Orden 12', date: '2024-01-12', total: 650, status: 'No Retirado' },
-        { name: 'Orden 13', date: '2024-01-13', total: 700, status: 'Entregado' },
-        { name: 'Orden 14', date: '2024-01-14', total: 750, status: 'Pendiente' },
-        { name: 'Orden 15', date: '2024-01-15', total: 800, status: 'No Retirado' },
-        { name: 'Orden 16', date: '2024-01-16', total: 850, status: 'Entregado' },
-        { name: 'Orden 17', date: '2024-01-17', total: 900, status: 'Pendiente' },
-        { name: 'Orden 18', date: '2024-01-18', total: 950, status: 'No Retirado' },
-        { name: 'Orden 19', date: '2024-01-19', total: 1000, status: 'Entregado' },
-        { name: 'Orden 20', date: '2024-01-20', total: 1050, status: 'Pendiente' },
-      
-        // Agrega más órdenes aquí
-    ];
-    console.log('Fetched Orders:', orders);
-    return orders;
+  const orders: Order[] = [
+    {
+      id: 1,
+      client: 'Cliente A',
+      date: '2024-01-01',
+      products: [
+        { name: 'Producto 1', quantity: 3 },
+        { name: 'Producto 2', quantity: 2 }
+      ],
+      name: 'Orden 1',        // Aquí asignas el nombre de la orden
+      total: 100,            // Aquí asignas el total de la orden
+      status: 'Entregado'    // Aquí asignas el estado de la orden
+    },
+    {
+      id: 2,
+      client: 'Cliente B',
+      date: '2024-01-02',
+      products: [
+        { name: 'Producto 3', quantity: 1 },
+        { name: 'Producto 4', quantity: 4 }
+      ],
+      name: 'Orden 2',
+      total: 150,
+      status: 'Pendiente'
+    },
+    // Agrega más órdenes aquí...
+  ];
+  console.log('Fetched Orders:', orders);
+  return orders;
 }
 
+verDetalles(order: Order) {
+  // Asignar la orden seleccionada a la propiedad selectedOrder
+  this.selectedOrder = order;
+  // Aquí podrías abrir un modal, mostrar un cuadro de diálogo o cualquier otra cosa
+  console.log('Detalles de la orden:', order);
+}
+
+// Método para cerrar detalles si es necesario
+cerrarDetalles() {
+  this.selectedOrder = null;
+}
+
+ // Método para manejar la acción de ver detalles
+ abrirDetalles(order: any): void {
+  this.selectedOrder = order;  // Al hacer clic, se asigna la orden seleccionada
+}
 
 }

@@ -1548,3 +1548,22 @@ color: #fff;
     background-color: #38572385 ;
 	
 }
+
+td {
+	text-align: center;
+}
+th.ordenar {
+	text-align: center;
+	cursor: pointer !important;  /* Cambiar el cursor a mano cuando pasamos el ratón por encima */
+	background-color: #f8f8f8 !important;  /* Fondo ligeramente gris para los encabezados */
+	transition: background-color 0.3s ease !important;  /* Transición suave para el cambio de color */
+  }
+  
+  th.ordenar:hover {
+	background-color: #572c1a21 !important;  /* Fondo gris claro cuando el ratón está encima */
+  }
+  
+  th.ordenar:active {
+	background-color: #ccc !important;  /* Fondo ligeramente más oscuro cuando se hace clic */
+  }
+  

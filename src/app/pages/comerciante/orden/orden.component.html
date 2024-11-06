@@ -21,18 +21,18 @@
     <div class="table-responsive">
         <table class="table table-hover table-nowrap" id="ordersTable">
             <thead class="thead-light">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Total</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                <tr class="ordenar">
+                    <th class="ordenar" (click)="sortOrders('name')">Nombre</th>
+                    <th class="ordenar" (click)="sortOrders('date')">Fecha</th>
+                    <th class="ordenar" (click)="sortOrders('total')">Total</th>
+                    <th class="ordenar" (click)="sortOrders('status')">Estado</th>
+                    <th class="ordenar"> Acciones </th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let order of filteredOrders">
+                <tr *ngFor="let order of sortedOrders">
                     <td><a class="text-heading font-semibold">{{order.name}}</a></td>
-                    <td>{{order.date}}</td>
+                    <td>{{ order.date | date: 'shortDate' }}</td>
                     <td>${{order.total.toFixed(2)}}</td>
                     <td>
                         <span class="badge badge-lg badge-dot">
@@ -44,7 +44,7 @@
                         </span>
                     </td>
                     <td class="text-end">
-                        <a href="#" class="btn btn-sm btn-neutral">Ver Detalles</a>
+                        <button (click)="verDetalles(order)" class="btn btn-sm btn-neutral">Ver Detalles </button>
                         <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
                             <i class="bi bi-trash"></i>
                         </button>
@@ -58,4 +58,21 @@
     </div>
 </div>
 
+<!-- Detalles de la orden (solo visible si selectedOrder está definido) -->
+<div *ngIf="selectedOrder" class="order-details">
+    <h3>Detalles de la Orden: {{ selectedOrder.name }}</h3>
+    <p><strong>Fecha:</strong> {{ selectedOrder.date }}</p>
+    <p><strong>Total:</strong> {{ selectedOrder.total | currency }}</p>
+    <p><strong>Estado:</strong> {{ selectedOrder.status }}</p>
+  
+    <h4>Productos:</h4>
+    <ul>
+      <li *ngFor="let product of selectedOrder.products">
+        {{ product.name }} (x{{ product.quantity }})
+      </li>
+    </ul>
+  
+    <button (click)="cerrarDetalles()">Cerrar</button>
+  </div>
+  
 
