@@ -45,5 +45,4 @@ export class ProductService {
   getProducts(): Product[] {
     return this.products; 
   }
-
 }

@@ -20,7 +20,7 @@ export class OrdenComponent implements OnInit{
 
   orders: Order[] = []; // Aquí van tus órdenes
   sortedOrders: Order[] = [];
-  sortDirection: { [key in keyof Order]: number } = { name: 1, date: 1, total: 1, status: 1 };
+  sortDirection: { [key in keyof Order]: number } = { id:1, client: 1, date: 1, products: 1, name:1, total: 1, status: 1 };
   selectedOrder: any; 
   
   filteredOrders: Order[] = [];
@@ -41,7 +41,7 @@ export class OrdenComponent implements OnInit{
 
   ngOnInit(): void {
     // Obtener las órdenes cuando el componente se inicializa
-    this.orders = this.productService.getOrders(); // Asumimos que ProductService tiene este método
+    
   }
 
    // Método para ordenar las órdenes
