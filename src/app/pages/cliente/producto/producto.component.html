@@ -38,10 +38,11 @@
         </div>
 
         <div class="product__pagination">
-            <button (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
-            <span>Página {{ currentPage }} de {{ totalPages }}</span>
-            <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+            <button (click)="previousPage()" [disabled]="currentPage === 1" class="pagination-button">Anterior</button>
+            <span class="pagination-info">{{ currentPage }} de {{ totalPages }}</span>
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-button">Siguiente</button>
         </div>
+        
     
 </section>
 <!-- Featured Section End -->

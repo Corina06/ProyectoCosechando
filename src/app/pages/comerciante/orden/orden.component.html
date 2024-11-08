@@ -45,9 +45,6 @@
                     </td>
                     <td class="text-end">
                         <button (click)="verDetalles(order)" class="btn btn-sm btn-neutral">Ver Detalles </button>
-                        <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-                            <i class="bi bi-trash"></i>
-                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -56,23 +53,58 @@
     <div class="card-footer border-0 py-5">
         <span class="text-muted text-sm">Mostrar 10 pedidos de 250 resultados</span>
     </div>
+
+    <app-paginacion
+    [totalItems]="orders.length"
+    [itemsPerPage]="itemsPerPage"
+    (pageChange)="onPageChange($event)">
+</app-paginacion>
 </div>
 
+
+
 <!-- Detalles de la orden (solo visible si selectedOrder está definido) -->
-<div *ngIf="selectedOrder" class="order-details">
-    <h3>Detalles de la Orden: {{ selectedOrder.name }}</h3>
-    <p><strong>Fecha:</strong> {{ selectedOrder.date }}</p>
-    <p><strong>Total:</strong> {{ selectedOrder.total | currency }}</p>
-    <p><strong>Estado:</strong> {{ selectedOrder.status }}</p>
+<div class="modal-overlay" *ngIf="selectedOrder" (click)="cerrarDetalles()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <!-- Título del Modal -->
+      <h2>Orden #{{ selectedOrder.id }}</h2>
   
-    <h4>Productos:</h4>
-    <ul>
-      <li *ngFor="let product of selectedOrder.products">
-        {{ product.name }} (x{{ product.quantity }})
-      </li>
-    </ul>
+      <!-- Información de la Orden -->
+      <div class="order-summary">
+        <p><strong>Cliente:</strong> {{ selectedOrder.client }}</p>
+        <p><strong>Fecha del Pedido:</strong> {{ selectedOrder.date | date: 'medium' }}</p>
+        <p><strong>Total:</strong> {{ selectedOrder.total | currency }}</p>
+      </div>
   
-    <button (click)="cerrarDetalles()">Cerrar</button>
+      <!-- Detalles de los Productos -->
+      <div class="order-products">
+        <h3>Productos Comprados:</h3>
+        <table class="products-table">
+          <!-- Encabezado de la tabla -->
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <!-- Cuerpo de la tabla -->
+          <tbody>
+            <tr *ngFor="let product of selectedOrder.products">
+              <td>{{ product.name }}</td>
+              <td>{{ product.quantity }}</td>
+              <td>{{ product.price | currency }}</td> <!-- Asumiendo que 'price' es parte del producto -->
+              <td>{{ product.quantity * product.price | currency }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- Botón para Cerrar -->
+      <div class="modal-footer">
+        <button (click)="cerrarDetalles()">Cerrar</button>
+      </div>
+    </div>
   </div>
   
-

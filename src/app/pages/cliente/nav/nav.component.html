@@ -19,14 +19,14 @@
     <img src="images/Icono.png" routerLink="/inicio" ng-reflect-router-link="inicio" href="/inicio" alt="Logotipo" width="60px">
 
     <!-- Buscar -->
-    <label class="open-search" for="open-search">
-      <i class="fas fa-search"></i>
-            <input class="input-open-search" id="open-search" type="checkbox" name="menu" />
+    <label>
       <div class="search">
+        <input type="text" placeholder="Buscar productos" class="input-search"/>
         <button class="button-search"><i class="fas fa-search"></i></button>
-        <input type="text" placeholder="Buscar" class="input-search"/>
+        
       </div>
     </label>
+
     <div>
     <!--Carrito -->
     <a class="cart-link" routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito">
