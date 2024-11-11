@@ -12,18 +12,52 @@
           <i class='bx bxs-lock-alt'></i>
         </div>
       <div class="remember-forgot">
-        <label>
-          <input type="checkbox">
-          Recordarme
-        </label>
-        <a href="#"> ¿Olvidaste la contraseña?</a>
+        <a (click)="openModal($event)"> ¿Olvidaste la contraseña?</a>
       </div>
       <!--<button type="submit" class="btn">Iniciar Sesión</button>-->
-      <a class="btn" routerLink="/panel" ng-reflect-router-link="panel" href="/panel">Iniciar Sesión</a>
+      <a class="btn" (click)="goToPanel()">Iniciar Sesión</a>
       
       <div class="register-link">
-        <p>¿No tienes una cuenta? <a routerLink="/registro" >Regístrate</a></p>
+        <p>¿No tienes una cuenta? <a routerLink="/registro" ng-reflect-router-link="registro" href="registro">Regístrate</a></p>
       </div>
     </form>
   </div>
 </body>
+
+<!-- Modal de recuperación de contraseña -->
+<div *ngIf="isModalOpen" class="modal">
+  <div class="modal-content">
+    <!-- Botón de cierre (X) -->
+    <button class="close-btn" (click)="closeModal()">×</button>
+
+    <h3>Recuperar Contraseña</h3>
+    <p class="modal-subtitle">Introduce tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.</p>
+
+    <form (ngSubmit)="onRecoverPassword()">
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="email" 
+          name="email" 
+          placeholder="Introduce tu correo" 
+          required
+        />
+      </div>
+
+      <!-- Mensaje de error si el correo no es válido -->
+      <div class="error-message" *ngIf="emailError">
+        <p>{{ emailError }}</p>
+      </div>
+
+      <!-- Mensaje de éxito si la recuperación fue exitosa -->
+      <div class="success-message" *ngIf="successMessage">
+        <p>{{ successMessage }}</p>
+      </div>
+
+      <button type="submit" class="btn">Enviar</button>
+    </form>
+  </div>
+</div>
+

@@ -1,74 +1,145 @@
-<body>
-<div class="container mt-6">
-    <form (submit)="register()">
-      <div class="row jumbotron box8">
-        <div class="title">
-          <h1> Registro </h1>
-        </div>
-        <h5>Datos Personales</h5>
-        <div class="col-sm-6 form-group">
-          <label for="name-f">Nombre</label>
-          <input type="text" class="form-control" [(ngModel)]="name" name="nombre" id="nombre" placeholder="Ingrese su nombre" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="name-l">Apellido</label>
-          <input type="text" class="form-control" [(ngModel)]="apellido" name="apellido" id="apellido" placeholder="Ingrese su apellido" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="email">Correo Electrónico</label>
-          <input type="email" class="form-control" [(ngModel)]="email" name="email" id="email" placeholder="Ingrese su correo electrónico" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="address-1">Dirección</label>
-          <input type="address" class="form-control" [(ngModel)]="direccion" name="Locality" id="address-1" placeholder="Distrito, Corregimiento, Calle, Casa" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="name-p">Nombre del Puesto</label>
-          <input type="address" class="form-control" [(ngModel)]="local" name="address" id="address-2" placeholder="Nombre de su local" required>
-        </div>
-        <div class="col-sm-4 form-group">
-          <label for="ubicacion">Ubicación del puesto</label>
-          <input type="address" class="form-control" [(ngModel)]="puesto" name="ubicacion" id="ubicacion" placeholder="¿Cómo llegar a su local?" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="Country">Celular</label>
-          <input type="tel" name="phone" class="form-control" [(ngModel)]="celular" id="tel" placeholder="Número de Contacto" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="Date">Fecha de Nacimiento</label>
-          <input type="Date" name="dob" class="form-control" [(ngModel)]="fecha" id="Date" placeholder="" required>
-        </div>
+<form (ngSubmit)="register(registroForm)" #registroForm="ngForm">
+  <div class="row jumbotron box8">
+    <div class="title">
+      <h1>Registro</h1>
+    </div>
 
-        <h5>Datos para Deposito Bancario</h5>
-        <div class="col-sm-6 form-group">
-          <label for="name-banco">Nombre del Banco</label>
-          <input type="name-banco" name="dob" class="form-control" [(ngModel)]="banco" id="name-banco" placeholder="Ingrese el nombre del banco" required>
-        </div>
-        <div class="col-sm-2 form-group">
-          <label for="cuenta">Tipo de Cuenta</label>
-          <select id="cuenta" class="form-control browser-default custom-select" [(ngModel)]="tipo" name="cuenta">
-            <option value="ahorro">Ahorro</option>
-            <option value="corriente">Corriente</option>
-          </select>
-        </div>
-        <div class="col-sm-4 form-group">
-          <label for="num">Número de Cuenta</label>
-          <input type="num" name="num" class="form-control" [(ngModel)]="cuenta" id="tel" placeholder="Ingrese su número de cuenta" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="pass">Contraseña</label>
-          <input type="Password" name="password" class="form-control" [(ngModel)]="password" id="pass" placeholder="Ingrese su contraseña" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <label for="pass2">Confirmar Contraseña</label>
-          <input type="Password" name="cnf-password" class="form-control" id="pass2" placeholder="Confirmar contraseña" required>
-        </div>
-        <div class="col-sm-12 form-group mb-0">
-          <br>
-          <button type="submit" class="btn" routerLink="/registro']">Registrar</button>
-        </div>
-        
+    <h5>Datos Personales</h5>
+    <!-- Personal Data -->
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="name-f">Nombre</label>
+      <input type="text" class="form-control" [(ngModel)]="name" name="nombre" id="nombre" placeholder="Ingrese su nombre" required #nombre="ngModel">
+      <div *ngIf="registroForm.submitted && nombre.invalid || nombre.touched && nombre.invalid" class="text-danger">
+        <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio.</small>
       </div>
-    </form>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="name-l">Apellido</label>
+      <input type="text" class="form-control" [(ngModel)]="apellido" name="apellido" id="apellido" placeholder="Ingrese su apellido" required #apellido="ngModel">
+      <div *ngIf="registroForm.submitted && apellido.invalid || apellido.touched && apellido.invalid" class="text-danger">
+        <small *ngIf="apellido.errors?.['required']">El apellido es obligatorio.</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="email">Correo Electrónico</label>
+      <input type="email" class="form-control" [(ngModel)]="email" name="email" id="email" placeholder="Ingrese su correo electrónico" required email #emailField="ngModel">
+      <div *ngIf="registroForm.submitted && emailField.invalid || emailField.touched && emailField.invalid" class="text-danger">
+        <small *ngIf="emailField.errors?.['required']">El correo electrónico es obligatorio.</small>
+        <small *ngIf="emailField.errors?.['email']">El correo electrónico no es válido.</small>
+      </div>
+    </div>
+    
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="address-1">Dirección</label>
+      <input type="text" class="form-control" [(ngModel)]="direccion" name="direccion" id="address-1" placeholder="Distrito, Corregimiento, Calle, Casa" required #direccion="ngModel">
+      <div *ngIf="registroForm.submitted && direccion.invalid || direccion.touched && direccion.invalid" class="text-danger">
+        <small *ngIf="direccion.errors?.['required']">La dirección es obligatoria.</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="name-p">Nombre del Puesto</label>
+      <input type="text" class="form-control" [(ngModel)]="local" name="local" id="address-2" placeholder="Nombre de su local" required #local="ngModel">
+      <div *ngIf="registroForm.submitted && local.invalid || local.touched && local.invalid" class="text-danger">
+        <small *ngIf="local.errors?.['required']">El nombre del puesto es obligatorio.</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="ubicacion">Ubicación del puesto</label>
+      <input type="text" class="form-control" [(ngModel)]="puesto" name="puesto" id="ubicacion" placeholder="¿Cómo llegar a su local?" required #puestoField="ngModel">
+      <div *ngIf="registroForm.submitted && puestoField.invalid || puestoField.touched && puestoField.invalid" class="text-danger">
+        <small *ngIf="puestoField.errors?.['required']">La ubicación es obligatoria.</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="Country">Celular</label>
+      <input type="tel" name="celular" class="form-control" [(ngModel)]="celular" id="tel" placeholder="Número de Contacto" required pattern="^[0-9]{8}$" #celularField="ngModel">
+      <div *ngIf="registroForm.submitted && celularField.invalid || celularField.touched && celularField.invalid" class="text-danger">
+        <small *ngIf="celularField.errors?.['required']">El celular es obligatorio.</small>
+        <small *ngIf="celularField.errors?.['pattern']">El número de celular no es válido (debe tener 8 dígitos).</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="Date">Fecha de Nacimiento</label>
+      <input type="date" name="fecha" class="form-control" [(ngModel)]="fecha" id="Date" required #fechaField="ngModel">
+      <div *ngIf="registroForm.submitted && fechaField.invalid || fechaField.touched && fechaField.invalid" class="text-danger">
+        <small *ngIf="fechaField.errors?.['required']">La fecha de nacimiento es obligatoria.</small>
+      </div>
+    </div>
+
+    <h5>Datos para Depósito Bancario</h5>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="name-banco">Nombre del Banco</label>
+      <input type="text" name="banco" class="form-control" [(ngModel)]="banco" id="name-banco" placeholder="Ingrese el nombre del banco" required #bancoField="ngModel">
+      <div *ngIf="registroForm.submitted && bancoField.invalid || bancoField.touched && bancoField.invalid" class="text-danger">
+        <small *ngIf="bancoField.errors?.['required']">El nombre del banco es obligatorio.</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="cuenta">Tipo de Cuenta</label>
+      <select id="cuenta" class="form-control" [(ngModel)]="tipo" name="tipo" #tipoField="ngModel">
+        <option value="ahorro">Ahorro</option>
+        <option value="corriente">Corriente</option>
+      </select>
+      <div *ngIf="registroForm.submitted && tipoField.invalid || tipoField.touched && tipoField.invalid" class="text-danger">
+        <small *ngIf="tipoField.errors?.['required']">El tipo de cuenta es obligatorio.</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="num">Número de Cuenta</label>
+      <input type="text" name="cuenta" class="form-control" [(ngModel)]="cuenta" id="num" placeholder="Ingrese su número de cuenta" required pattern="^[0-9]+$" #cuentaField="ngModel">
+      <div *ngIf="registroForm.submitted && cuentaField.invalid || cuentaField.touched && cuentaField.invalid" class="text-danger">
+        <small *ngIf="cuentaField.errors?.['required']">El número de cuenta es obligatorio.</small>
+        <small *ngIf="cuentaField.errors?.['pattern']">El número de cuenta debe contener solo números.</small>
+      </div>
+    </div>
+    
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="pass">Contraseña</label>
+      <input type="password" name="password" class="form-control" [(ngModel)]="password" id="pass" placeholder="Ingrese su contraseña" required #passwordField="ngModel">
+      <div *ngIf="registroForm.submitted && passwordField.invalid || passwordField.touched && passwordField.invalid" class="text-danger">
+        <small *ngIf="passwordField.errors?.['required']">La contraseña es obligatoria.</small>
+      </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 form-group">
+      <label for="pass2">Confirmar Contraseña</label>
+      <input type="password" name="cnf-password" class="form-control" [(ngModel)]="confirmPassword" id="pass2" placeholder="Confirmar contraseña" required #confirmPasswordField="ngModel">
+      <div *ngIf="registroForm.submitted && confirmPasswordField.invalid || confirmPasswordField.touched && confirmPasswordField.invalid" class="text-danger">
+        <small *ngIf="confirmPasswordField.errors?.['required']">La confirmación de contraseña es obligatoria.</small>
+        <small *ngIf="confirmPasswordField.errors?.['notMatch']">Las contraseñas no coinciden.</small>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-sm-12 form-group mb-0">
+      <br>
+      <button type="submit" class="btn btn-primary" [disabled]="registroForm.invalid">Registrar</button>
+    </div>
+
   </div>
-</body>
+</form>
+
+<!-- Mensaje de éxito (oculto por defecto) -->
+<div *ngIf="mensajeRegistroVisible" class="mensaje-satisfaccion">
+  ¡Registro exitoso! Ahora puedes iniciar sesión.
+</div>
+
+<!-- Enlace para regresar al login -->
+<div class="form-group text-center">
+  <div class="link-login-container">
+    ¿Ya tienes una cuenta? <a (click)="goToLogin()" class="link-login">Inicia sesión aquí</a>
+  </div>
+</div>
+
+<br>
