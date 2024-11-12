@@ -1,0 +1,58 @@
+.btn-save {
+	background-color: #385723;  /* Verde */
+	color: white;               /* Texto blanco */
+	border: 1px solid #385723;  /* Borde verde */
+  }
+  
+  .btn-save:hover {
+	background-color: #2e4618; /* Un tono más oscuro de verde para el hover */
+	border-color: #2e4618;      /* Borde oscuro en hover */
+  }
+  
+  /* Botón para "Editar" (Marrón) */
+  .btn-edit {
+	background-color: #572C1A;  /* Marrón */
+	color: white;               /* Texto blanco */
+	border: 1px solid #572C1A;  /* Borde marrón */
+  }
+  
+  .btn-edit:hover {
+	background-color: #4b2614;  /* Un tono más oscuro de marrón para el hover */
+	border-color: #4b2614;       /* Borde oscuro en hover */
+  }
+  
+  /* Estilo adicional para deshabilitar los botones */
+  button:disabled {
+	opacity: 0.6;   /* Reducir la opacidad cuando el botón está deshabilitado */
+	cursor: not-allowed; /* Cambiar el cursor cuando el botón está deshabilitado */
+  }
+  
+  .jumbotron {
+    background-color: #f8f9fa;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-photo {
+    margin-bottom: 15px; /* Espacio debajo de la foto */
+  }
+  
+  .profile-photo img {
+    margin-bottom: 10px; /* Espacio entre la foto y el nombre */
+  }
+  
+  h2 {
+    margin-top: 10px; /* Espacio entre la foto y el nombre */
+  }
+  
+  /* Puedes agregar algo de estilo para que el mensaje se vea más destacado */
+.alert {
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+  .alert-success {
+    background-color: #28a745;
+    color: white;
+  }
+  

@@ -1,38 +1,40 @@
-<body>
+<app-navcomer></app-navcomer>
 
-    <div class="container-fluid">
-        <h1 class="title">Productos</h1>
-        <table class="product-table">
-            <thead>
-                <tr>
-                    <th>Imagen</th>
-                    <th onclick="sortTable(1)">Nombre</th>
-                    <th onclick="sortTable(2)">Categoria</th>
-                    <th onclick="sortTable(3)">Precio</th>
-                    <th onclick="sortTable(4)">Stock</th>
-                    <th onclick="sortTable(5)">Estado</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><img src="images/manzana.jpg" alt="Producto 1" class="product-image"></td>
-                    <td>Producto 1</td>
-                    <td>$10.00</td>
-                    <td><span class="badge badge-success">Disponible</span></td>
-                    <td><button class="btn">Agregar al Carrito</button></td>
-                </tr>
-                <tr>
-                    <td><img src="images/banana1.jpg" alt="Producto 2" class="product-image"></td>
-                    <td>Producto 2</td>
-                    <td>$20.00</td>
-                    <td><span class="badge badge-danger">Agotado</span></td>
-                    <td><button class="btn" disabled>Agotado</button></td>
-                </tr>
-                <!-- Agrega más productos según sea necesario -->
-            </tbody>
-        </table>
-    </div>
-    
-    <script src="script.js"></script>
-    </body>
+<div class="text-center mb-4">
+    <h2 class="display-4 font-weight-bold ">Inventario</h2>
+    <p class="lead text-muted">Identificar, gestionar y controlar los productos que se encuentran en el inventario. </p>
+  </div>
+
+<div class="card shadow border-0 mb-7">
+    <div class="table-responsive">
+    <table class="table table-hover table-nowrap" id="ordersTable">
+      <thead class="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí iteramos sobre los productos del inventario -->
+        <tr *ngFor="let item of productos">
+          <td>{{ item.id }}</td>
+          <td>{{ item.nombre }}</td>
+          <td>{{ item.descripcion }}</td>
+          <td>{{ item.cantidad }}</td>
+          <td>{{ item.precio | currency }}</td>
+          <td>
+            <button class="btn-custom" (click)="downloadProductPDF(item)">
+                <i class="fas fa-download"></i> PDF
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <button class="btn-custom" (click)="downloadInventoryPDF()">Descargar Inventario en PDF</button>
+  </div>
+  

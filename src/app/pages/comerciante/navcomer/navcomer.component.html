@@ -14,19 +14,52 @@
 
   <div class="container">
     <!-- logo -->
-     <a routerLink="/inicio" routerLinkActive="router-link-active" >
-    <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="60px">
-  </a>
+    <a routerLink="/inicio" routerLinkActive="router-link-active">
+      <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="60px">
+    </a>
     <h1 class="h2 mb-0 ls-tight">Bienvenido Comerciante</h1>
+    
     <div class="iconos">
-    <a class="cart-link" routerLink="/notificacion" ng-reflect-router-link="notificacion" href="/notificacion">
+      <!-- Ícono de notificación con dropdown -->
+      <div class="cart-link" (click)="toggleNotifications()">
         <i class="fas fa-bell"></i>
-    </a>
-    <a class="cart-link" routerLink="/perfil" ng-reflect-router-link="perfil" href="/perfil">
+      </div>
+  
+      <!-- Panel de notificaciones que se muestra/oculta -->
+      <div class="notifications-panel" *ngIf="notificationsVisible">
+        <ul>
+          <li *ngFor="let notification of notifications">
+            <div class="notification-item">
+              <div class="notification-content">
+                <i class="fas fa-info-circle"></i> 
+                {{ notification }}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Ícono de perfil con dropdown -->
+      <div class="cart-link" (click)="toggleProfileMenu()">
         <i class="fas fa-user"></i>
-    </a>
+      </div>
+  
+      <!-- Panel de opciones de perfil -->
+      <div class="profile-panel" *ngIf="profileMenuVisible">
+        <ul>
+          <li (click)="goToProfile()">
+            <i class="fas fa-user-circle"></i> Perfil
+          </li>
+          <li (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
+  
+  
+  
 
   <nav class="nav-categories"> 
     <ul class="nav">

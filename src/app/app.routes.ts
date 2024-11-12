@@ -14,6 +14,7 @@ import { OrdenComponent } from './pages/comerciante/orden/orden.component';
 import { ProductosComponent } from './pages/comerciante/productos/productos.component';
 import { PanelComponent } from './pages/comerciante/panel/panel.component';
 import { InventarioComponent } from './pages/comerciante/inventario/inventario.component';
+import { PerfilComponent } from './pages/comerciante/perfil/perfil.component';
 //Rutas Cuenta
 import { LoginComponent } from './pages/cuenta/login/login.component';
 import { RegistroComponent } from './pages/cuenta/registro/registro.component';
@@ -34,6 +35,7 @@ export const routes: Routes = [
    {path: 'productos', component: ProductosComponent},
    {path: 'panel', component: PanelComponent},
    {path: 'inventario', component: InventarioComponent},
+   {path: 'perfil', component: PerfilComponent},
    //Rutas Cuenta
    {path: 'login', component: LoginComponent},
    {path: 'registro', component: RegistroComponent},

@@ -1,0 +1,137 @@
+/* Estilos para los iconos de la barra de navegación */
+.iconos {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  .cart-link {
+    margin-left: 15px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  /* Estilos para el panel de notificaciones */
+  .notifications-panel {
+    position: absolute;
+    top: 60px; /* Ajusta según el tamaño del encabezado */
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 280px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    z-index: 10;
+    animation: fadeIn 0.3s ease-out;
+    overflow-y: auto;
+    max-height: 350px;
+  }
+  
+  .notifications-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .notifications-panel li {
+    padding: 12px 10px;
+    border-bottom: 1px solid #f4f4f4;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .notifications-panel li:last-child {
+    border-bottom: none;
+  }
+  
+  .notifications-panel li:hover {
+    background-color: #f7f7f7;
+  }
+  
+  .notification-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .notification-content {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+    padding-left: 10px;
+  }
+  
+  .notification-content i {
+    color: #385723;
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  /* Animación de aparición del panel */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Estilos para el panel de opciones de perfil */
+  .profile-panel {
+    position: absolute;
+    top: 60px; /* Ajustar según el tamaño del encabezado */
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 200px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    z-index: 10;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .profile-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .profile-panel li {
+    padding: 12px 10px;
+    border-bottom: 1px solid #f4f4f4;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .profile-panel li:last-child {
+    border-bottom: none;
+  }
+  
+  .profile-panel li:hover {
+    background-color: #f7f7f7;
+  }
+  
+  .profile-panel i {
+    margin-right: 10px;
+  }
+  
+  /* Estilo para el ícono de perfil */
+  .cart-link i {
+    font-size: 24px;
+    color: #385723;
+  }
+  
+  .cart-link i:hover {
+    color: #2c4b21;
+  }
+  
+  
