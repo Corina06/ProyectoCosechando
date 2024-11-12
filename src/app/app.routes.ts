@@ -15,6 +15,7 @@ import { ProductosComponent } from './pages/comerciante/productos/productos.comp
 import { PanelComponent } from './pages/comerciante/panel/panel.component';
 import { InventarioComponent } from './pages/comerciante/inventario/inventario.component';
 import { PerfilComponent } from './pages/comerciante/perfil/perfil.component';
+import { CompraComponent } from './pages/comerciante/compra/compra.component';
 //Rutas Cuenta
 import { LoginComponent } from './pages/cuenta/login/login.component';
 import { RegistroComponent } from './pages/cuenta/registro/registro.component';
@@ -36,6 +37,7 @@ export const routes: Routes = [
    {path: 'panel', component: PanelComponent},
    {path: 'inventario', component: InventarioComponent},
    {path: 'perfil', component: PerfilComponent},
+   {path: 'compra', component: CompraComponent},
    //Rutas Cuenta
    {path: 'login', component: LoginComponent},
    {path: 'registro', component: RegistroComponent},
@@ -47,7 +49,7 @@ export const routes: Routes = [
 
 @NgModule({
    imports: [
-      RouterModule.forRoot(routes)
+      RouterModule.forRoot(routes), 
    ],
    exports: [RouterModule]
  })

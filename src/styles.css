@@ -1784,3 +1784,25 @@ th.ordenar {
 	background-color: #2c4719; /* Color más oscuro cuando se pasa el cursor */
   }
   
+  /*********************************
+  ************** COMPRA ****************
+  ***********************************/
+  button.btn-success {
+    background-color: #7F6000; /* Mostaza */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button.btn-success:hover {
+    background-color: #572C1A; /* Marrón */
+  }
+  
+  .btn-custom:hover {
+    background-color: #275750; /* Turquesa oscuro */
+  }
+
+  

@@ -42,6 +42,11 @@ export class ProductosComponent implements OnInit {
     stock: true
   };
 
+  showDeleteModal = false; // Estado del modal de eliminación
+  showEditModal = false; // Estado del modal de edición
+  productToDelete: any; // Producto seleccionado para eliminar
+  editedProduct: any = {}; // Producto a editar
+
   constructor(private productService: ProductService) {
     this.products = this.productService.getProducts();
     this.updatePaginatedProducts();
@@ -132,6 +137,50 @@ export class ProductosComponent implements OnInit {
   onPageChange(page: number): void {
     this.currentPage = page;
     this.updatePaginatedProducts();
+  }
+
+  // Método para abrir el modal de eliminación
+  openDeleteModal(product: any) {
+    this.productToDelete = product;
+    this.showDeleteModal = true;
+  }
+
+  // Método para cerrar el modal de eliminación
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+  }
+
+  // Método para confirmar la eliminación
+  deleteProduct() {
+    if (this.productToDelete) {
+      // Aquí debes realizar la lógica para eliminar el producto
+      const index = this.productosPaginados.indexOf(this.productToDelete);
+      if (index !== -1) {
+        this.productosPaginados.splice(index, 1); // Eliminar producto de la lista
+        this.showDeleteModal = false; // Cerrar modal
+      }
+    }
+  }
+
+  // Método para abrir el modal de edición
+  openEditModal(product: any) {
+    this.editedProduct = { ...product }; // Crear una copia del producto
+    this.showEditModal = true;
+  }
+
+  // Método para cerrar el modal de edición
+  closeEditModal() {
+    this.showEditModal = false;
+  }
+
+  // Método para guardar los cambios
+  saveChanges() {
+    // Aquí puedes realizar la lógica para actualizar el producto
+    const index = this.productosPaginados.findIndex(p => p.id === this.editedProduct.id);
+    if (index !== -1) {
+      this.productosPaginados[index] = { ...this.editedProduct }; // Actualizar producto
+      this.showEditModal = false; // Cerrar modal
+    }
   }
   
 }

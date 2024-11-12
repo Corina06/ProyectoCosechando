@@ -1,0 +1,49 @@
+.modal.show {
+    display: block;
+    z-index: 1050;
+  }
+
+  /* Contenedor para los botones */
+.btn-group {
+    display: flex; /* Utiliza flexbox para alinear los botones horizontalmente */
+    gap: 5px; /* Espacio entre los botones */
+  }
+  
+  /* Botón cuadrado más pequeño */
+  .square-btn {
+    width: 25px;  /* Tamaño reducido del botón */
+    height: 25px; /* Tamaño reducido del botón */
+    padding: 0;   /* Elimina el padding interno */
+    display: flex; /* Para centrar el icono */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    border-radius: 5px; /* Bordes redondeados (opcional) */
+  }
+  
+  /* Icono dentro del botón */
+  .square-btn i {
+    font-size: 12px; /* Tamaño más pequeño para el icono */
+  }
+  
+  /* Estilo para el botón de editar (Verde) */
+  .btn-edit {
+    background-color: #385723; /* Verde */
+    border: none; /* Sin borde */
+    color: white; /* Color del icono */
+  }
+  
+  .btn-edit:hover {
+    background-color: #2c441a; /* Verde más oscuro al pasar el ratón */
+  }
+  
+  /* Estilo para el botón de eliminar (Marrón) */
+  .btn-delete {
+    background-color: #572C1A; /* Marrón */
+    border: none; /* Sin borde */
+    color: white; /* Color del icono */
+  }
+  
+  .btn-delete:hover {
+    background-color: #3f1d13; /* Marrón más oscuro al pasar el ratón */
+  }
+  

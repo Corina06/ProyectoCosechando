@@ -1,0 +1,131 @@
+<app-navcomer></app-navcomer>
+
+<div class="text-center mb-4">
+    <h2 class="display-4 font-weight-bold">Compras</h2>
+    <p class="lead text-muted">Gestiona y controla todas las compras realizadas a proveedores para reabastecer tu inventario.</p>
+
+    <!-- Botón para agregar nueva compra -->
+     
+    <button class="btn btn-add-purchase" (click)="openAddPurchaseModal()">
+        <i class="fas fa-plus"></i> Agregar Compra
+    </button>
+</div>
+
+<div class="card shadow border-0 mb-7">
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap" id="purchasesTable">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID Compra</th>
+                    <th>Proveedor</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let compra of compras">
+                    <td>{{ compra.id }}</td>
+                    <td>{{ compra.proveedor }}</td>
+                    <td>{{ compra.fecha | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ compra.total | currency }}</td>
+                    <td>{{ compra.estado }}</td>
+                    <td>
+                        <div>
+                        <button class="btn btn-custom" (click)="viewPurchaseDetails(compra)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal de detalles de compra -->
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h5>Detalles de la Compra</h5>
+      <button class="close-btn" (click)="closeModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <h6><strong>Proveedor:</strong> {{ selectedCompra.proveedor }}</h6>
+      <h6><strong>Fecha de Compra:</strong> {{ selectedCompra.fecha | date: 'dd/MM/yyyy' }}</h6>
+      <h6><strong>Estado:</strong> {{ selectedCompra.estado }}</h6>
+      <h6><strong>Método de Pago:</strong> {{ selectedCompra.metodoPago }}</h6>
+      <h6><strong>Costo Total:</strong> {{ selectedCompra.total | currency }}</h6>
+
+      <h5>Productos Comprados</h5>
+      <ul>
+        <li *ngFor="let producto of selectedCompra.productos">
+          {{ producto.nombre }} - {{ producto.cantidad }} unidades - {{ producto.precio | currency }} cada uno
+          <br><strong>Subtotal:</strong> {{ producto.cantidad * producto.precio | currency }}
+        </li>
+      </ul>
+
+      
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal de Agregar Compra -->
+<div *ngIf="showAddModal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h5>Agregar Nueva Compra</h5>
+        <button class="close-btn" (click)="closeAddModal()">×</button>
+      </div>
+  
+      <div class="modal-body">
+        <form (ngSubmit)="submitAddPurchase()">
+          <div class="form-group">
+            <label for="proveedor">Proveedor</label>
+            <input type="text" id="proveedor" [(ngModel)]="newCompra.proveedor" name="proveedor" class="form-control" required />
+          </div>
+  
+          <div class="form-group">
+            <label for="fecha">Fecha de Compra</label>
+            <input type="date" id="fecha" [(ngModel)]="newCompra.fecha" name="fecha" class="form-control" required />
+          </div>
+  
+          <div class="form-group">
+            <label for="metodoPago">Método de Pago</label>
+            <input type="text" id="metodoPago" [(ngModel)]="newCompra.metodoPago" name="metodoPago" class="form-control" required />
+          </div>
+  
+          <div class="form-group">
+            <label for="total">Total</label>
+            <input type="number" id="total" [(ngModel)]="newCompra.total" name="total" class="form-control" required />
+          </div>
+  
+          <div class="form-group">
+            <label for="estado">Estado</label>
+            <select id="estado" [(ngModel)]="newCompra.estado" name="estado" class="form-control" required>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Completada">Completada</option>
+              <option value="Cancelada">Cancelada</option>
+            </select>
+          </div>
+  
+          <div class="form-group">
+            <label for="productos">Productos Comprados</label>
+            <div *ngFor="let producto of newCompra.productos; let i = index" class="d-flex mb-3">
+              <input type="text" [(ngModel)]="producto.nombre" name="productoNombre-{{i}}" class="form-control" placeholder="Nombre del Producto" required />
+              <input type="number" [(ngModel)]="producto.cantidad" name="productoCantidad-{{i}}" class="form-control" placeholder="Cantidad" required />
+              <input type="number" [(ngModel)]="producto.precio" name="productoPrecio-{{i}}" class="form-control" placeholder="Precio" required />
+              <button type="button" class="btn btn-danger" (click)="removeProduct(i)">Eliminar</button>
+            </div>
+            <button type="button" class="btn btn-success" (click)="addProduct()">Agregar Producto</button>
+          </div>
+  
+          <button type="submit" class="btn btn-primary">Guardar Compra</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
