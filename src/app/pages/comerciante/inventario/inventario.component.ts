@@ -3,6 +3,7 @@ import { NavcomerComponent } from "../navcomer/navcomer.component";
 import { jsPDF} from "jspdf"
 import { CommonModule } from '@angular/common';
 
+
 @Component({
   selector: 'app-inventario',
   standalone: true,
