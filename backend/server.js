@@ -1,20 +1,23 @@
 
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const User = require('./models/user'); // Asegúrate de que el camino es correcto
-const Stripe = require('stripe');
-
+const User = require('./models/user'); 
+//const Stripe = require('stripe');
+const authRoutes = require('./routes/auth');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-const stripe = new Stripe('TU_SECRET_KEY_DE_STRIPE');
+//const stripe = new Stripe('TU_SECRET_KEY_DE_STRIPE');
 
 // Middleware para parsear JSON
 app.use(express.json());
 
 // Middleware CORS
 app.use(cors());
+app.use(bodyParser.json());
 
 // Conectar a MongoDB
 mongoose.connect('mongodb://localhost:27017/mydatabase')
@@ -22,7 +25,7 @@ mongoose.connect('mongodb://localhost:27017/mydatabase')
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
 //Rutas
-const authRoutes = require('./routes/auth');
+
 app.use('/api/auth', authRoutes);
 
 // Ruta para la raíz
@@ -31,19 +34,19 @@ app.get('/', (req, res) => {
 });
 
 //Pago
-app.post('/api/create-payment-intent', async (req, res) => {
-  const { amount } = req.body;
+//app.post('/api/create-payment-intent', async (req, res) => {
+  //const { amount } = req.body;
 
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency: 'usd',
-    });
-    res.send({ clientSecret: paymentIntent.client_secret });
-  } catch (error) {
-    res.status(500).send({ error: error.message });
-  }
-});
+  //try {
+   // const paymentIntent = await stripe.paymentIntents.create({
+    //  amount,
+      //currency: 'usd',
+   // });
+    //res.send({ clientSecret: paymentIntent.client_secret });
+  //} catch (error) {
+   // res.status(500).send({ error: error.message });
+ // }
+//});
 
 // Inicia el servidor
 const PORT = process.env.PORT || 3000;

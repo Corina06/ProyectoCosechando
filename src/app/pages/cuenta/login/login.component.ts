@@ -1,8 +1,9 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoginResponse } from '../../../models/login-response.interface';
 
 @Component({
   selector: 'app-login',
@@ -15,25 +16,36 @@ export class LoginComponent {
 
   email: string = '';
   password: string = '';
+
   isModalOpen: boolean =  false;
   emailError: string = '';
   successMessage: string = '';
+  errorMessage: string = '';
 
   constructor(private authService: AuthService, 
     private router: Router) { }
 
   onLogin() {
+    console.log("Intentando iniciar sesión...");
+    this.errorMessage = '';
+
     this.authService.login(this.email, this.password).subscribe({
        next: (response) => {
+        
          // Lógica de autenticación
          console.log('Login exitoso', response);
          
+         // Si el login es exitoso, almacenar el token y redirigir al panel
+        const token = response.token;
+        this.authService.storeToken(token);
          // Redirige al panel después del login exitoso
-         //this.router.navigate(['/panel']); 
+         this.router.navigate(['/panel']); 
        },
+       // Maneja el error de login
        error: (error) => {
          console.error('Error en Iniciar Sesion', error);
-         // Maneja el error de login
+         alert('Correo o contraseña incorrectos');
+         
        }
      });
   }
