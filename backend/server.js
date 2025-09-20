@@ -28,6 +28,15 @@ mongoose.connect('mongodb://localhost:27017/mydatabase')
 
 app.use('/api/auth', authRoutes);
 
+// Ruta de prueba para productos
+app.get('/api/products', (req, res) => {
+  res.json([
+    { name: 'Producto 1', price: 10 },
+    { name: 'Producto 2', price: 20 },
+    { name: 'Producto 3', price: 30 }
+  ]);
+});
+
 // Ruta para la raíz
 app.get('/', (req, res) => {
   res.send('API is running'); // Mensaje simple para verificar que el servidor está funcionando
@@ -50,6 +59,7 @@ app.get('/', (req, res) => {
 
 // Inicia el servidor
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
