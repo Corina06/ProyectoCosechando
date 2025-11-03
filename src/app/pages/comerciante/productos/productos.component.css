@@ -1,49 +1,642 @@
 .modal.show {
-    display: block;
-    z-index: 1050;
+  display: block;
+  z-index: 1050;
+}
+
+/* Contenedor para los botones */
+.btn-group {
+  display: flex;
+  /* Utiliza flexbox para alinear los botones horizontalmente */
+  gap: 5px;
+  /* Espacio entre los botones */
+}
+
+/* Botón cuadrado más pequeño */
+.square-btn {
+  width: 25px;
+  /* Tamaño reducido del botón */
+  height: 25px;
+  /* Tamaño reducido del botón */
+  padding: 0;
+  /* Elimina el padding interno */
+  display: flex;
+  /* Para centrar el icono */
+  justify-content: center;
+  /* Centrado horizontal */
+  align-items: center;
+  /* Centrado vertical */
+  border-radius: 5px;
+  /* Bordes redondeados (opcional) */
+}
+
+/* Icono dentro del botón */
+.square-btn i {
+  font-size: 12px;
+  /* Tamaño más pequeño para el icono */
+}
+
+/* Estilo para el botón de editar (Verde) */
+.btn-edit {
+  background-color: #385723;
+  /* Verde */
+  border: none;
+  /* Sin borde */
+  color: white;
+  /* Color del icono */
+}
+
+.btn-edit:hover {
+  background-color: #2c441a;
+  /* Verde más oscuro al pasar el ratón */
+}
+
+/* Estilo para el botón de eliminar (Marrón) */
+.btn-delete {
+  background-color: #572C1A;
+  /* Marrón */
+  border: none;
+  /* Sin borde */
+  color: white;
+  /* Color del icono */
+}
+
+.btn-delete:hover {
+  background-color: #3f1d13;
+  /* Marrón más oscuro al pasar el ratón */
+}
+
+/* Estilos para las imágenes de productos */
+.product-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-image:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+/* Estilos para el resumen de productos */
+.product-summary {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.summary-card {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 140px;
+  max-width: 180px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tarjeta de Total de productos - Verde principal */
+.summary-card:nth-child(1) {
+  border-color: #385723;
+}
+
+.summary-card:nth-child(1) i {
+  color: #385723;
+}
+
+.summary-card:nth-child(1) h4 {
+  color: #385723;
+}
+
+.summary-card:nth-child(1) p {
+  color: #385723;
+}
+
+/* Tarjeta de Disponibles - Verde claro */
+.summary-card:nth-child(2) {
+  border-color: #28a745;
+}
+
+.summary-card:nth-child(2) i {
+  color: #28a745;
+}
+
+.summary-card:nth-child(2) h4 {
+  color: #28a745;
+}
+
+.summary-card:nth-child(2) p {
+  color: #28a745;
+}
+
+/* Tarjeta de Agotados - Marrón */
+.summary-card:nth-child(3) {
+  border-color: #572C1A;
+}
+
+.summary-card:nth-child(3) i {
+  color: #572C1A;
+}
+
+.summary-card:nth-child(3) h4 {
+  color: #572C1A;
+}
+
+.summary-card:nth-child(3) p {
+  color: #572C1A;
+}
+
+.summary-card h4 {
+  margin: 0 0 5px 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.summary-card p {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Iconos para las tarjetas - más pequeños y en línea */
+.summary-card i {
+  font-size: 16px;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .product-summary {
+    gap: 10px;
   }
 
-  /* Contenedor para los botones */
-.btn-group {
-    display: flex; /* Utiliza flexbox para alinear los botones horizontalmente */
-    gap: 5px; /* Espacio entre los botones */
+  .summary-card {
+    min-width: 120px;
+    max-width: 150px;
+    height: 70px;
+    padding: 10px 15px;
   }
-  
-  /* Botón cuadrado más pequeño */
-  .square-btn {
-    width: 25px;  /* Tamaño reducido del botón */
-    height: 25px; /* Tamaño reducido del botón */
-    padding: 0;   /* Elimina el padding interno */
-    display: flex; /* Para centrar el icono */
-    justify-content: center; /* Centrado horizontal */
-    align-items: center; /* Centrado vertical */
-    border-radius: 5px; /* Bordes redondeados (opcional) */
+
+  .summary-card h4 {
+    font-size: 10px;
+    margin-bottom: 3px;
   }
-  
-  /* Icono dentro del botón */
-  .square-btn i {
-    font-size: 12px; /* Tamaño más pequeño para el icono */
+
+  .summary-card p {
+    font-size: 20px;
   }
-  
-  /* Estilo para el botón de editar (Verde) */
-  .btn-edit {
-    background-color: #385723; /* Verde */
-    border: none; /* Sin borde */
-    color: white; /* Color del icono */
+
+  .summary-card i {
+    font-size: 14px;
+    margin-right: 6px;
   }
-  
-  .btn-edit:hover {
-    background-color: #2c441a; /* Verde más oscuro al pasar el ratón */
-  }
-  
-  /* Estilo para el botón de eliminar (Marrón) */
-  .btn-delete {
-    background-color: #572C1A; /* Marrón */
-    border: none; /* Sin borde */
-    color: white; /* Color del icono */
-  }
-  
-  .btn-delete:hover {
-    background-color: #3f1d13; /* Marrón más oscuro al pasar el ratón */
-  }
-  
+}
+
+/* Est
+ilos para las categorías en verde */
+.badge.bg-primary {
+  background-color: #385723 !important;
+  color: white;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.bg-primary:hover {
+  background-color: #2c441a !important;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+/* Mejorar el aspecto general de la tabla */
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #385723;
+  color: #385723;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 15px;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.table tbody td {
+  padding: 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Mejorar los badges de estado */
+.badge.bg-success {
+  background-color: #28a745 !important;
+}
+
+.badge.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+/* Estilo para el título principal */
+.display-4 {
+  color: #385723;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.lead {
+  color: #572C1A;
+  font-size: 1.1rem;
+}
+
+/* E
+stilos para los iconos de FontAwesome */
+.fas {
+  font-family: "Font Awesome 5 Free" !important;
+  font-weight: 900 !important;
+  display: inline-block;
+}
+
+.fa-plus::before {
+  content: "\f067" !important;
+}
+
+.fa-minus::before {
+  content: "\f068" !important;
+}
+
+/* Asegurar que los iconos en botones se vean correctamente */
+.btn .fas {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.btn-success {
+  background-color: #385723 !important;
+  border-color: #385723 !important;
+  color: white;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-success:hover {
+  background-color: #2c441a !important;
+  border-color: #2c441a !important;
+  transform: translateY(-1px);
+}
+
+.btn-success:focus {
+  box-shadow: 0 0 0 0.2rem rgba(56, 87, 35, 0.25) !important;
+}
+
+.btn-success:active {
+  background-color: #2c441a !important;
+  border-color: #2c441a !important;
+}
+
+/* Específico para el botón de agregar producto */
+.btn-success .fas {
+  vertical-align: middle;
+  color: white !important;
+}
+
+/* Sobrescribir estilos globales para iconos en botones */
+.btn .fas,
+.btn .fa,
+.btn .far,
+.btn .fab {
+  color: inherit !important;
+}
+
+/* Asegurar que los iconos se vean en botones de éxito */
+.btn-success .fas,
+.btn-success .fa {
+  color: white !important;
+}
+
+/* Est
+ilos para emojis como respaldo */
+.btn span {
+  margin-right: 8px;
+  font-size: 14px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/*
+ Asegurar que todos los botones de éxito usen el color oficial */
+button.btn-success,
+.btn.btn-success {
+  background-color: #385723 !important;
+  border-color: #385723 !important;
+}
+
+button.btn-success:hover,
+.btn.btn-success:hover {
+  background-color: #2c441a !important;
+  border-color: #2c441a !important;
+}
+
+button.btn-success:focus,
+.btn.btn-success:focus {
+  background-color: #385723 !important;
+  border-color: #385723 !important;
+  box-shadow: 0 0 0 0.2rem rgba(56, 87, 35, 0.25) !important;
+}
+
+button.btn-success:active,
+.btn.btn-success:active {
+  background-color: #2c441a !important;
+  border-color: #2c441a !important;
+}
+
+/* Botón deshabilitado */
+button.btn-success:disabled,
+.btn.btn-success:disabled {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  opacity: 0.65;
+}
+
+/* 
+========================================
+   PALETA DE COLORES OFICIALES - COSECHANDO
+   ========================================
+   #385723 - Verde Oficial (Principal)
+   #572C1A - Marrón Oficial (Secundario)
+   #2B3357 - Azul Oscuro (Opcional)
+   #275750 - Verde Azulado (Opcional)
+   #7F6000 - Dorado/Mostaza (Opcional)
+   ======================================== */
+
+/* Botones de acciones en la tabla con colores oficiales */
+.btn-outline-primary {
+  color: #385723 !important;
+  border-color: #385723 !important;
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  color: white !important;
+  background-color: #385723 !important;
+  border-color: #385723 !important;
+}
+
+.btn-outline-primary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(56, 87, 35, 0.25) !important;
+}
+
+.btn-outline-danger {
+  color: #572C1A !important;
+  border-color: #572C1A !important;
+  background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+  color: white !important;
+  background-color: #572C1A !important;
+  border-color: #572C1A !important;
+}
+
+.btn-outline-danger:focus {
+  box-shadow: 0 0 0 0.2rem rgba(87, 44, 26, 0.25) !important;
+}
+
+/* Mejorar el aspecto de los botones de acción */
+.btn-group .btn {
+  border-radius: 6px;
+  margin-right: 4px;
+  font-size: 12px;
+  padding: 6px 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-group .btn:last-child {
+  margin-right: 0;
+}
+
+.btn-group .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Iconos en los botones de acción */
+.btn-group .btn i {
+  font-size: 12px;
+}
+
+/* Botón primario alternativo usando el azul oscuro opcional */
+.btn-primary-alt {
+  background-color: #2B3357 !important;
+  border-color: #2B3357 !important;
+  color: white;
+}
+
+.btn-primary-alt:hover {
+  background-color: #1f2442 !important;
+  border-color: #1f2442 !important;
+}
+
+/* Botón de información usando el verde azulado */
+.btn-info-alt {
+  background-color: #275750 !important;
+  border-color: #275750 !important;
+  color: white;
+}
+
+.btn-info-alt:hover {
+  background-color: #1e433d !important;
+  border-color: #1e433d !important;
+}
+
+/* Botón de advertencia usando el dorado */
+.btn-warning-alt {
+  background-color: #7F6000 !important;
+  border-color: #7F6000 !important;
+  color: white;
+}
+
+.btn-warning-alt:hover {
+  background-color: #664d00 !important;
+  border-color: #664d00 !important;
+}/* Es
+tilos para imágenes de productos mejorados */
+.product-image {
+  width: 50px !important;
+  height: 50px !important;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  background-color: #f8f9fa;
+}
+
+.product-image:hover {
+  transform: scale(1.1);
+}
+
+/* Placeholder para imágenes rotas */
+.image-placeholder {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #6c757d;
+}
+
+/* Estilos para la vista previa de imagen en el formulario */
+.img-thumbnail {
+  max-width: 200px;
+  max-height: 200px;
+  border: 2px solid #385723;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Mejorar el input de archivo */
+input[type="file"] {
+  border: 2px dashed #385723;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+input[type="file"]:hover {
+  background-color: #e9ecef;
+  border-color: #2c441a;
+}
+
+input[type="file"]:focus {
+  outline: none;
+  border-color: #385723;
+  box-shadow: 0 0 0 0.2rem rgba(56, 87, 35, 0.25);
+}
+
+/* Indicador de carga de imagen */
+.image-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.image-loading i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}/* Estilos
+ para modal más compacto */
+.modal-dialog {
+  max-width: 800px;
+}
+
+.modal-body {
+  padding: 1rem;
+}
+
+.modal-header {
+  padding: 0.75rem 1rem;
+  background-color: #385723;
+  color: white;
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Campos más compactos */
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.form-control {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Imágenes más pequeñas en el modal */
+.modal-body .img-thumbnail {
+  border: 2px solid #385723;
+  border-radius: 8px;
+}
+
+/* Botones del modal */
+.modal-body .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* Input group más compacto */
+.input-group-text {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.9rem;
+}

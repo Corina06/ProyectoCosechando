@@ -1,6 +1,6 @@
 
-import { NgModule } from '@angular/core'; 
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 
 //Rutas Cliente
 import { InicioComponent } from './pages/cliente/inicio/inicio.component';
@@ -30,14 +30,14 @@ export const routes: Routes = [
    {path: 'checkout', component: CheckoutComponent},
    {path: 'producto', component: ProductoComponent},
    {path: 'detalleproducto', component: DetalleproductoComponent},
-   //Rutas Comerciante
-   {path: 'navcomer', component: NavcomerComponent},
-   {path: 'orden', component: OrdenComponent},
-   {path: 'productos', component: ProductosComponent},
-   {path: 'panel', component: PanelComponent},
-   {path: 'inventario', component: InventarioComponent},
-   {path: 'perfil', component: PerfilComponent},
-   {path: 'compra', component: CompraComponent},
+   //Rutas Comerciante (Protegidas con AuthGuard)
+   {path: 'navcomer', component: NavcomerComponent, canActivate: [AuthGuard]},
+   {path: 'orden', component: OrdenComponent, canActivate: [AuthGuard]},
+   {path: 'productos', component: ProductosComponent, canActivate: [AuthGuard]},
+   {path: 'panel', component: PanelComponent, canActivate: [AuthGuard]},
+   {path: 'inventario', component: InventarioComponent, canActivate: [AuthGuard]},
+   {path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard]},
+   {path: 'compra', component: CompraComponent, canActivate: [AuthGuard]},
    //Rutas Cuenta
    {path: 'login', component: LoginComponent},
    {path: 'registro', component: RegistroComponent},
@@ -46,11 +46,3 @@ export const routes: Routes = [
    {path: 'paginacion', component: PaginacionComponent},
 
 ];
-
-@NgModule({
-   imports: [
-      RouterModule.forRoot(routes), 
-   ],
-   exports: [RouterModule]
- })
- export class AppRoutingModule { }

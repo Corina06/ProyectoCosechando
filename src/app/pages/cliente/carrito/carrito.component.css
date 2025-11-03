@@ -1,0 +1,242 @@
+/
+* Botón de eliminar producto mejorado */
+.btn-remove-item {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove-item:hover {
+  background-color: #dc3545;
+  color: white;
+  transform: scale(1.1);
+}
+
+.btn-remove-item:active {
+  transform: scale(0.95);
+}
+
+.btn-remove-item i {
+  font-size: 14px;
+}
+
+/* Alternativa: Botón solo con X */
+.btn-remove-x {
+  background: none;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.btn-remove-x:hover {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+/* Alternativa: Botón de texto */
+.btn-remove-text {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: underline;
+}
+
+.btn-remove-text:hover {
+  background-color: #dc3545;
+  color: white;
+  text-decoration: none;
+}/* Ce
+ntrar contenido de la tabla */
+.table {
+  text-align: center;
+}
+
+.table thead th {
+  text-align: center !important;
+  vertical-align: middle !important;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #385723;
+}
+
+.table tbody td,
+.table tbody th {
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 15px 8px;
+}
+
+/* Centrar imagen del producto */
+.table tbody th .d-flex {
+  justify-content: center !important;
+}
+
+/* Centrar controles de cantidad */
+.input-group.quantity {
+  margin: 0 auto !important;
+}
+
+/* Centrar botón de eliminar */
+.btn-remove-x {
+  margin: 0 auto;
+  display: block;
+}
+
+/* Asegurar que el texto esté centrado */
+.table p {
+  margin: 0;
+  text-align: center;
+}/
+* Estilos para el selector de unidades */
+.unit-selector {
+  margin-top: 8px;
+}
+
+.unit-selector select {
+  font-size: 12px;
+  width: 120px;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.unit-selector select:focus {
+  border-color: #385723;
+  box-shadow: 0 0 0 0.2rem rgba(56, 87, 35, 0.25);
+  outline: none;
+}
+
+.unit-selector select:hover {
+  border-color: #385723;
+  background-color: #fff;
+}
+
+/* Mejorar el aspecto de la columna de cantidad */
+.quantity-column {
+  min-width: 150px;
+}
+
+.quantity-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .unit-selector select {
+    width: 100px;
+    font-size: 11px;
+  }
+  
+  .input-group.quantity {
+    width: 100px !important;
+  }
+  
+  .quantity-column {
+    min-width: 120px;
+  }
+}/* 
+Estilos mejorados para controles de cantidad y unidades */
+.quantity-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botones de cantidad más modernos */
+.input-group.quantity .btn-outline-secondary {
+  border-color: #385723;
+  color: #385723;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 12px;
+}
+
+.input-group.quantity .btn-outline-secondary:hover {
+  background-color: #385723;
+  color: white;
+  border-color: #385723;
+}
+
+.input-group.quantity input {
+  height: 32px;
+  font-weight: 500;
+  border-color: #385723;
+  color: #385723;
+}
+
+.input-group.quantity input:focus {
+  border-color: #385723;
+  box-shadow: none;
+}
+
+/* Selector de unidades mejorado */
+.unit-selector .form-select {
+  border: 1px solid #385723;
+  color: #385723;
+  font-weight: 500;
+  padding: 4px 8px;
+}
+
+.unit-selector .form-select:focus {
+  border-color: #385723;
+  box-shadow: 0 0 0 0.2rem rgba(56, 87, 35, 0.15);
+}
+
+.unit-selector .form-select:hover {
+  background-color: #f8f9fa;
+}
+
+/* Mejorar presentación de productos */
+.table tbody td p strong {
+  color: #333;
+  font-size: 16px;
+}
+
+.table tbody td small {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Precio más destacado */
+.table tbody td p strong {
+  font-size: 18px;
+  color: #385723;
+}

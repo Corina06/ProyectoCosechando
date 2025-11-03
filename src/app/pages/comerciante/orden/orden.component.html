@@ -1,110 +1,282 @@
 <app-navcomer></app-navcomer>
 
 <div class="text-center mb-4">
-    <h2 class="display-4 font-weight-bold ">Ventas</h2>
-    <p class="lead text-muted">Gestiona y realiza un seguimiento de todas las ventas realizadas en tu tienda.</p>
+    <h2 class="display-4 font-weight-bold ">Mis Ventas</h2>
+    <p class="lead text-muted">Historial de todas las compras realizadas por tus clientes en tu local.</p>
   </div>
 
-  <div class="filters">
-    <div class="filter-group">
-        <label for="statusFilter">Filtrar por estado:</label>
-        <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="filterOrders()" class="filter-select">
-            <option value="">Todos</option>
-            <option value="Entregado">Entregado</option>
-            <option value="Pendiente">Pendiente</option>
-            <option value="No Retirado">No Retirado</option>
-        </select>
+<!-- Mensajes de estado -->
+<div *ngIf="loading" class="alert alert-info">
+  <i class="fas fa-spinner fa-spin"></i> Cargando ventas...
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+  <i class="fas fa-exclamation-triangle"></i> {{ error }}
+  <button type="button" class="btn-close" (click)="error = ''"></button>
+</div>
+
+<div class="row mb-3 align-items-center">
+  <div class="col-md-4">
+    <div class="input-group">
+      <span class="input-group-text"><i class="fas fa-search"></i></span>
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" 
+             placeholder="Buscar por cliente, orden o producto..." class="form-control" />
+      <button *ngIf="searchTerm" class="btn btn-outline-secondary" (click)="searchTerm = ''; onSearchChange()">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
+  </div>
+  <div class="col-md-4">
+    <div class="input-group">
+      <span class="input-group-text"><i class="fas fa-filter"></i></span>
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="filterOrders()" class="form-control">
+        <option value="">Todos los estados</option>
+        <option value="Entregado">Entregado</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="En proceso">En proceso</option>
+        <option value="No Retirado">No Retirado</option>
+      </select>
+      <button *ngIf="selectedStatus" class="btn btn-outline-secondary" 
+              (click)="selectedStatus = ''; filterOrders()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <div class="col-md-4 text-end">
+    <div class="d-flex justify-content-end align-items-center">
+      <span class="text-muted me-3">
+        <i class="fas fa-receipt"></i> 
+        {{ totalOrders }} ventas encontradas
+      </span>
+    </div>
+  </div>
 </div>
 
 <div class="card shadow border-0 mb-7">
     <div class="table-responsive">
         <table class="table table-hover table-nowrap" id="ordersTable">
-            <thead class="thead-light">
-                <tr class="ordenar">
-                    <th class="ordenar" (click)="sortOrders('name')">Nombre</th>
-                    <th class="ordenar" (click)="sortOrders('date')">Fecha</th>
-                    <th class="ordenar" (click)="sortOrders('total')">Total</th>
-                    <th class="ordenar" (click)="sortOrders('status')">Estado</th>
-                    <th class="ordenar"> Acciones </th>
+            <thead>
+                <tr>
+                    <th style="background-color: #385723 !important; color: white !important; cursor: pointer; padding: 12px 8px; font-weight: 600; text-transform: uppercase; font-size: 14px;" 
+                        (click)="sortOrders('name')">Nombre</th>
+                    <th style="background-color: #385723 !important; color: white !important; cursor: pointer; padding: 12px 8px; font-weight: 600; text-transform: uppercase; font-size: 14px;" 
+                        (click)="sortOrders('date')">Fecha</th>
+                    <th style="background-color: #385723 !important; color: white !important; cursor: pointer; padding: 12px 8px; font-weight: 600; text-transform: uppercase; font-size: 14px;" 
+                        (click)="sortOrders('total')">Total</th>
+                    <th style="background-color: #385723 !important; color: white !important; cursor: pointer; padding: 12px 8px; font-weight: 600; text-transform: uppercase; font-size: 14px;" 
+                        (click)="sortOrders('status')">Estado</th>
+                    <th style="background-color: #385723 !important; color: white !important; cursor: pointer; padding: 12px 8px; font-weight: 600; text-transform: uppercase; font-size: 14px;"> Acciones </th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let order of sortedOrders">
-                    <td><a class="text-heading font-semibold">{{order.name}}</a></td>
-                    <td>{{ order.date | date: 'shortDate' }}</td>
-                    <td>${{order.total.toFixed(2)}}</td>
+                <tr *ngFor="let order of currentOrders">
                     <td>
-                        <span class="badge badge-lg badge-dot">
-                            <i [ngClass]="{
-                                'bg-success': order.status === 'Entregado',
-                                'bg-warning': order.status === 'Pendiente',
-                                'bg-danger': order.status === 'No Retirado'
-                              }"></i>{{ order.status }}
+                      <div>
+                        <strong class="text-heading">{{order.name}}</strong>
+                        <br>
+                        <small class="text-muted">Cliente: {{order.client}}</small>
+                      </div>
+                    </td>
+                    <td>{{ order.date }}</td>
+                    <td>
+                      <strong>${{order.total.toFixed(2)}}</strong>
+                      <br>
+                      <small class="text-muted">{{order.products.length}} productos</small>
+                      <br>
+                      <small class="text-muted" *ngFor="let product of order.products; let i = index">
+                        <span *ngIf="i < 2">{{product.quantity}} {{getUnitAbbreviation(product.unit)}} {{product.name}}<span *ngIf="i < order.products.length - 1 && i < 1">, </span></span>
+                        <span *ngIf="i === 2 && order.products.length > 2">...</span>
+                      </small>
+                    </td>
+                    <td>
+                        <span *ngIf="order.status === 'Entregado'" 
+                              style="background-color: #7fad39 !important; color: white !important; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                          {{ order.status }}
+                        </span>
+                        <span *ngIf="order.status === 'Pendiente'" 
+                              style="background-color: #7F6000 !important; color: white !important; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                          {{ order.status }}
+                        </span>
+                        <span *ngIf="order.status === 'En proceso'" 
+                              style="background-color: #385723 !important; color: white !important; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                          {{ order.status }}
+                        </span>
+                        <span *ngIf="order.status === 'No Retirado'" 
+                              style="background-color: #572C1A !important; color: white !important; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                          {{ order.status }}
                         </span>
                     </td>
                     <td class="text-end">
-                        <button (click)="verDetalles(order)" class="btn btn-sm btn-neutral">Ver Detalles </button>
+                        <button (click)="verDetalles(order)" 
+                                style="color: #385723 !important; border: 2px solid #385723 !important; background-color: transparent !important; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all 0.2s ease;"
+                                onmouseover="this.style.backgroundColor='#385723'; this.style.color='white';"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#385723';">
+                          <i class="fas fa-eye" style="color: inherit; margin-right: 6px;"></i> Ver Detalles
+                        </button>
                     </td>
+                </tr>
+                
+                <tr *ngIf="currentOrders.length === 0">
+                  <td colspan="5" class="text-center py-4">
+                    <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No se encontraron ventas</p>
+                    <small class="text-muted">
+                      {{ searchTerm || selectedStatus ? 'Intenta cambiar los filtros de búsqueda' : 'Aún no tienes ventas registradas' }}
+                    </small>
+                  </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="card-footer border-0 py-5">
-        <span class="text-muted text-sm">Mostrar 10 pedidos de 250 resultados</span>
+    <div class="card-footer border-0 py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="text-muted text-sm">
+            Mostrando {{ currentOrders.length }} de {{ totalOrders }} ventas
+          </span>
+          <app-paginacion
+            [totalItems]="totalOrders"
+            [itemsPerPage]="itemsPerPage"
+            (pageChange)="onPageChange($event)">
+          </app-paginacion>
+        </div>
     </div>
-
-    <app-paginacion
-    [totalItems]="orders.length"
-    [itemsPerPage]="itemsPerPage"
-    (pageChange)="onPageChange($event)">
-</app-paginacion>
 </div>
 
 
 
-<!-- Detalles de la orden (solo visible si selectedOrder está definido) -->
-<div class="modal-overlay" *ngIf="selectedOrder" (click)="cerrarDetalles()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <!-- Título del Modal -->
-      <h2>Orden #{{ selectedOrder.id }}</h2>
-  
-      <!-- Información de la Orden -->
-      <div class="order-summary">
-        <p><strong>Cliente:</strong> {{ selectedOrder.client }}</p>
-        <p><strong>Fecha del Pedido:</strong> {{ selectedOrder.date | date: 'medium' }}</p>
-        <p><strong>Total:</strong> {{ selectedOrder.total | currency }}</p>
+<!-- Modal de Detalles de la Orden -->
+<div class="modal" tabindex="-1" [ngClass]="{ 'show': selectedOrder }" style="display: block;" *ngIf="selectedOrder">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #385723 !important; color: white !important;">
+        <h5 class="modal-title" style="color: white !important; margin: 0;">
+          <i class="fas fa-file-invoice-dollar" style="color: white !important;"></i> 
+          FACTURA - {{ selectedOrder.name }}
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarDetalles()" style="filter: invert(1);"></button>
       </div>
-  
-      <!-- Detalles de los Productos -->
-      <div class="order-products">
-        <h3>Productos Comprados:</h3>
-        <table class="products-table">
-          <!-- Encabezado de la tabla -->
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Cantidad</th>
-              <th>Precio Unitario</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <!-- Cuerpo de la tabla -->
-          <tbody>
-            <tr *ngFor="let product of selectedOrder.products">
-              <td>{{ product.name }}</td>
-              <td>{{ product.quantity }}</td>
-              <td>{{ product.price | currency }}</td> <!-- Asumiendo que 'price' es parte del producto -->
-              <td>{{ product.quantity * product.price | currency }}</td>
-            </tr>
-          </tbody>
-        </table>
+      
+      <div class="modal-body" style="padding: 20px; background-color: white;">
+        <!-- Encabezado de Factura -->
+        <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #385723; padding-bottom: 15px;">
+          <h4 style="color: #385723; font-weight: bold; margin: 0;">COSECHANDO</h4>
+          <p style="margin: 5px 0; color: #572C1A; font-size: 14px;">Mercado de Productos Frescos</p>
+          <p style="margin: 0; color: #666; font-size: 12px;">Tel: (507) 123-4567 | Email: info&#64;cosechando.com</p>
+        </div>
+
+        <!-- Información de la Factura -->
+        <div class="row mb-3">
+          <div class="col-6">
+            <h6 style="color: #385723; font-weight: bold; margin-bottom: 10px;">FACTURAR A:</h6>
+            <p style="margin: 2px 0; font-size: 14px;"><strong>{{ selectedOrder.client }}</strong></p>
+            <p style="margin: 2px 0; font-size: 12px; color: #666;">Cliente registrado</p>
+          </div>
+          <div class="col-6 text-end">
+            <h6 style="color: #385723; font-weight: bold; margin-bottom: 10px;">FACTURA</h6>
+            <p style="margin: 2px 0; font-size: 14px;"><strong>No. {{ selectedOrder.id }}</strong></p>
+            <p style="margin: 2px 0; font-size: 12px; color: #666;">Fecha: {{ selectedOrder.date }}</p>
+            <p style="margin: 2px 0;">
+              <span *ngIf="selectedOrder.status === 'Entregado'" 
+                    style="background-color: #7fad39 !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;">
+                {{ selectedOrder.status }}
+              </span>
+              <span *ngIf="selectedOrder.status === 'Pendiente'" 
+                    style="background-color: #7F6000 !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;">
+                {{ selectedOrder.status }}
+              </span>
+              <span *ngIf="selectedOrder.status === 'En proceso'" 
+                    style="background-color: #385723 !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;">
+                {{ selectedOrder.status }}
+              </span>
+              <span *ngIf="selectedOrder.status === 'No Retirado'" 
+                    style="background-color: #572C1A !important; color: white !important; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;">
+                {{ selectedOrder.status }}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Detalle de Productos -->
+        <div style="margin-bottom: 20px;">
+          <h6 style="color: #385723; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+            DETALLE DE PRODUCTOS
+          </h6>
+          <div class="table-responsive">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+              <thead>
+                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #385723;">
+                  <th style="padding: 10px 8px; text-align: left; font-weight: bold; color: #385723;">DESCRIPCIÓN</th>
+                  <th style="padding: 10px 8px; text-align: center; font-weight: bold; color: #385723;">CANT.</th>
+                  <th style="padding: 10px 8px; text-align: right; font-weight: bold; color: #385723;">PRECIO UNIT.</th>
+                  <th style="padding: 10px 8px; text-align: right; font-weight: bold; color: #385723;">IMPORTE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of selectedOrder.products; let i = index" 
+                    [style.background-color]="i % 2 === 0 ? 'white' : '#f9f9f9'">
+                  <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ product.name }}</td>
+                  <td style="padding: 8px; text-align: center; border-bottom: 1px solid #eee;">
+                    {{ product.quantity }} {{ getUnitAbbreviation(product.unit) }}
+                  </td>
+                  <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">
+                    ${{ product.price.toFixed(2) }}/{{ getUnitAbbreviation(product.unit) }}
+                  </td>
+                  <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee; font-weight: bold;">
+                    ${{ (product.quantity * product.price).toFixed(2) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Resumen de Totales -->
+        <div style="border-top: 2px solid #385723; padding-top: 15px;">
+          <div class="row">
+            <div class="col-6">
+              <p style="font-size: 12px; color: #666; margin: 0;">
+                <strong>Términos y Condiciones:</strong><br>
+                • Productos frescos del día<br>
+                • Garantía de calidad<br>
+                • Gracias por su compra
+              </p>
+            </div>
+            <div class="col-6">
+              <table style="width: 100%; font-size: 14px;">
+                <tr>
+                  <td style="padding: 5px 0; text-align: right;"><strong>Subtotal:</strong></td>
+                  <td style="padding: 5px 0 5px 15px; text-align: right;">${{ selectedOrder.total.toFixed(2) }}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 5px 0; text-align: right;"><strong>Impuestos:</strong></td>
+                  <td style="padding: 5px 0 5px 15px; text-align: right;">$0.00</td>
+                </tr>
+                <tr style="border-top: 2px solid #385723;">
+                  <td style="padding: 10px 0 5px 0; text-align: right; font-size: 16px;"><strong>TOTAL:</strong></td>
+                  <td style="padding: 10px 0 5px 15px; text-align: right; font-size: 18px; font-weight: bold; color: #385723;">
+                    ${{ selectedOrder.total.toFixed(2) }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pie de Factura -->
+        <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 11px; color: #666;">
+          <p style="margin: 0;">¡Gracias por elegir Cosechando! - Productos frescos, directamente del campo a tu mesa</p>
+        </div>
       </div>
-  
-      <!-- Botón para Cerrar -->
-      <div class="modal-footer">
-        <button (click)="cerrarDetalles()">Cerrar</button>
+      
+      <div class="modal-footer" style="padding: 12px 16px; border-top: 1px solid #dee2e6; text-align: center;">
+        <button type="button" (click)="descargarFactura()"
+                style="background-color: #385723 !important; color: white !important; border: 2px solid #385723 !important; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all 0.2s ease; cursor: pointer;"
+                onmouseover="this.style.backgroundColor='#2c441a';"
+                onmouseout="this.style.backgroundColor='#385723';">
+          <i class="fas fa-download" style="color: white; margin-right: 8px;"></i> Descargar Factura
+        </button>
       </div>
     </div>
   </div>
+</div>
   

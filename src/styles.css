@@ -81,10 +81,230 @@
     text-decoration: none; 
 	color: #385723 ;
 	margin-right: 15px;
+	position: relative;
   }
   
   .cart-link:hover {
     color: #572C1A ; 
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 20px;
+  }
+
+  /* Notificación del carrito */
+  .cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #385723;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .cart-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .cart-notification i {
+    color: #4CAF50;
+    font-size: 18px;
+  }
+
+  /* Sección de cantidad con título arriba */
+  .quantity-section {
+    margin: 20px 0;
+  }
+
+  .quantity-section label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .quantity-controls {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid #385723;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .qty-btn {
+    width: 32px;
+    height: 40px;
+    background: #385723;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .qty-btn:hover {
+    background: #572C1A;
+  }
+
+  .qty-btn:active {
+    background: #2d4019;
+  }
+
+  .quantity-input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: none;
+    background: white;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    outline: none;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+
+  .quantity-input:focus {
+    background: #f8f9fa;
+    box-shadow: inset 0 0 0 2px #385723;
+  }
+
+  /* Ocultar las flechas del input number */
+  .quantity-input::-webkit-outer-spin-button,
+  .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .quantity-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .add-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    height: 40px;
+    line-height: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* Sección de cantidad con título arriba */
+  .quantity-section {
+    margin: 20px 0;
+  }
+
+  .quantity-section label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .quantity-controls {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid #385723;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .qty-btn {
+    width: 32px;
+    height: 40px;
+    background: #385723;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .qty-btn:hover {
+    background: #572C1A;
+  }
+
+  .qty-btn:active {
+    background: #2d4019;
+  }
+
+  .quantity-input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: none;
+    background: white;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    outline: none;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+
+  .quantity-input:focus {
+    background: #f8f9fa;
+    box-shadow: inset 0 0 0 2px #385723;
+  }
+
+  /* Ocultar las flechas del input number */
+  .quantity-input::-webkit-outer-spin-button,
+  .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .quantity-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  .add-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    height: 40px;
+    line-height: 20px;
+    letter-spacing: 1px;
   }
   /*
 ===========================================
@@ -101,10 +321,65 @@
 .header a {
   text-align: center;
   font-size: 80%;
-  color: inherit;
+  color: white !important;
   padding: 3px 10px;
   text-decoration: none ;
-  
+}
+
+/* Solo iconos dentro del header del comerciante deben ser blancos */
+.header i {
+  color: white !important;
+}
+
+/* Asegurar que los iconos del nav del cliente mantengan su color original */
+app-nav .nav-icons .cart-link i,
+app-nav .cart-link i {
+  color: #385723 !important;
+}
+
+app-nav .nav-icons .cart-link:hover i,
+app-nav .cart-link:hover i {
+  color: #2c4b21 !important;
+}
+
+app-nav .nav-icons .user-link i,
+app-nav .user-link i {
+  color: #385723 !important;
+}
+
+app-nav .nav-icons .user-link:hover i,
+app-nav .user-link:hover i {
+  color: #572C1A !important;
+}
+
+/* Específicamente para el icono del carrito en la página de inicio */
+app-nav .fas.fa-shopping-cart {
+  color: #385723 !important;
+}
+
+app-nav .cart-link:hover .fas.fa-shopping-cart {
+  color: #2c4b21 !important;
+}
+
+/* Iconos de estadísticas del panel - solo en contenedores específicos */
+.card-body div[style*="border-radius: 50%"] .fas.fa-dollar-sign,
+.card-body div[style*="border-radius: 50%"] .fas.fa-shopping-cart,
+.card-body div[style*="border-radius: 50%"] .fas.fa-boxes,
+.card-body div[style*="border-radius: 50%"] .fas.fa-chart-line {
+  color: white !important;
+}
+
+/* Contenedores circulares con iconos - solo en tarjetas */
+.card-body div[style*="border-radius: 50%"] i.fas {
+  color: white !important;
+}
+
+/* Iconos en contenedores con fondo de colores específicos - solo en tarjetas */
+.card-body div[style*="background-color: #385723"] i,
+.card-body div[style*="background-color: #7fad39"] i,
+.card-body div[style*="background-color: #7F6000"] i,
+.card-body div[style*="background-color: #572C1A"] i {
+  color: white !important;
 }
 
 /*
@@ -277,6 +552,13 @@
 	font-weight: 700;
 	background: #385723;
 	letter-spacing: 2px;
+	text-decoration: none;
+	transition: background-color 0.3s ease;
+}
+
+.primary-btn:hover {
+	background: #572C1A;
+	color: #ffffff;
 	text-decoration: none;
 }
 
@@ -1806,3 +2088,85 @@ th.ordenar {
   }
 
   
+/* Camb
+iar color por defecto de iconos FontAwesome */
+.fas, .fa, .far, .fab {
+  color: #385723 !important;
+}
+
+/* Excepciones para iconos que deben mantener colores específicos */
+.cart-badge,
+.btn-danger .fas,
+.btn-danger .fa,
+.text-white .fas,
+.text-white .fa,
+.modern-show-all-btn .fas,
+.modern-show-all-btn .fa,
+.button-search .fas,
+.button-search .fa,
+.button-search i {
+  color: white !important;
+}/* Estilos 
+globales para centrar todas las tablas */
+.table {
+  text-align: center;
+}
+
+.table thead th {
+  text-align: center !important;
+  vertical-align: middle !important;
+  font-weight: 600;
+  color: #333;
+}
+
+.table tbody td,
+.table tbody th {
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 12px 8px;
+}
+
+/* Centrar contenido específico de tablas */
+.table img {
+  margin: 0 auto;
+  display: block;
+}
+
+.table .btn-group {
+  justify-content: center;
+  display: flex;
+}
+
+/* Estilos para tablas de productos */
+.products-table {
+  text-align: center;
+  width: 100%;
+}
+
+.products-table thead th {
+  text-align: center !important;
+  vertical-align: middle !important;
+  font-weight: 600;
+  color: #333;
+  padding: 12px;
+  border-bottom: 2px solid #385723;
+}
+
+.products-table tbody td {
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Centrar elementos específicos en tablas */
+.table .input-group {
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.table select,
+.table input[type="number"],
+.table input[type="text"] {
+  text-align: center;
+}

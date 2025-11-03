@@ -2,21 +2,22 @@ import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavComponent } from '../nav/nav.component';
-import { FilterPipe } from '../../../componentes/filter.pipe';
 import { ProductService } from '../../../services/product.service';
 import { CartService } from '../../../services/cart.service';
+import { SearchService } from '../../../services/search.service';
 import { Product } from '../../../models/product.model';
 
 @Component({
   selector: 'app-producto',
   standalone: true,
-  imports: [NavComponent,CommonModule, FilterPipe],
-  templateUrl: './producto.component.html',
-  styleUrls: ['./producto.component.css']
+  imports: [NavComponent,CommonModule],
+  templateUrl: './producto.component.html'
 })
 
 export class ProductoComponent implements OnInit{
   selectedFilter: string = 'Todos'
+  searchTerm: string = '';
+  searchExecuted: boolean = false;
 
   products: Product[] = []; // Inicializa el array de productos
 
@@ -26,9 +27,21 @@ export class ProductoComponent implements OnInit{
   quantity: number = 1;
 
   get filteredProducts() {
-    return this.selectedFilter === 'Todos' 
+    let filtered = this.selectedFilter === 'Todos' 
      ? this.products
      : this.products.filter(product => product.category === this.selectedFilter);
+
+    // Aplicar filtro de búsqueda
+    if (this.searchTerm.trim()) {
+      const searchLower = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(product => 
+        product.name.toLowerCase().includes(searchLower) ||
+        product.description.toLowerCase().includes(searchLower) ||
+        product.category.toLowerCase().includes(searchLower)
+      );
+    }
+
+    return filtered;
   }
 
   get paginatedProducts() {
@@ -58,14 +71,45 @@ export class ProductoComponent implements OnInit{
     this.currentPage = 1; // Reiniciar a la primera página al cambiar el filtro
   }
 
+  // Limpiar búsqueda
+  clearSearch(): void {
+    this.searchService.clearSearch();
+  }
+
+  // Verificar si debe mostrar información de búsqueda
+  shouldShowSearchInfo(): boolean {
+    return this.searchExecuted && this.searchTerm.trim() !== '';
+  }
+
   constructor(private productService: ProductService, 
               private cartService: CartService,
+              private searchService: SearchService,
               private router: Router) { } 
 
   ngOnInit(): void {
-    this.products = this.productService.getProducts(); 
-    console.log('ProductoComponent inicializado'); // Para verificar que el componente se carga
-  }
+  this.productService.getProducts().subscribe(
+    (data: Product[]) => {
+      this.products = data;
+      console.log('Productos cargados:', this.products);
+    },
+    (error: any) => {
+      console.error('Error al cargar productos:', error);
+    }
+  );
+
+  // Suscribirse a cambios en el término de búsqueda
+  this.searchService.searchTerm$.subscribe(term => {
+    this.searchTerm = term;
+    this.currentPage = 1; // Reiniciar a la primera página al buscar
+  });
+
+  // Suscribirse a cambios en el estado de búsqueda ejecutada
+  this.searchService.searchExecuted$.subscribe(executed => {
+    this.searchExecuted = executed;
+  });
+
+  console.log('ProductoComponent inicializado');
+}
 
   //Detalle del producto
   viewDetails(product: Product): void {
@@ -77,9 +121,70 @@ export class ProductoComponent implements OnInit{
   addToCart(product: Product): void {
     console.log('Intentando añadir al carrito:', product);
     this.cartService.addToCart(product, this.quantity);
-    this.router.navigate(['/carrito']);
+    
+    // Mostrar notificación sutil
+    this.showAddedToCartNotification(product.name);
+  }
 
- }
+  showAddedToCartNotification(productName: string): void {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification';
+    notification.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      <span>${productName} añadido al carrito</span>
+    `;
+    
+    // Agregar al body
+    document.body.appendChild(notification);
+    
+    // Mostrar con animación
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    // Ocultar después de 3 segundos
+    setTimeout(() => {
+      notification.classList.remove('show');
+      setTimeout(() => document.body.removeChild(notification), 300);
+    }, 3000);
+  }
 
-  
+  // Método para manejar errores de carga de imágenes
+  onImageError(event: any) {
+    event.target.src = 'assets/images/placeholder.svg';
+  }
+
+  // Métodos para unidades de medida
+  getUnitName(unit: string): string {
+    const units: { [key: string]: string } = {
+      'unidad': 'unidad',
+      'libra': 'libra',
+      'kilo': 'kilogramo',
+      'gramo': 'gramo',
+      'onza': 'onza',
+      'docena': 'docena',
+      'paquete': 'paquete',
+      'bolsa': 'bolsa',
+      'caja': 'caja',
+      'litro': 'litro',
+      'galon': 'galón'
+    };
+    return units[unit] || unit || 'unidad';
+  }
+
+  getUnitAbbreviation(unit: string): string {
+    const abbreviations: { [key: string]: string } = {
+      'unidad': 'u',
+      'libra': 'lb',
+      'kilo': 'kg',
+      'gramo': 'g',
+      'onza': 'oz',
+      'docena': 'doc',
+      'paquete': 'paq',
+      'bolsa': 'bolsa',
+      'caja': 'caja',
+      'litro': 'L',
+      'galon': 'gal'
+    };
+    return abbreviations[unit] || unit || 'u';
+  }
 }

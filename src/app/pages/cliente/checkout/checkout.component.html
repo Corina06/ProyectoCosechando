@@ -5,7 +5,8 @@
             <p class="lead fw-normal text-white-50 mb-0">Completa la información solicitada </p>
 
         </div>
-        <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="200px" style="cursor: pointer;" tabindex="0">
+        <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="200px" style="cursor: pointer;"
+            tabindex="0">
 
     </div>
 </header>
@@ -14,70 +15,176 @@
 <section class="checkout spad">
     <div class="borde">
         <div class="checkout__form">
-            <h4>Información</h4>
-            <form action="#">
+            <h4>Información de Envío</h4>
+            <p class="guest-info">Completa tus datos para procesar el pedido</p>
+            <form (ngSubmit)="processOrder()" #checkoutForm="ngForm">
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
+                        <!-- Información Personal -->
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Nombre<span>*</span></p>
-                                    <input type="text">
+                                    <input 
+                                        type="text" 
+                                        [(ngModel)]="guestData.firstName"
+                                        name="firstName"
+                                        required
+                                        [class.error]="formErrors.firstName"
+                                    >
+                                    <span class="error-message" *ngIf="formErrors.firstName">{{ formErrors.firstName }}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
                                     <p>Apellido<span>*</span></p>
-                                    <input type="text">
+                                    <input 
+                                        type="text" 
+                                        [(ngModel)]="guestData.lastName"
+                                        name="lastName"
+                                        required
+                                        [class.error]="formErrors.lastName"
+                                    >
+                                    <span class="error-message" *ngIf="formErrors.lastName">{{ formErrors.lastName }}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout__input">
-                            <p>Provincia<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Dirección<span>*</span></p>
-                            <input type="text" placeholder="Corregimiento, Calle" class="checkout__input__add">
-                            <input type="text" placeholder="Apartamento/Casa">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Town/City<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Country/State<span>*</span></p>
-                            <input type="text">
-                        </div>
-                        <div class="checkout__input">
-                            <p>Postcode / ZIP<span>*</span></p>
-                            <input type="text">
-                        </div>
+
+                        <!-- Contacto -->
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Phone<span>*</span></p>
-                                    <input type="text">
+                                    <p>Correo Electrónico<span>*</span></p>
+                                    <input 
+                                        type="email" 
+                                        [(ngModel)]="guestData.email"
+                                        name="email"
+                                        required
+                                        [class.error]="formErrors.email"
+                                    >
+                                    <span class="error-message" *ngIf="formErrors.email">{{ formErrors.email }}</span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
-                                    <p>Correo Electrónico<span>*</span></p>
-                                    <input type="text">
+                                    <p>Celular<span>*</span></p>
+                                    <input 
+                                        type="tel" 
+                                        [(ngModel)]="guestData.phone"
+                                        name="phone"
+                                        required
+                                        [class.error]="formErrors.phone"
+                                    >
+                                    <span class="error-message" *ngIf="formErrors.phone">{{ formErrors.phone }}</span>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Dirección -->
+                        <div class="checkout__input">
+                            <p>Provincia<span>*</span></p>
+                            <select 
+                                [(ngModel)]="guestData.province"
+                                name="province"
+                                (change)="onProvinceChange()"
+                                required
+                                [class.error]="formErrors.province"
+                            >
+                                <option value="">Selecciona una provincia</option>
+                                <option *ngFor="let province of provinces" [value]="province.value">
+                                    {{ province.label }}
+                                </option>
+                            </select>
+                            <span class="error-message" *ngIf="formErrors.province">{{ formErrors.province }}</span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Distrito<span>*</span></p>
+                                    <select 
+                                        [(ngModel)]="guestData.district"
+                                        name="district"
+                                        (change)="onDistrictChange()"
+                                        required
+                                        [class.error]="formErrors.district"
+                                        [disabled]="!guestData.province"
+                                    >
+                                        <option value="">Selecciona un distrito</option>
+                                        <option *ngFor="let district of availableDistricts" [value]="district">
+                                            {{ district }}
+                                        </option>
+                                    </select>
+                                    <span class="error-message" *ngIf="formErrors.district">{{ formErrors.district }}</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Corregimiento<span>*</span></p>
+                                    <select 
+                                        [(ngModel)]="guestData.corregimiento"
+                                        name="corregimiento"
+                                        required
+                                        [class.error]="formErrors.corregimiento"
+                                        [disabled]="!guestData.district"
+                                    >
+                                        <option value="">Selecciona un corregimiento</option>
+                                        <option *ngFor="let corregimiento of availableCorregimientos" [value]="corregimiento">
+                                            {{ corregimiento }}
+                                        </option>
+                                    </select>
+                                    <span class="error-message" *ngIf="formErrors.corregimiento">{{ formErrors.corregimiento }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkout__input">
+                            <p>Dirección<span>*</span></p>
+                            <input 
+                                type="text" 
+                                [(ngModel)]="guestData.address"
+                                name="address"
+                                placeholder="Calle, Avenida, etc."
+                                required
+                                [class.error]="formErrors.address"
+                            >
+                            <input 
+                                type="text" 
+                                [(ngModel)]="guestData.apartment"
+                                name="apartment"
+                                placeholder="Apartamento, Casa, Edificio (Opcional)"
+                                style="margin-top: 10px;"
+                            >
+                            <span class="error-message" *ngIf="formErrors.address">{{ formErrors.address }}</span>
+                        </div>
+
+                        <!-- Opción de crear cuenta -->
                         <div class="checkout__input__checkbox">
-                            <label for="acc">
-                                ¿Quieres crear una cuenta?
-                                <input type="checkbox" id="acc">
+                            <label for="createAccount">
+                                ¿Quieres crear una cuenta para futuras compras?
+                                <input 
+                                    type="checkbox" 
+                                    id="createAccount"
+                                    [(ngModel)]="createAccount"
+                                    name="createAccount"
+                                >
                                 <span class="checkmark"></span>
                             </label>
                         </div>
-                        <p>Cree una cuenta ingresando la información a continuación. Si es un cliente habitual, inicie sesión en la parte superior de la página.</p>
-                        <div class="checkout__input">
-                            <p>Contraseña<span>*</span></p>
-                            <input type="text">
+
+                        <div *ngIf="createAccount" class="account-section">
+                            <p class="account-info">Crea una cuenta para guardar tus datos y hacer compras más rápidas en el futuro.</p>
+                            <div class="checkout__input">
+                                <p>Contraseña<span>*</span></p>
+                                <input 
+                                    type="password" 
+                                    [(ngModel)]="password"
+                                    name="password"
+                                    placeholder="Mínimo 6 caracteres"
+                                    [class.error]="formErrors.password"
+                                >
+                                <span class="error-message" *ngIf="formErrors.password">{{ formErrors.password }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -85,29 +192,47 @@
                             <h4>Tu Orden</h4>
                             <div class="checkout__order__products">Productos <span>Total</span></div>
                             <ul *ngFor="let item of cart">
-                                <li>{{ item.product.name }}<span>{{ item.product.price * item.quantity | currency }}</span></li>
+                                <li>
+                                    {{ item.product.name }}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ item.quantity }} {{ getUnitAbbreviation(item.product.unit || 'unidad') }} 
+                                        × ${{ item.product.price.toFixed(2) }}
+                                    </small>
+                                    <span>{{ item.product.price * item.quantity | currency }}</span>
+                                </li>
                             </ul>
                             <div class="checkout__order__subtotal">Subtotal <span>{{ total | currency }}</span></div>
-                            <div class="checkout__order__subtotal">Costo de Envío <span>{{ shippingCost | currency }}</span></div>
+                            <div class="checkout__order__subtotal">Costo de Envío <span>{{ shippingCost | currency
+                                    }}</span></div>
                             <div class="checkout__order__total">Total <span>{{ total | currency }}</span></div>
                             <div class="checkout__input__checkbox">
                                 <div class="shipping-options">
                                     <label class="shipping-label">Método de Envío</label>
-                                    
-                                    <div class="radio-option">
-                                      <input type="radio" id="local" name="shipping" value="local" (change)="onShippingChange($event)" checked>
-                                      <label for="local">Retiro en local</label>
-                                    </div>
-                                    
-                                    <div class="radio-option">
-                                      <input type="radio" id="delivery" name="shipping" value="delivery" (change)="onShippingChange($event)">
-                                      <label for="delivery">Envío a domicilio </label>
-                                    </div>
-                                  </div>
-                                  
-                            </div>  
-                            <div id="paypal-button-container">                   
 
+                                    <div class="radio-option">
+                                        <input type="radio" id="local" name="shipping" value="local"
+                                            (change)="onShippingChange($event)" checked>
+                                        <label for="local">Retiro en local</label>
+                                    </div>
+
+                                    <div class="radio-option">
+                                        <input type="radio" id="delivery" name="shipping" value="delivery"
+                                            (change)="onShippingChange($event)">
+                                        <label for="delivery">Envío a domicilio </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <button 
+                                type="button" 
+                                class="process-order-btn"
+                                (click)="processOrder()"
+                            >
+                                <i class="fas fa-check"></i> Procesar Orden
+                            </button>
+                            
+                            <div id="paypal-button-container" style="display: none;">
                             </div>
                         </div>
                     </div>
@@ -121,17 +246,18 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Mensaje</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Mensaje</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Su orden ha sido enviada</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success" routerLink="/inicio" ng-reflect-router-link="inicio"
+                    href="/inicio">Aceptar</a>
+            </div>
         </div>
-        <div class="modal-body">
-            <p>Su orden ha sido enviada</p>
-        </div>
-        <div class="modal-footer">
-          <a class="btn btn-success" routerLink="/inicio" ng-reflect-router-link="inicio" href="/inicio">Aceptar</a>
-        </div>
-      </div>
     </div>
-  </div>
+</div>

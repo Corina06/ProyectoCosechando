@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-navcomer',
@@ -9,18 +10,67 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navcomer.component.html',
   styleUrl: './navcomer.component.css'
 })
-export class NavcomerComponent {
-    
+export class NavcomerComponent implements OnInit {
+  currentUser: any = null;
+  
   navigateToInicio() {
     console.log('Navegando al inicio comerciante');
-    this.router.navigate(['/reporte']);
+    this.router.navigate(['/panel']);
   }
 
   notificationsVisible: boolean = false;
   profileMenuVisible: boolean = false;
-  notifications: string[] = ['Nueva actualización', 'Tienes 5 nuevos mensajes'];
+  notifications = [
+    {
+      type: 'order',
+      icon: 'fas fa-shopping-cart',
+      color: '#7fad39',
+      message: 'Nueva orden recibida: $15.50',
+      detail: 'María Rodríguez - Tomates y Lechuga',
+      time: 'Hace 5 min'
+    },
+    {
+      type: 'stock',
+      icon: 'fas fa-exclamation-triangle',
+      color: '#ff6b35',
+      message: 'Stock bajo: Tomates Cherry',
+      detail: 'Solo quedan 3 unidades disponibles',
+      time: 'Hace 1 hora'
+    },
+    {
+      type: 'payment',
+      icon: 'fas fa-dollar-sign',
+      color: '#385723',
+      message: 'Pago confirmado: $25.75',
+      detail: 'Orden #ORD-003 - Ana Sofía López',
+      time: 'Hace 2 horas'
+    },
+    {
+      type: 'trending',
+      icon: 'fas fa-chart-line',
+      color: '#7F6000',
+      message: 'Producto destacado',
+      detail: 'Yuca Fresca es tu más vendido esta semana',
+      time: 'Hoy'
+    },
+    {
+      type: 'reminder',
+      icon: 'fas fa-clock',
+      color: '#572C1A',
+      message: 'Recordatorio importante',
+      detail: 'Actualizar precios de temporada',
+      time: 'Hace 3 horas'
+    }
+  ];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser();
+  }
 
   toggleNotifications() {
     this.notificationsVisible = !this.notificationsVisible;
@@ -39,12 +89,18 @@ export class NavcomerComponent {
   }
 
   goToProfile() {
+    console.log('🔗 Navegando al perfil desde header...');
+    
+    // Navegar al perfil
     this.router.navigate(['/perfil']);
+    
+    // Cerrar el menú después de navegar
+    this.profileMenuVisible = false;
   }
 
   logout() {
-    // Aquí puedes agregar el comportamiento para cerrar sesión, como limpiar el almacenamiento local o cerrar sesión en el backend.
+    this.authService.logout();
     console.log("Cerrando sesión...");
-    this.router.navigate(['/inicio']); // Redirige a la página de login.
+    this.router.navigate(['/inicio']);
   }
 }

@@ -1,14 +1,13 @@
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoginResponse } from '../../../models/login-response.interface';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -29,23 +28,31 @@ export class LoginComponent {
     console.log("Intentando iniciar sesión...");
     this.errorMessage = '';
 
+    // Validación básica antes de enviar
+    if (!this.canSubmit()) {
+      this.errorMessage = 'Por favor completa todos los campos';
+      return;
+    }
+
+    if (!this.isValidEmail()) {
+      this.errorMessage = 'Por favor ingresa un correo electrónico válido';
+      return;
+    }
+
     this.authService.login(this.email, this.password).subscribe({
        next: (response) => {
         
          // Lógica de autenticación
          console.log('Login exitoso', response);
          
-         // Si el login es exitoso, almacenar el token y redirigir al panel
-        const token = response.token;
-        this.authService.storeToken(token);
+         // El token ya se almacena automáticamente en el servicio
          // Redirige al panel después del login exitoso
          this.router.navigate(['/panel']); 
        },
        // Maneja el error de login
        error: (error) => {
          console.error('Error en Iniciar Sesion', error);
-         alert('Correo o contraseña incorrectos');
-         
+         this.errorMessage = 'Correo o contraseña incorrectos';
        }
      });
   }
@@ -101,5 +108,16 @@ export class LoginComponent {
   // Este método se puede llamar en lugar de usar routerLink
   goToPanel() {
     this.router.navigate(['/panel']);
+  }
+
+  // Método para verificar si el formulario puede ser enviado
+  canSubmit(): boolean {
+    return this.email.trim().length > 0 && this.password.trim().length >= 1;
+  }
+
+  // Método para verificar si el email tiene formato válido
+  isValidEmail(): boolean {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailPattern.test(this.email);
   }
 }

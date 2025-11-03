@@ -2,3 +2,256 @@
 
 /* Bootstrap Icons */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
+
+/* Layout principal para fijar footer */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding-bottom: 2rem;
+}
+
+/* Estilos para las tarjetas de estadísticas */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Iconos de estadísticas */
+.icon-shape {
+  transition: transform 0.2s ease;
+}
+
+.card:hover .icon-shape {
+  transform: scale(1.1);
+}
+
+/* Forzar color blanco en iconos de estadísticas */
+.fas.fa-dollar-sign,
+.fas.fa-shopping-cart,
+.fas.fa-boxes,
+.fas.fa-chart-line {
+  color: white !important;
+}
+
+/* Contenedores de iconos de estadísticas */
+div[style*="background-color: #385723"] i,
+div[style*="background-color: #7fad39"] i,
+div[style*="background-color: #7F6000"] i,
+div[style*="background-color: #572C1A"] i {
+  color: white !important;
+}
+
+/* Asegurar que todos los iconos FontAwesome en contenedores circulares sean blancos */
+:host ::ng-deep div[style*="border-radius: 50%"] i {
+  color: white !important;
+}
+
+/* Estilos para badges de crecimiento */
+.badge {
+  font-size: 0.75em;
+  padding: 0.5em 0.75em;
+  border-radius: 0.5rem;
+}
+
+/* Estilos para alertas */
+.alert {
+  border-radius: 8px;
+  border: none;
+}
+
+.alert-warning {
+  background-color: rgba(127, 96, 0, 0.1);
+  border-left: 4px solid #7F6000;
+}
+
+/* Estilos para headers de tarjetas */
+.card-header {
+  border-bottom: none !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+/* Forzar estilos de tabla */
+.table thead th {
+  background-color: #385723 !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px 8px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 14px !important;
+}
+
+/* Forzar estilos de botones */
+button[style*="color: #385723"] {
+  border: 2px solid #385723 !important;
+  background-color: transparent !important;
+  color: #385723 !important;
+}
+
+button[style*="color: #7fad39"] {
+  border: 2px solid #7fad39 !important;
+  background-color: transparent !important;
+  color: #7fad39 !important;
+}
+
+button[style*="color: #7F6000"] {
+  border: 2px solid #7F6000 !important;
+  background-color: transparent !important;
+  color: #7F6000 !important;
+}
+
+/* Forzar estilos de badges */
+span[style*="background-color: #7fad39"] {
+  background-color: #7fad39 !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+}
+
+span[style*="background-color: #7F6000"] {
+  background-color: #7F6000 !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+}
+
+span[style*="background-color: #385723"] {
+  background-color: #385723 !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+}
+
+span[style*="background-color: #572C1A"] {
+  background-color: #572C1A !important;
+  color: white !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+}
+
+/* Estilos para la tabla */
+.table-hover tbody tr:hover {
+  background-color: rgba(56, 87, 35, 0.05);
+}
+
+/* Estilos para botones */
+.btn-group .btn {
+  margin: 0 0.25rem;
+}
+
+.btn-outline-success:hover {
+  background-color: #385723;
+  border-color: #385723;
+}
+
+.btn-outline-primary:hover {
+  background-color: #7fad39;
+  border-color: #7fad39;
+}
+
+.btn-outline-warning:hover {
+  background-color: #7F6000;
+  border-color: #7F6000;
+}
+
+/* Estilos para list-group */
+.list-group-item {
+  transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: rgba(56, 87, 35, 0.05);
+}
+
+/* Estilos para el modal */
+.modal {
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  border-radius: 0.75rem;
+  border: none;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(56, 87, 35, 0.1);
+  background-color: #f8f9fa;
+}
+
+/* Animaciones para carga */
+.fa-spin {
+  animation: fa-spin 2s infinite linear;
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+/* Utilidad para espaciado */
+.gap-3 {
+  gap: 1rem;
+}
+
+/* Sobrescribir estilos externos completamente */
+:host ::ng-deep .table thead th {
+  background-color: #385723 !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px 8px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 14px !important;
+}
+
+:host ::ng-deep .card-header {
+  border-bottom: none !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+:host ::ng-deep .card-header h5 {
+  color: white !important;
+  margin: 0 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .d-flex.flex-wrap {
+    flex-direction: column;
+  }
+  
+  .d-flex.flex-wrap button {
+    margin: 0.25rem 0;
+    width: 100%;
+  }
+  
+  .card-body .row .col-6 {
+    margin-bottom: 1rem;
+  }
+}

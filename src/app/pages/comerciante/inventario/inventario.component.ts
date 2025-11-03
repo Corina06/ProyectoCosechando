@@ -1,137 +1,370 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavcomerComponent } from "../navcomer/navcomer.component";
 import { jsPDF} from "jspdf"
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PaginacionComponent } from '../../../componentes/paginacion/paginacion.component';
+import { DateUtilsService } from '../../../services/date-utils.service';
+import 'jspdf-autotable';
 
+
+// Interfaces para el inventario
+interface ProductoInventario {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  categoria: string;
+  cantidad: number;
+  cantidadMinima: number;
+  precio: number;
+  costoUnitario: number;
+  unidad: string;
+  fechaUltimaCompra: string;
+  fechaUltimaVenta: string;
+  totalVendido: number;
+  estado: 'Disponible' | 'Poco Stock' | 'Agotado';
+}
+
+interface MovimientoInventario {
+  id: number;
+  productoId: number;
+  productoNombre: string;
+  tipo: 'Entrada' | 'Salida';
+  cantidad: number;
+  motivo: string;
+  fecha: string;
+  referencia: string;
+}
 
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [NavcomerComponent, CommonModule],
+  imports: [NavcomerComponent, CommonModule, FormsModule, PaginacionComponent],
   templateUrl: './inventario.component.html',
   styleUrl: './inventario.component.css'
 })
-export class InventarioComponent {
+export class InventarioComponent implements OnInit {
 
-  productos = [
-    { id: 1, nombre: 'Manzana', descripcion: 'Manzana Roja Fresca', categoria: 'Frutas', cantidad: 100, precio: 1.2 },
-    { id: 2, nombre: 'Banano', descripcion: 'Banano Amarillo Maduro', categoria: 'Frutas', cantidad: 200, precio: 0.5 },
-    { id: 3, nombre: 'Pera', descripcion: 'Pera de la variedad Williams', categoria: 'Frutas', cantidad: 150, precio: 1.0 },
-    { id: 4, nombre: 'Naranja', descripcion: 'Naranja de Sumo', categoria: 'Frutas', cantidad: 80, precio: 1.5 },
-    { id: 5, nombre: 'Papaya', descripcion: 'Papaya fresca de la región', categoria: 'Frutas', cantidad: 120, precio: 2.0 },
-    { id: 6, nombre: 'Lechuga', descripcion: 'Lechuga fresca y orgánica', categoria: 'Vegetales', cantidad: 250, precio: 1.0 },
-    { id: 7, nombre: 'Espinaca', descripcion: 'Espinaca de hoja verde', categoria: 'Vegetales', cantidad: 180, precio: 1.5 },
-    { id: 8, nombre: 'Pepino', descripcion: 'Pepino fresco y crujiente', categoria: 'Vegetales', cantidad: 300, precio: 0.8 },
-    { id: 9, nombre: 'Tomate', descripcion: 'Tomate rojo maduro', categoria: 'Vegetales', cantidad: 100, precio: 1.2 },
-    { id: 10, nombre: 'Zanahoria', descripcion: 'Zanahorias frescas', categoria: 'Vegetales', cantidad: 200, precio: 0.6 },
-    { id: 11, nombre: 'Papa', descripcion: 'Papa amarilla de campo', categoria: 'Raíces', cantidad: 400, precio: 0.9 },
-    { id: 12, nombre: 'Yuca', descripcion: 'Yuca fresca y cocinable', categoria: 'Raíces', cantidad: 150, precio: 1.5 },
-    { id: 13, nombre: 'Ñame', descripcion: 'Ñame de campo', categoria: 'Raíces', cantidad: 120, precio: 2.2 },
-    { id: 14, nombre: 'Betabel', descripcion: 'Betabel orgánico', categoria: 'Raíces', cantidad: 80, precio: 1.8 },
-    { id: 15, nombre: 'Apio', descripcion: 'Apio fresco y crujiente', categoria: 'Raíces', cantidad: 50, precio: 1.3 },
-    { id: 16, nombre: 'Guisante', descripcion: 'Guisantes verdes', categoria: 'Legumbres', cantidad: 200, precio: 1.0 },
-    { id: 17, nombre: 'Frijol', descripcion: 'Frijoles negros', categoria: 'Legumbres', cantidad: 300, precio: 1.4 },
-    { id: 18, nombre: 'Lenteja', descripcion: 'Lentejas de alta calidad', categoria: 'Legumbres', cantidad: 100, precio: 2.0 },
-    { id: 19, nombre: 'Arveja', descripcion: 'Arvejas frescas', categoria: 'Legumbres', cantidad: 150, precio: 1.3 },
-    { id: 20, nombre: 'Garbanzo', descripcion: 'Garbanzo seco', categoria: 'Legumbres', cantidad: 250, precio: 1.5 }
+  productos: ProductoInventario[] = [
+    { id: 1, nombre: 'Guineos', descripcion: 'Guineos verdes frescos', categoria: 'Frutas', cantidad: 45, cantidadMinima: 20, precio: 1.50, costoUnitario: 1.20, unidad: 'libra', fechaUltimaCompra: '28/10/2024', fechaUltimaVenta: '30/10/2024', totalVendido: 155, estado: 'Disponible' },
+    { id: 2, nombre: 'Tomates', descripcion: 'Tomates rojos maduros', categoria: 'Vegetales', cantidad: 8, cantidadMinima: 15, precio: 2.00, costoUnitario: 1.80, unidad: 'libra', fechaUltimaCompra: '26/10/2024', fechaUltimaVenta: '30/10/2024', totalVendido: 87, estado: 'Poco Stock' },
+    { id: 3, nombre: 'Plátanos Maduros', descripcion: 'Plátanos amarillos maduros', categoria: 'Frutas', cantidad: 25, cantidadMinima: 10, precio: 0.75, costoUnitario: 0.60, unidad: 'unidad', fechaUltimaCompra: '28/10/2024', fechaUltimaVenta: '30/10/2024', totalVendido: 92, estado: 'Disponible' },
+    { id: 4, nombre: 'Yuca', descripcion: 'Yuca fresca para cocinar', categoria: 'Raíces', cantidad: 18, cantidadMinima: 15, precio: 1.25, costoUnitario: 1.00, unidad: 'libra', fechaUltimaCompra: '28/10/2024', fechaUltimaVenta: '30/10/2024', totalVendido: 67, estado: 'Disponible' },
+    { id: 5, nombre: 'Cilantro', descripcion: 'Cilantro fresco en paquetes', categoria: 'Hierbas', cantidad: 3, cantidadMinima: 8, precio: 0.50, costoUnitario: 0.35, unidad: 'paquete', fechaUltimaCompra: '26/10/2024', fechaUltimaVenta: '30/10/2024', totalVendido: 45, estado: 'Poco Stock' },
+    { id: 6, nombre: 'Lechuga', descripcion: 'Lechuga americana fresca', categoria: 'Vegetales', cantidad: 12, cantidadMinima: 8, precio: 1.00, costoUnitario: 0.80, unidad: 'unidad', fechaUltimaCompra: '27/10/2024', fechaUltimaVenta: '29/10/2024', totalVendido: 38, estado: 'Disponible' },
+    { id: 7, nombre: 'Cebolla', descripcion: 'Cebolla blanca fresca', categoria: 'Vegetales', cantidad: 22, cantidadMinima: 10, precio: 0.80, costoUnitario: 0.65, unidad: 'libra', fechaUltimaCompra: '26/10/2024', fechaUltimaVenta: '29/10/2024', totalVendido: 73, estado: 'Disponible' },
+    { id: 8, nombre: 'Pimientos', descripcion: 'Pimientos verdes frescos', categoria: 'Vegetales', cantidad: 6, cantidadMinima: 12, precio: 1.50, costoUnitario: 1.25, unidad: 'libra', fechaUltimaCompra: '26/10/2024', fechaUltimaVenta: '29/10/2024', totalVendido: 34, estado: 'Poco Stock' },
+    { id: 9, nombre: 'Naranjas', descripcion: 'Naranjas dulces para jugo', categoria: 'Frutas', cantidad: 85, cantidadMinima: 30, precio: 0.40, costoUnitario: 0.30, unidad: 'unidad', fechaUltimaCompra: '25/10/2024', fechaUltimaVenta: '28/10/2024', totalVendido: 215, estado: 'Disponible' },
+    { id: 10, nombre: 'Mangos', descripcion: 'Mangos maduros dulces', categoria: 'Frutas', cantidad: 32, cantidadMinima: 15, precio: 0.90, costoUnitario: 0.70, unidad: 'unidad', fechaUltimaCompra: '25/10/2024', fechaUltimaVenta: '27/10/2024', totalVendido: 128, estado: 'Disponible' },
+    { id: 11, nombre: 'Piñas', descripcion: 'Piñas maduras dulces', categoria: 'Frutas', cantidad: 8, cantidadMinima: 5, precio: 3.00, costoUnitario: 2.50, unidad: 'unidad', fechaUltimaCompra: '25/10/2024', fechaUltimaVenta: '27/10/2024', totalVendido: 23, estado: 'Disponible' },
+    { id: 12, nombre: 'Maíz Tierno', descripcion: 'Mazorcas de maíz tierno', categoria: 'Vegetales', cantidad: 0, cantidadMinima: 20, precio: 0.60, costoUnitario: 0.45, unidad: 'unidad', fechaUltimaCompra: '24/10/2024', fechaUltimaVenta: '29/10/2024', totalVendido: 56, estado: 'Agotado' },
+    { id: 13, nombre: 'Frijoles', descripcion: 'Frijoles rojos secos', categoria: 'Legumbres', cantidad: 15, cantidadMinima: 8, precio: 2.50, costoUnitario: 2.00, unidad: 'libra', fechaUltimaCompra: '24/10/2024', fechaUltimaVenta: '29/10/2024', totalVendido: 42, estado: 'Disponible' },
+    { id: 14, nombre: 'Papas', descripcion: 'Papas amarillas frescas', categoria: 'Raíces', cantidad: 28, cantidadMinima: 20, precio: 1.20, costoUnitario: 0.95, unidad: 'libra', fechaUltimaCompra: '28/10/2024', fechaUltimaVenta: '28/10/2024', totalVendido: 89, estado: 'Disponible' },
+    { id: 15, nombre: 'Zanahorias', descripcion: 'Zanahorias frescas naranjas', categoria: 'Vegetales', cantidad: 18, cantidadMinima: 15, precio: 1.00, costoUnitario: 0.80, unidad: 'libra', fechaUltimaCompra: '28/10/2024', fechaUltimaVenta: '28/10/2024', totalVendido: 67, estado: 'Disponible' },
+    { id: 16, nombre: 'Apio', descripcion: 'Apio fresco en paquetes', categoria: 'Vegetales', cantidad: 5, cantidadMinima: 10, precio: 0.75, costoUnitario: 0.60, unidad: 'paquete', fechaUltimaCompra: '23/10/2024', fechaUltimaVenta: '28/10/2024', totalVendido: 28, estado: 'Poco Stock' }
   ];
 
-  // Método para descargar un solo producto en formato PDF
-  downloadProductPDF(item: any) {
-    const doc = new jsPDF();
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(12);
-    
-    // Título del producto
-    doc.setTextColor(0, 0, 255); // Color azul
-    doc.text(`Producto: ${item.nombre}`, 10, 10);
-    
-    // Descripción del producto
-    doc.setTextColor(0, 0, 0); // Texto negro
-    doc.text(`Descripción: ${item.descripcion}`, 10, 20);
-    doc.text(`Categoría: ${item.categoria}`, 10, 30);
-    doc.text(`Cantidad: ${item.cantidad}`, 10, 40);
-    doc.text(`Precio: ${item.precio} USD`, 10, 50);
-    
-    // Descargar el PDF con el nombre del producto
-    doc.save(`${item.nombre}_Detalles.pdf`);
+  movimientos: MovimientoInventario[] = [
+    { id: 1, productoId: 1, productoNombre: 'Guineos', tipo: 'Entrada', cantidad: 50, motivo: 'Compra a proveedor', fecha: '28/10/2024', referencia: 'FM-001234' },
+    { id: 2, productoId: 1, productoNombre: 'Guineos', tipo: 'Salida', cantidad: 2, motivo: 'Venta a cliente', fecha: '30/10/2024', referencia: 'Venta #1001' },
+    { id: 3, productoId: 2, productoNombre: 'Tomates', tipo: 'Entrada', cantidad: 20, motivo: 'Compra a proveedor', fecha: '26/10/2024', referencia: 'VC-005678' },
+    { id: 4, productoId: 2, productoNombre: 'Tomates', tipo: 'Salida', cantidad: 1, motivo: 'Venta a cliente', fecha: '30/10/2024', referencia: 'Venta #1001' },
+    { id: 5, productoId: 3, productoNombre: 'Plátanos Maduros', tipo: 'Entrada', cantidad: 30, motivo: 'Compra a proveedor', fecha: '28/10/2024', referencia: 'FM-001234' },
+    { id: 6, productoId: 3, productoNombre: 'Plátanos Maduros', tipo: 'Salida', cantidad: 3, motivo: 'Venta a cliente', fecha: '30/10/2024', referencia: 'Venta #1002' },
+    { id: 7, productoId: 12, productoNombre: 'Maíz Tierno', tipo: 'Salida', cantidad: 4, motivo: 'Venta a cliente', fecha: '29/10/2024', referencia: 'Venta #1004' }
+  ];
+
+  // Variables para filtros y paginación
+  filteredProductos: ProductoInventario[] = [];
+  selectedCategoria: string = '';
+  selectedEstado: string = '';
+  searchTerm: string = '';
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalProductos: number = 0;
+  currentProductos: ProductoInventario[] = [];
+
+  // Variables para estadísticas
+  valorTotalInventario: number = 0;
+  productosPocoStock: number = 0;
+  productosAgotados: number = 0;
+  
+  // Estados de carga
+  loading: boolean = false;
+  error: string = '';
+
+  constructor(private dateUtils: DateUtilsService) {}
+
+  ngOnInit(): void {
+    this.loadInventario();
+    this.calculateStats();
   }
 
-   // Método para descargar todo el inventario en un solo archivo PDF
-   downloadInventoryPDF() {
+  loadInventario(): void {
+    this.loading = true;
+    this.error = '';
+    
+    try {
+      // Actualizar estados de productos basado en cantidad vs cantidad mínima
+      this.productos.forEach(producto => {
+        if (producto.cantidad === 0) {
+          producto.estado = 'Agotado';
+        } else if (producto.cantidad <= producto.cantidadMinima) {
+          producto.estado = 'Poco Stock';
+        } else {
+          producto.estado = 'Disponible';
+        }
+      });
+      
+      this.applyFilters();
+      this.loading = false;
+    } catch (error) {
+      this.error = 'Error al cargar el inventario';
+      this.loading = false;
+    }
+  }
+
+  calculateStats(): void {
+    this.valorTotalInventario = this.productos.reduce((total, producto) => 
+      total + (producto.cantidad * producto.costoUnitario), 0);
+    
+    this.productosPocoStock = this.productos.filter(p => p.estado === 'Poco Stock').length;
+    this.productosAgotados = this.productos.filter(p => p.estado === 'Agotado').length;
+  }
+
+  // Paginación
+  updateProductos(): void {
+    this.totalProductos = this.filteredProductos.length;
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.currentProductos = this.filteredProductos.slice(startIndex, endIndex);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.updateProductos();
+  }
+
+  // Filtros
+  applyFilters(): void {
+    this.filteredProductos = this.productos.filter(producto => {
+      const matchesCategoria = !this.selectedCategoria || producto.categoria === this.selectedCategoria;
+      const matchesEstado = !this.selectedEstado || producto.estado === this.selectedEstado;
+      const matchesSearch = !this.searchTerm || 
+        producto.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        producto.descripcion.toLowerCase().includes(this.searchTerm.toLowerCase());
+      
+      return matchesCategoria && matchesEstado && matchesSearch;
+    });
+    
+    this.currentPage = 1;
+    this.updateProductos();
+  }
+
+  onSearchChange(): void {
+    this.applyFilters();
+  }
+
+  filterByCategoria(): void {
+    this.applyFilters();
+  }
+
+  filterByEstado(): void {
+    this.applyFilters();
+  }
+
+  // Obtener color del estado
+  getEstadoColor(estado: string): string {
+    switch (estado) {
+      case 'Disponible': return '#7fad39';
+      case 'Poco Stock': return '#7F6000';
+      case 'Agotado': return '#572C1A';
+      default: return '#6c757d';
+    }
+  }
+
+  // Obtener categorías únicas
+  getCategorias(): string[] {
+    return [...new Set(this.productos.map(p => p.categoria))];
+  }
+
+  // Obtener abreviación de unidad
+  getUnitAbbreviation(unit: string): string {
+    const abbreviations: { [key: string]: string } = {
+      'unidad': 'u',
+      'libra': 'lb',
+      'kilo': 'kg',
+      'paquete': 'paq',
+      'bolsa': 'bolsa',
+      'caja': 'caja',
+      'docena': 'doc'
+    };
+    return abbreviations[unit] || unit || 'u';
+  }
+
+  // Generar reporte de inventario completo en PDF
+  downloadInventoryPDF(): void {
     const doc = new jsPDF();
-    let yPosition = 20;
-
-    // Título del inventario
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 255); // Título en azul
-    doc.text('Inventario Completo', 10, yPosition);
-    yPosition += 10; // Dejar espacio después del título
-
-    // Encabezados de la tabla
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(0, 0, 0); // Texto en negro
+    const fechaActual = this.dateUtils.getCurrentDate();
+    
+    // Encabezado del reporte
+    doc.setFontSize(18);
+    doc.setTextColor(56, 87, 35); // Verde del tema
+    doc.text('REPORTE DE INVENTARIO', 105, 20, { align: 'center' });
+    
     doc.setFontSize(12);
-
-    const headers = ['ID', 'Nombre', 'Descripción', 'Categoría', 'Cantidad', 'Precio'];
-
-    const colWidths = [20, 40, 60, 40, 30, 30]; // Anchos de las columnas
-
-    // Dibujamos la tabla con bordes
-    let startX = 10;
-    let startY = yPosition;
-    const tableHeight = 8;
-
-    // Dibujar encabezados
-    doc.setFillColor(230, 230, 230); // Fondo gris claro para las cabeceras
-    doc.rect(startX, startY, colWidths[0], tableHeight, 'F');
-    doc.rect(startX + colWidths[0], startY, colWidths[1], tableHeight, 'F');
-    doc.rect(startX + colWidths[0] + colWidths[1], startY, colWidths[2], tableHeight, 'F');
-    doc.rect(startX + colWidths[0] + colWidths[1] + colWidths[2], startY, colWidths[3], tableHeight, 'F');
-    doc.rect(startX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3], startY, colWidths[4], tableHeight, 'F');
-    doc.rect(startX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3] + colWidths[4], startY, colWidths[5], tableHeight, 'F');
-
-    headers.forEach((header, index) => {
-      doc.text(header, startX + colWidths.slice(0, index).reduce((acc, val) => acc + val, 0) + 5, startY + 5);
-    });
-
-    yPosition += tableHeight; // Dejar más espacio después de los encabezados
-
-    // Dibujar filas de productos
-    this.productos.forEach((item, index) => {
-      // Verificar si el índice actual está fuera del límite de la página (evitar sobrecargar la página)
-      if (yPosition > 270) { // Si se llega al final de la página
-        doc.addPage(); // Añadir una nueva página
-        yPosition = 20; // Resetear la posición y al comienzo de la nueva página
-        doc.setFontSize(12);
-        // Redibujar los encabezados en la nueva página
-        headers.forEach((header, index) => {
-          doc.text(header, startX + colWidths.slice(0, index).reduce((acc, val) => acc + val, 0) + 5, yPosition + 5);
-        });
-        yPosition += tableHeight;
+    doc.setTextColor(0, 0, 0);
+    doc.text('Local de Ana - Cosechando', 105, 30, { align: 'center' });
+    doc.text(`Fecha: ${fechaActual}`, 105, 40, { align: 'center' });
+    
+    // Estadísticas generales
+    doc.setFontSize(14);
+    doc.setTextColor(56, 87, 35);
+    doc.text('RESUMEN EJECUTIVO', 20, 60);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`• Total de productos: ${this.productos.length}`, 20, 70);
+    doc.text(`• Valor total del inventario: $${this.valorTotalInventario.toFixed(2)}`, 20, 80);
+    doc.text(`• Productos con poco stock: ${this.productosPocoStock}`, 20, 90);
+    doc.text(`• Productos agotados: ${this.productosAgotados}`, 20, 100);
+    
+    // Tabla de inventario usando autoTable
+    const tableData = this.productos.map(producto => [
+      producto.id,
+      producto.nombre,
+      producto.categoria,
+      `${producto.cantidad} ${this.getUnitAbbreviation(producto.unidad)}`,
+      `${producto.cantidadMinima} ${this.getUnitAbbreviation(producto.unidad)}`,
+      producto.estado,
+      `$${producto.precio.toFixed(2)}`,
+      `$${(producto.cantidad * producto.costoUnitario).toFixed(2)}`
+    ]);
+    
+    (doc as any).autoTable({
+      head: [['ID', 'Producto', 'Categoría', 'Stock', 'Mín.', 'Estado', 'Precio', 'Valor']],
+      body: tableData,
+      startY: 120,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [56, 87, 35] },
+      columnStyles: {
+        5: { cellWidth: 20 }, // Estado
+        6: { halign: 'right' }, // Precio
+        7: { halign: 'right' }  // Valor
       }
-
-      // Dibujar cada fila del producto
-      doc.rect(startX, yPosition, colWidths[0], tableHeight); // ID
-      doc.rect(startX + colWidths[0], yPosition, colWidths[1], tableHeight); // Nombre
-      doc.rect(startX + colWidths[0] + colWidths[1], yPosition, colWidths[2], tableHeight); // Descripción
-      doc.rect(startX + colWidths[0] + colWidths[1] + colWidths[2], yPosition, colWidths[3], tableHeight); // Categoría
-      doc.rect(startX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3], yPosition, colWidths[4], tableHeight); // Cantidad
-      doc.rect(startX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3] + colWidths[4], yPosition, colWidths[5], tableHeight); // Precio
-
-      doc.text(item.id.toString(), startX + 5, yPosition + 5);
-      doc.text(item.nombre, startX + colWidths[0] + 5, yPosition + 5);
-      doc.text(item.descripcion, startX + colWidths[0] + colWidths[1] + 5, yPosition + 5);
-      doc.text(item.categoria, startX + colWidths[0] + colWidths[1] + colWidths[2] + 5, yPosition + 5);
-      doc.text(item.cantidad.toString(), startX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3] + 5, yPosition + 5);
-      doc.text(item.precio.toFixed(2), startX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3] + colWidths[4] + 5, yPosition + 5);
-
-      yPosition += tableHeight;
     });
+    
+    // Productos que necesitan reabastecimiento
+    const productosReabastecer = this.productos.filter(p => p.estado === 'Poco Stock' || p.estado === 'Agotado');
+    
+    if (productosReabastecer.length > 0) {
+      const finalY = (doc as any).lastAutoTable.finalY + 20;
+      
+      doc.setFontSize(14);
+      doc.setTextColor(127, 96, 0); // Amarillo de alerta
+      doc.text('⚠️ PRODUCTOS QUE NECESITAN REABASTECIMIENTO', 20, finalY);
+      
+      const alertData = productosReabastecer.map(producto => [
+        producto.nombre,
+        `${producto.cantidad} ${this.getUnitAbbreviation(producto.unidad)}`,
+        `${producto.cantidadMinima} ${this.getUnitAbbreviation(producto.unidad)}`,
+        producto.estado,
+        producto.fechaUltimaCompra
+      ]);
+      
+      (doc as any).autoTable({
+        head: [['Producto', 'Stock Actual', 'Mínimo', 'Estado', 'Última Compra']],
+        body: alertData,
+        startY: finalY + 10,
+        styles: { fontSize: 9 },
+        headStyles: { fillColor: [127, 96, 0] }
+      });
+    }
+    
+    doc.save(`Inventario_${fechaActual.replace(/\//g, '-')}.pdf`);
+  }
 
-    // Descargar el archivo PDF
-    doc.save('inventario.pdf');
+  // Generar reporte de productos con poco stock
+  downloadLowStockPDF(): void {
+    const productosPocoStock = this.productos.filter(p => p.estado === 'Poco Stock' || p.estado === 'Agotado');
+    
+    if (productosPocoStock.length === 0) {
+      alert('No hay productos con poco stock para reportar.');
+      return;
+    }
+    
+    const doc = new jsPDF();
+    const fechaActual = this.dateUtils.getCurrentDate();
+    
+    doc.setFontSize(18);
+    doc.setTextColor(127, 96, 0);
+    doc.text('ALERTA DE REABASTECIMIENTO', 105, 20, { align: 'center' });
+    
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Local de Ana - Cosechando', 105, 30, { align: 'center' });
+    doc.text(`Fecha: ${fechaActual}`, 105, 40, { align: 'center' });
+    
+    const tableData = productosPocoStock.map(producto => [
+      producto.nombre,
+      producto.categoria,
+      `${producto.cantidad} ${this.getUnitAbbreviation(producto.unidad)}`,
+      `${producto.cantidadMinima} ${this.getUnitAbbreviation(producto.unidad)}`,
+      producto.estado,
+      producto.fechaUltimaCompra,
+      `${producto.cantidadMinima * 2} ${this.getUnitAbbreviation(producto.unidad)}` // Sugerencia de compra
+    ]);
+    
+    (doc as any).autoTable({
+      head: [['Producto', 'Categoría', 'Stock', 'Mínimo', 'Estado', 'Última Compra', 'Sugerencia']],
+      body: tableData,
+      startY: 60,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [127, 96, 0] },
+      columnStyles: {
+        4: { cellWidth: 20 } // Estado
+      }
+    });
+    
+    doc.save(`Reabastecimiento_${fechaActual.replace(/\//g, '-')}.pdf`);
+  }
+
+  // Generar reporte de movimientos de inventario
+  downloadMovementsPDF(): void {
+    const doc = new jsPDF();
+    const fechaActual = this.dateUtils.getCurrentDate();
+    
+    doc.setFontSize(18);
+    doc.setTextColor(56, 87, 35);
+    doc.text('MOVIMIENTOS DE INVENTARIO', 105, 20, { align: 'center' });
+    
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Local de Ana - Cosechando', 105, 30, { align: 'center' });
+    doc.text(`Fecha: ${fechaActual}`, 105, 40, { align: 'center' });
+    
+    const tableData = this.movimientos.map(movimiento => [
+      movimiento.fecha,
+      movimiento.productoNombre,
+      movimiento.tipo,
+      movimiento.cantidad,
+      movimiento.motivo,
+      movimiento.referencia
+    ]);
+    
+    (doc as any).autoTable({
+      head: [['Fecha', 'Producto', 'Tipo', 'Cantidad', 'Motivo', 'Referencia']],
+      body: tableData,
+      startY: 60,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [56, 87, 35] },
+      columnStyles: {
+        2: { cellWidth: 20 }, // Tipo
+        3: { halign: 'center' } // Cantidad
+      }
+    });
+    
+    doc.save(`Movimientos_${fechaActual.replace(/\//g, '-')}.pdf`);
   }
 }
 

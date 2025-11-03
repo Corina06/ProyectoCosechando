@@ -14,7 +14,15 @@ const userSchema = new mongoose.Schema({
   banco: { type: String, required: true },
   tipo: { type: String, required: true },
   cuenta: { type: Number, required: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  // Campos adicionales para el perfil
+  foto: { type: String, default: '/assets/images/default-avatar.png' },
+  estado: { type: String, enum: ['Activo', 'Inactivo'], default: 'Activo' },
+  verificado: { type: Boolean, default: false },
+  totalVentas: { type: Number, default: 0 },
+  productosActivos: { type: Number, default: 0 }
+}, {
+  timestamps: true // Esto agrega createdAt y updatedAt automáticamente
 });
 
 // Middleware para encriptar la contraseña antes de guardar

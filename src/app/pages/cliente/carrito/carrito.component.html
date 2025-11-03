@@ -1,11 +1,11 @@
-
 <header class="bg-image py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="content">
             <h1 class="display-4 fw-bolder">Carrito de Compras</h1>
             <p class="lead fw-normal text-white-50 mb-0">Verifica los productos que has seleccionado</p>
         </div>
-        <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="200px" style="cursor: pointer;" tabindex="0">
+        <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="200px" style="cursor: pointer;"
+            tabindex="0">
     </div>
 </header>
 
@@ -15,50 +15,76 @@
         <div class="table-responsive">
             <table class="table">
                 <thead>
-                  <tr>
-                    <th scope="col">Productos</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Eliminar</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">Productos</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Eliminar</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of cart">
                         <th scope="row">
                             <div class="d-flex align-items-center">
-                                <img src="images/{{ item.product.image }}" alt="{{ item.product.name }}" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                <img [src]="item.product.image" alt="{{ item.product.name }}"
+                                    class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;"
+                                    onerror="this.src='assets/images/placeholder.svg'">
                             </div>
                         </th>
                         <td>
-                            <p class="mb-0 mt-4">{{ item.product.name }}</p>
+                            <p class="mb-0 mt-4"><strong>{{ item.product.name }}</strong></p>
+                            <small class="text-muted">{{ item.product.description | slice:0:40 }}...</small>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4">{{ item.product.price | currency }}</p>
+                            <p class="mb-0 mt-4"><strong>{{ item.product.price | currency }}</strong></p>
+                            <small class="text-muted">c/{{ getUnitName(item.product.unit || 'unidad') }}</small>
                         </td>
-                        <td>
-                            <div class="input-group quantity mt-4" style="width: 100px;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border" (click)="decrement(item)" >
-                                    <i class="fa fa-minus"></i>
+                        <td class="quantity-column">
+                            <div class="quantity-controls">
+                                <!-- Cantidad -->
+                                <div class="input-group quantity" style="width: 120px;">
+                                    <button class="btn btn-sm btn-outline-secondary" (click)="decrement(item)"
+                                        type="button">
+                                        <i class="fa fa-minus"></i>
                                     </button>
-                                </div>
-                                <input type="number" class="form-control form-control-sm text-center border-0" [(ngModel)]="item.quantity" min="1">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border" (click)="increment(item)">
+                                    <input type="number" class="form-control form-control-sm text-center"
+                                        [(ngModel)]="item.quantity" min="1" style="border: 0; box-shadow: none;">
+                                    <button class="btn btn-sm btn-outline-secondary" (click)="increment(item)"
+                                        type="button">
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
+
                             </div>
                         </td>
                         <td>
-                            <p class="mb-0 mt-4"> {{ item.product.price * item.quantity | currency }} </p>
+                            <p class="mb-0 mt-4"><strong>{{ item.product.price * item.quantity | currency }}</strong>
+                            </p>
+                            <small class="text-muted">{{ item.quantity }} × {{ item.product.price | currency }}</small>
                         </td>
                         <td>
-                            <button class="btn btn-md rounded-circle bg-light border mt-4" (click)="removeFromCart(item)">
-                                <i class="fa fa-times text-danger"></i>
+                            <!-- Opción 1: Solo X -->
+                            <button class="btn-remove-x mt-4" (click)="removeFromCart(item)" title="Eliminar producto">
+                                ×
                             </button>
+
+                            <!-- Opción 2: Icono de basura (comentado)
+                            <button class="btn-remove-item mt-4"
+                                (click)="removeFromCart(item)"
+                                title="Eliminar producto">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            -->
+
+                            <!-- Opción 3: Texto "Eliminar" (comentado)
+                            <button class="btn-remove-text mt-4"
+                                (click)="removeFromCart(item)"
+                                title="Eliminar producto">
+                                Eliminar
+                            </button>
+                            -->
                         </td>
                     </tr>
                 </tbody>
@@ -70,17 +96,19 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="shoping__cart__btns">
-                    <a (click)="goToProducts()" class="primary-btn cart-btn"><span class="fa fa-shopping-cart"></span>Continuar Comprando</a>
+                    <a (click)="goToProducts()" class="primary-btn cart-btn"><span
+                            class="fa fa-shopping-cart"></span>Continuar Comprando</a>
                 </div>
             </div>
-            
+
             <div class="col-lg-6">
                 <div class="shoping__continue">
                     <div class="shoping__discount">
                         <h5>Código de Descuento</h5>
-                        <form action="#">
-                            <input type="text" placeholder="Ingresa tu código">
-                            <button type="submit" class="site-btn">Aplicar Cupón</button>
+                        <form action="#" style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" placeholder="Ingresa tu código"
+                                style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <button type="submit" class="site-btn" style="white-space: nowrap;">Aplicar Cupón</button>
                         </form>
                     </div>
                 </div>
@@ -99,6 +127,3 @@
     </div>
 </div>
 <!-- Cart Page End -->
-
-
-

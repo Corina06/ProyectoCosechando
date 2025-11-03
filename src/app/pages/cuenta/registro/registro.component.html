@@ -1,138 +1,396 @@
 <form (ngSubmit)="register(registroForm)" #registroForm="ngForm">
   <div class="row jumbotron box8">
-    <div class="title">
-      <h1>Registro</h1>
+    <div class="title text-center mb-4">
+      <h1 style="color: #385723;">¡Únete a Cosechando!</h1>
+      <p class="lead text-muted">Conecta con clientes y haz crecer tu negocio</p>
     </div>
 
-    <h5>Datos Personales</h5>
+    <!-- Beneficios -->
+    <div class="col-12 mb-4">
+      <div class="row text-center">
+        <div class="col-md-4">
+          <i class="fas fa-store fa-2x mb-2" style="color: #385723;"></i>
+          <h6>Vende Online</h6>
+          <small class="text-muted">Llega a más clientes</small>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-chart-line fa-2x mb-2" style="color: #385723;"></i>
+          <h6>Aumenta Ventas</h6>
+          <small class="text-muted">Gestiona tu inventario</small>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-mobile-alt fa-2x mb-2" style="color: #385723;"></i>
+          <h6>Fácil de Usar</h6>
+          <small class="text-muted">Desde cualquier dispositivo</small>
+        </div>
+      </div>
+    </div>
+
+    <h5><i class="fas fa-user" style="color: #385723;"></i> Información Personal</h5>
     <!-- Personal Data -->
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="name-f">Nombre</label>
-      <input type="text" class="form-control" [(ngModel)]="name" name="nombre" id="nombre" placeholder="Ingrese su nombre" required #nombre="ngModel">
-      <div *ngIf="registroForm.submitted && nombre.invalid || nombre.touched && nombre.invalid" class="text-danger">
-        <small *ngIf="nombre.errors?.['required']">El nombre es obligatorio.</small>
+      <label for="name-f">Nombre <span class="text-danger">*</span></label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="name" 
+        name="nombre" 
+        id="nombre" 
+        placeholder="Ej: Juan Carlos" 
+        required 
+        minlength="2"
+        maxlength="50"
+        pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+        #nombreField="ngModel"
+        [value]="nameValue"
+      >
+      <div *ngIf="registroForm.submitted && nombreField.invalid || nombreField.touched && nombreField.invalid" class="text-danger">
+        <small *ngIf="nombreField.errors?.['required']">El nombre es obligatorio</small>
+        <small *ngIf="nombreField.errors?.['minlength']">Mínimo 2 caracteres</small>
+        <small *ngIf="nombreField.errors?.['maxlength']">Máximo 50 caracteres</small>
+        <small *ngIf="nombreField.errors?.['pattern']">Solo letras y espacios permitidos</small>
       </div>
     </div>
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="name-l">Apellido</label>
-      <input type="text" class="form-control" [(ngModel)]="apellido" name="apellido" id="apellido" placeholder="Ingrese su apellido" required #apellido="ngModel">
-      <div *ngIf="registroForm.submitted && apellido.invalid || apellido.touched && apellido.invalid" class="text-danger">
-        <small *ngIf="apellido.errors?.['required']">El apellido es obligatorio.</small>
+      <label for="name-l">Apellido <span class="text-danger">*</span></label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="apellido" 
+        name="apellido" 
+        id="apellido" 
+        placeholder="Ej: Rodríguez García" 
+        required 
+        minlength="2"
+        maxlength="50"
+        pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+        #apellidoField="ngModel" 
+        [value]="apellidoValue"
+      >
+      <div *ngIf="registroForm.submitted && apellidoField.invalid || apellidoField.touched && apellidoField.invalid" class="text-danger">
+        <small *ngIf="apellidoField.errors?.['required']">El apellido es obligatorio</small>
+        <small *ngIf="apellidoField.errors?.['minlength']">Mínimo 2 caracteres</small>
+        <small *ngIf="apellidoField.errors?.['maxlength']">Máximo 50 caracteres</small>
+        <small *ngIf="apellidoField.errors?.['pattern']">Solo letras y espacios permitidos</small>
       </div>
     </div>
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="email">Correo Electrónico</label>
-      <input type="email" class="form-control" [(ngModel)]="email" name="email" id="email" placeholder="Ingrese su correo electrónico" required email #emailField="ngModel">
+      <label for="email"><i class="fas fa-envelope" style="color: #385723;"></i> Correo Electrónico <span class="text-danger">*</span></label>
+      <input 
+        type="email" 
+        class="form-control" 
+        [(ngModel)]="email" 
+        name="email" 
+        id="email" 
+        placeholder="ejemplo@correo.com" 
+        required 
+        email 
+        maxlength="100"
+        #emailField="ngModel"
+      >
       <div *ngIf="registroForm.submitted && emailField.invalid || emailField.touched && emailField.invalid" class="text-danger">
-        <small *ngIf="emailField.errors?.['required']">El correo electrónico es obligatorio.</small>
-        <small *ngIf="emailField.errors?.['email']">El correo electrónico no es válido.</small>
+        <small *ngIf="emailField.errors?.['required']">El correo electrónico es obligatorio</small>
+        <small *ngIf="emailField.errors?.['email']">Formato de correo inválido</small>
+        <small *ngIf="emailField.errors?.['maxlength']">Máximo 100 caracteres</small>
       </div>
+      <small class="text-muted">Usaremos este correo para enviarte notificaciones importantes</small>
     </div>
     
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="address-1">Dirección</label>
-      <input type="text" class="form-control" [(ngModel)]="direccion" name="direccion" id="address-1" placeholder="Distrito, Corregimiento, Calle, Casa" required #direccion="ngModel">
-      <div *ngIf="registroForm.submitted && direccion.invalid || direccion.touched && direccion.invalid" class="text-danger">
-        <small *ngIf="direccion.errors?.['required']">La dirección es obligatoria.</small>
+      <label for="address-1"><i class="fas fa-home" style="color: #385723;"></i> Dirección Personal <span class="text-danger">*</span></label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="direccion" 
+        name="direccion" 
+        id="address-1" 
+        placeholder="Ej: San Miguelito, Villa Lucre, Calle 5, Casa 10" 
+        required 
+        minlength="10"
+        maxlength="200"
+        #direccionField="ngModel" 
+        [value]="direccionValue"
+      >
+      <div *ngIf="registroForm.submitted && direccionField.invalid || direccionField.touched && direccionField.invalid" class="text-danger">
+        <small *ngIf="direccionField.errors?.['required']">La dirección es obligatoria</small>
+        <small *ngIf="direccionField.errors?.['minlength']">Mínimo 10 caracteres</small>
+        <small *ngIf="direccionField.errors?.['maxlength']">Máximo 200 caracteres</small>
       </div>
+      <small class="text-muted">Tu dirección personal (no será pública)</small>
     </div>
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="name-p">Nombre del Puesto</label>
-      <input type="text" class="form-control" [(ngModel)]="local" name="local" id="address-2" placeholder="Nombre de su local" required #local="ngModel">
-      <div *ngIf="registroForm.submitted && local.invalid || local.touched && local.invalid" class="text-danger">
-        <small *ngIf="local.errors?.['required']">El nombre del puesto es obligatorio.</small>
+      <label for="name-p"><i class="fas fa-store" style="color: #385723;"></i> Nombre del Negocio <span class="text-danger">*</span></label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="local" 
+        name="local" 
+        id="address-2" 
+        placeholder="Ej: Frutas y Verduras María" 
+        required 
+        minlength="3"
+        maxlength="100"
+        #localField="ngModel" 
+        [value]="localValue"
+      >
+      <div *ngIf="registroForm.submitted && localField.invalid || localField.touched && localField.invalid" class="text-danger">
+        <small *ngIf="localField.errors?.['required']">El nombre del negocio es obligatorio</small>
+        <small *ngIf="localField.errors?.['minlength']">Mínimo 3 caracteres</small>
+        <small *ngIf="localField.errors?.['maxlength']">Máximo 100 caracteres</small>
       </div>
+      <small class="text-muted">Nombre que verán tus clientes</small>
     </div>
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="ubicacion">Ubicación del puesto</label>
-      <input type="text" class="form-control" [(ngModel)]="puesto" name="puesto" id="ubicacion" placeholder="¿Cómo llegar a su local?" required #puestoField="ngModel">
+      <label for="ubicacion"><i class="fas fa-map-marker-alt" style="color: #385723;"></i> Ubicación del Negocio <span class="text-danger">*</span></label>
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="puesto" 
+        name="puesto" 
+        id="ubicacion" 
+        placeholder="Ej: Mercado Central, Puesto 15" 
+        required 
+        minlength="5"
+        maxlength="200"
+        #puestoField="ngModel" 
+        [value]="puestoValue"
+      >
       <div *ngIf="registroForm.submitted && puestoField.invalid || puestoField.touched && puestoField.invalid" class="text-danger">
-        <small *ngIf="puestoField.errors?.['required']">La ubicación es obligatoria.</small>
+        <small *ngIf="puestoField.errors?.['required']">La ubicación es obligatoria</small>
+        <small *ngIf="puestoField.errors?.['minlength']">Mínimo 5 caracteres</small>
+        <small *ngIf="puestoField.errors?.['maxlength']">Máximo 200 caracteres</small>
       </div>
+      <small class="text-muted">Ayuda a tus clientes a encontrarte</small>
     </div>
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="Country">Celular</label>
-      <input type="tel" name="celular" class="form-control" [(ngModel)]="celular" id="tel" placeholder="Número de Contacto" required pattern="^[0-9]{8}$" #celularField="ngModel">
+      <label for="Country"><i class="fas fa-phone" style="color: #385723;"></i> Celular <span class="text-danger">*</span></label>
+      <div class="input-group">
+        <select 
+          class="form-select" 
+          [(ngModel)]="codigoPais" 
+          name="codigoPais" 
+          style="max-width: 140px; background-color: #385723; color: white; border-color: #385723; border-right: none;"
+          required
+        >
+          <option *ngFor="let pais of codigosPais" [value]="pais.codigo">
+            {{pais.bandera}} {{pais.codigo}}
+          </option>
+        </select>
+        <input 
+          type="tel" 
+          name="celular" 
+          class="form-control" 
+          [(ngModel)]="celular" 
+          id="tel" 
+          [placeholder]="getPlaceholderForCountry(codigoPais)" 
+          required 
+          pattern="^[0-9]+$" 
+          minlength="7"
+          maxlength="15"
+          #celularField="ngModel"
+          style="border-left: none;"
+        >
+      </div>
       <div *ngIf="registroForm.submitted && celularField.invalid || celularField.touched && celularField.invalid" class="text-danger">
-        <small *ngIf="celularField.errors?.['required']">El celular es obligatorio.</small>
-        <small *ngIf="celularField.errors?.['pattern']">El número de celular no es válido (debe tener 8 dígitos).</small>
+        <small *ngIf="celularField.errors?.['required']">El celular es obligatorio</small>
+        <small *ngIf="celularField.errors?.['pattern']">Solo se permiten números</small>
+        <small *ngIf="celularField.errors?.['minlength']">Mínimo 7 dígitos</small>
+        <small *ngIf="celularField.errors?.['maxlength']">Máximo 15 dígitos</small>
+        <small *ngIf="celularField.errors?.['invalidLength']">
+          Número inválido para {{getCountryName(codigoPais)}}. 
+          Formato esperado: {{getPlaceholderForCountry(codigoPais)}}
+        </small>
       </div>
+      <small class="text-muted">
+        <i class="fas fa-info-circle" style="color: #385723;"></i> 
+        Selecciona tu país y escribe tu número sin el código de país. Ejemplo: Para +507 6123-4567, solo escribe 61234567
+      </small>
     </div>
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="Date">Fecha de Nacimiento</label>
-      <input type="date" name="fecha" class="form-control" [(ngModel)]="fecha" id="Date" required #fechaField="ngModel">
+      <label for="Date"><i class="fas fa-calendar" style="color: #385723;"></i> Fecha de Nacimiento <span class="text-danger">*</span></label>
+      <input 
+        type="date" 
+        name="fecha" 
+        class="form-control" 
+        [(ngModel)]="fecha" 
+        id="Date" 
+        placeholder="dd/mm/aaaa"
+        required 
+        [max]="maxDate"
+        [min]="minDate"
+        #fechaField="ngModel"
+        style="color-scheme: light;"
+      >
       <div *ngIf="registroForm.submitted && fechaField.invalid || fechaField.touched && fechaField.invalid" class="text-danger">
-        <small *ngIf="fechaField.errors?.['required']">La fecha de nacimiento es obligatoria.</small>
+        <small *ngIf="fechaField.errors?.['required']">La fecha de nacimiento es obligatoria</small>
+        <small *ngIf="fechaField.errors?.['max']">Debes ser mayor de edad</small>
+        <small *ngIf="fechaField.errors?.['min']">Fecha no válida</small>
+        <small *ngIf="fechaField.errors?.['underage']">Debes ser mayor de 18 años para registrarte</small>
       </div>
+      <small class="text-muted">
+        <i class="fas fa-info-circle" style="color: #385723;"></i>
+        Formato: dd/mm/aaaa - Debes ser mayor de 18 años para registrarte
+      </small>
     </div>
 
-    <h5>Datos para Depósito Bancario</h5>
-
-    <div class="col-sm-12 col-md-6 form-group">
-      <label for="name-banco">Nombre del Banco</label>
-      <input type="text" name="banco" class="form-control" [(ngModel)]="banco" id="name-banco" placeholder="Ingrese el nombre del banco" required #bancoField="ngModel">
-      <div *ngIf="registroForm.submitted && bancoField.invalid || bancoField.touched && bancoField.invalid" class="text-danger">
-        <small *ngIf="bancoField.errors?.['required']">El nombre del banco es obligatorio.</small>
-      </div>
+    <!-- Separador -->
+    <div class="col-12 my-4">
+      <hr>
+      <h5><i class="fas fa-store" style="color: #385723;"></i> Información del Negocio</h5>
+      <p class="text-muted">Cuéntanos sobre tu puesto o negocio</p>
     </div>
 
-    <div class="col-sm-12 col-md-6 form-group">
-      <label for="cuenta">Tipo de Cuenta</label>
-      <select id="cuenta" class="form-control" [(ngModel)]="tipo" name="tipo" #tipoField="ngModel">
-        <option value="ahorro">Ahorro</option>
-        <option value="corriente">Corriente</option>
-      </select>
-      <div *ngIf="registroForm.submitted && tipoField.invalid || tipoField.touched && tipoField.invalid" class="text-danger">
-        <small *ngIf="tipoField.errors?.['required']">El tipo de cuenta es obligatorio.</small>
-      </div>
-    </div>
+    <!-- Información bancaria opcional -->
+    <div class="col-12 mb-3">
+      <div class="card" style="border: 2px solid #385723;">
+        <div class="card-header" style="background-color: #385723; color: white;">
+          <h6 class="mb-0">
+            <i class="fas fa-credit-card"></i>
+            Información de Pagos (Opcional)
+          </h6>
+        </div>
+        <div class="card-body" style="background-color: #f8f9fa;">
+          <p class="mb-3" style="color: #333;">
+            <i class="fas fa-shield-alt" style="color: #385723;"></i>
+            <strong style="color: #385723;">¿Por qué necesitamos esta información?</strong><br>
+            <span style="color: #555;">Para transferirte las ganancias de tus ventas de forma segura. 
+            Puedes completar esta información más tarde desde tu panel de control.</span>
+          </p>
+          
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="incluirDatosBancarios" name="incluirDatosBancarios" id="incluirDatosBancarios">
+            <label class="form-check-label" for="incluirDatosBancarios">
+              Quiero configurar mis datos bancarios ahora
+            </label>
+          </div>
 
-    <div class="col-sm-12 col-md-6 form-group">
-      <label for="num">Número de Cuenta</label>
-      <input type="text" name="cuenta" class="form-control" [(ngModel)]="cuenta" id="num" placeholder="Ingrese su número de cuenta" required pattern="^[0-9]+$" #cuentaField="ngModel">
-      <div *ngIf="registroForm.submitted && cuentaField.invalid || cuentaField.touched && cuentaField.invalid" class="text-danger">
-        <small *ngIf="cuentaField.errors?.['required']">El número de cuenta es obligatorio.</small>
-        <small *ngIf="cuentaField.errors?.['pattern']">El número de cuenta debe contener solo números.</small>
+          <div *ngIf="incluirDatosBancarios" class="row">
+            <div class="col-md-6 mb-3">
+              <label for="name-banco">Nombre del Banco</label>
+              <input type="text" name="banco" class="form-control" [(ngModel)]="banco" id="name-banco" placeholder="Ej: Banco Nacional de Panamá">
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="cuenta">Tipo de Cuenta</label>
+              <select id="cuenta" class="form-control" [(ngModel)]="tipo" name="tipo">
+                <option value="">Seleccionar tipo</option>
+                <option value="ahorro">Cuenta de Ahorro</option>
+                <option value="corriente">Cuenta Corriente</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="num">Número de Cuenta</label>
+              <input type="text" name="cuenta" class="form-control" [(ngModel)]="cuenta" id="num" placeholder="Solo números" pattern="^[0-9]+$">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="pass">Contraseña</label>
-      <input type="password" name="password" class="form-control" [(ngModel)]="password" id="pass" placeholder="Ingrese su contraseña" required #passwordField="ngModel">
+      <label for="pass"><i class="fas fa-lock" style="color: #385723;"></i> Contraseña <span class="text-danger">*</span></label>
+      <input 
+        type="password" 
+        name="password" 
+        class="form-control" 
+        [(ngModel)]="password" 
+        id="pass" 
+        placeholder="Mínimo 6 caracteres" 
+        required 
+        minlength="6"
+        maxlength="50"
+        #passwordField="ngModel"
+      >
       <div *ngIf="registroForm.submitted && passwordField.invalid || passwordField.touched && passwordField.invalid" class="text-danger">
-        <small *ngIf="passwordField.errors?.['required']">La contraseña es obligatoria.</small>
+        <small *ngIf="passwordField.errors?.['required']">La contraseña es obligatoria</small>
+        <small *ngIf="passwordField.errors?.['minlength']">Mínimo 6 caracteres</small>
+        <small *ngIf="passwordField.errors?.['maxlength']">Máximo 50 caracteres</small>
       </div>
+      <small class="text-muted">
+        <i class="fas fa-info-circle" style="color: #385723;"></i>
+        Usa una contraseña segura que recuerdes fácilmente
+      </small>
     </div>
 
     <div class="col-sm-12 col-md-6 form-group">
-      <label for="pass2">Confirmar Contraseña</label>
-      <input type="password" name="cnf-password" class="form-control" [(ngModel)]="confirmPassword" id="pass2" placeholder="Confirmar contraseña" required #confirmPasswordField="ngModel">
+      <label for="pass2"><i class="fas fa-lock" style="color: #385723;"></i> Confirmar Contraseña <span class="text-danger">*</span></label>
+      <input 
+        type="password" 
+        name="cnf-password" 
+        class="form-control" 
+        [(ngModel)]="confirmPassword" 
+        id="pass2" 
+        placeholder="Repite tu contraseña" 
+        required 
+        minlength="6"
+        maxlength="50"
+        #confirmPasswordField="ngModel"
+        [class.is-valid]="confirmPassword && password === confirmPassword"
+        [class.is-invalid]="confirmPassword && password !== confirmPassword"
+      >
       <div *ngIf="registroForm.submitted && confirmPasswordField.invalid || confirmPasswordField.touched && confirmPasswordField.invalid" class="text-danger">
-        <small *ngIf="confirmPasswordField.errors?.['required']">La confirmación de contraseña es obligatoria.</small>
-        <small *ngIf="confirmPasswordField.errors?.['notMatch']">Las contraseñas no coinciden.</small>
+        <small *ngIf="confirmPasswordField.errors?.['required']">Confirma tu contraseña</small>
+        <small *ngIf="confirmPasswordField.errors?.['minlength']">Mínimo 6 caracteres</small>
+        <small *ngIf="confirmPasswordField.errors?.['notMatch']">Las contraseñas no coinciden</small>
+      </div>
+      <div *ngIf="confirmPassword && password === confirmPassword" style="color: #385723;">
+        <small><i class="fas fa-check"></i> Las contraseñas coinciden</small>
+      </div>
+      <div *ngIf="confirmPassword && password !== confirmPassword" class="text-danger">
+        <small><i class="fas fa-times"></i> Las contraseñas no coinciden</small>
       </div>
     </div>
 
     <!-- Submit Button -->
-    <div class="col-sm-12 form-group mb-0">
+    <div class="col-sm-12 form-group mb-0 text-center">
       <br>
-      <button type="submit" class="btn btn-primary" [disabled]="registroForm.invalid">Registrar</button>
+      <button type="submit" class="btn btn-lg px-5" 
+              (click)="onSubmitClick($event)"
+              style="background-color: #385723; border-color: #385723; color: white;"
+              onmouseover="this.style.backgroundColor='#572C1A'" 
+              onmouseout="this.style.backgroundColor='#385723'">
+        <i class="fas fa-rocket"></i>
+        Crear Mi Cuenta Gratis
+      </button>
+      <div class="mt-2">
+        <small class="text-muted">
+          Estado del formulario: {{registroForm.valid ? 'Válido' : 'Inválido'}}
+          <span *ngIf="!registroForm.valid" class="text-danger">
+            - Campos faltantes: {{getInvalidFields()}}
+          </span>
+        </small>
+      </div>
+      <br><br>
+      <small class="text-muted">
+        <i class="fas fa-shield-alt" style="color: #385723;"></i>
+        Al registrarte, aceptas nuestros términos y condiciones. Tu información está segura con nosotros.
+      </small>
     </div>
 
   </div>
 </form>
 
 <!-- Mensaje de éxito (oculto por defecto) -->
-<div *ngIf="mensajeRegistroVisible" class="mensaje-satisfaccion">
-  ¡Registro exitoso! Ahora puedes iniciar sesión.
+<div *ngIf="mensajeRegistroVisible" class="alert fade show" role="alert" 
+     style="background-color: #385723; color: white; border: 2px solid #385723;">
+  <i class="fas fa-check-circle"></i>
+  <strong>¡Bienvenido a Cosechando!</strong><br>
+  Tu cuenta ha sido creada exitosamente. Te estamos redirigiendo a tu panel de control...
+  <div class="mt-2">
+    <small style="color: #f0f0f0;">
+      <i class="fas fa-info-circle"></i>
+      Recuerda que puedes configurar tus datos bancarios más tarde desde tu perfil.
+    </small>
+  </div>
 </div>
 
 <!-- Enlace para regresar al login -->

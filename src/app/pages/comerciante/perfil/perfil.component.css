@@ -1,58 +1,131 @@
-.btn-save {
-	background-color: #385723;  /* Verde */
-	color: white;               /* Texto blanco */
-	border: 1px solid #385723;  /* Borde verde */
-  }
-  
-  .btn-save:hover {
-	background-color: #2e4618; /* Un tono más oscuro de verde para el hover */
-	border-color: #2e4618;      /* Borde oscuro en hover */
-  }
-  
-  /* Botón para "Editar" (Marrón) */
-  .btn-edit {
-	background-color: #572C1A;  /* Marrón */
-	color: white;               /* Texto blanco */
-	border: 1px solid #572C1A;  /* Borde marrón */
-  }
-  
-  .btn-edit:hover {
-	background-color: #4b2614;  /* Un tono más oscuro de marrón para el hover */
-	border-color: #4b2614;       /* Borde oscuro en hover */
-  }
-  
-  /* Estilo adicional para deshabilitar los botones */
-  button:disabled {
-	opacity: 0.6;   /* Reducir la opacidad cuando el botón está deshabilitado */
-	cursor: not-allowed; /* Cambiar el cursor cuando el botón está deshabilitado */
-  }
-  
-  .jumbotron {
-    background-color: #f8f9fa;
-    padding: 50px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+/* Layout principal para fijar footer */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-  .profile-photo {
-    margin-bottom: 15px; /* Espacio debajo de la foto */
+.main-content {
+  flex: 1;
+  padding-bottom: 2rem;
+}
+
+/* Estilos para las tarjetas */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Información personal compacta */
+.card-body.py-3 {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+/* Estilos para inputs */
+.form-control:focus {
+  border-color: #385723 !important;
+  box-shadow: 0 0 0 0.2rem rgba(56, 87, 35, 0.25) !important;
+}
+
+.form-control[readonly] {
+  background-color: #f8f9fa !important;
+  border-color: #e9ecef !important;
+}
+
+/* Estilos para labels */
+.form-label {
+  font-weight: 600;
+  color: #385723;
+  margin-bottom: 0.5rem;
+}
+
+.form-label i {
+  color: #7fad39;
+  margin-right: 6px;
+}
+
+/* Estilos para badges */
+.badge {
+  font-size: 0.75em;
+  padding: 0.5em 0.75em;
+  border-radius: 0.5rem;
+}
+
+/* Estilos para alertas */
+.alert {
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  padding: 12px 16px;
+}
+
+.alert-success {
+  background-color: rgba(127, 173, 57, 0.1);
+  border-left: 4px solid #7fad39;
+  color: #385723;
+}
+
+.alert-danger {
+  background-color: rgba(87, 44, 26, 0.1);
+  border-left: 4px solid #572C1A;
+  color: #572C1A;
+}
+
+.alert-info {
+  background-color: rgba(56, 87, 35, 0.1);
+  border-left: 4px solid #385723;
+  color: #385723;
+}
+
+/* Botones deshabilitados */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Utilidad para espaciado */
+.gap-3 {
+  gap: 1rem;
+}
+
+/* Animaciones para carga */
+.fa-spin {
+  animation: fa-spin 2s infinite linear;
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .d-flex.flex-wrap {
+    flex-direction: column;
+  }
+  
+  .d-flex.flex-wrap button {
+    margin: 0.25rem 0;
+    width: 100%;
   }
   
   .profile-photo img {
-    margin-bottom: 10px; /* Espacio entre la foto y el nombre */
+    width: 100px !important;
+    height: 100px !important;
   }
   
-  h2 {
-    margin-top: 10px; /* Espacio entre la foto y el nombre */
+  .card-body .row .col-md-6,
+  .card-body .row .col-md-4 {
+    margin-bottom: 1rem;
   }
-  
-  /* Puedes agregar algo de estilo para que el mensaje se vea más destacado */
-.alert {
-    font-size: 1.2rem;
-    padding: 15px;
-  }
-  .alert-success {
-    background-color: #28a745;
-    color: white;
-  }
+}
   

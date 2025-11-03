@@ -1,3 +1,14 @@
+/* Layout principal para fijar footer */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding-bottom: 2rem;
+}
 
 .btn-custom {
     background-color: #2B3357; 

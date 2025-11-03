@@ -21,21 +21,40 @@
     <!-- Buscar -->
     <label>
       <div class="search">
-        <input type="text" placeholder="Buscar productos" class="input-search"/>
-        <button class="button-search"><i class="fas fa-search"></i></button>
-        
+        <input 
+          type="text" 
+          placeholder="Buscar productos" 
+          class="input-search"
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+        />
+        <button 
+          *ngIf="searchTerm" 
+          class="clear-search-input" 
+          (click)="clearSearch()"
+          type="button"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+        <button class="button-search" (click)="onSearch()">
+          <i class="fas fa-search"></i>
+        </button>
       </div>
     </label>
 
-    <div>
+    <div class="nav-icons">
     <!--Carrito -->
-    <a class="cart-link" routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito">
+    <a class="cart-link" routerLink="/carrito" title="Ver Carrito">
         <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" *ngIf="(cartItemCount$ | async) as count; else: noBadge">
+          {{ count }}
+        </span>
+        <ng-template #noBadge></ng-template>
     </a>
     <!-- Usuario-->
-    <a class="cart-link" routerLink="/login" ng-reflect-router-link="login" href="/login">
+    <a class="user-link" routerLink="/login" (click)="onUserIconClick()" title="Iniciar Sesión">
       <i class="fas fa-user"></i>
-  </a>
+    </a>
     </div>
   </div>
 

@@ -3,20 +3,32 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "setup-atlas": "node setupAtlas.js",
+    "test-connection": "node testConnection.js",
+    "seed-products": "node seedProducts.js",
+    "seed-orders": "node seedOrders.js",
+    "migrate-to-cloud": "node migrateToCloud.js",
+    "check-data": "node checkData.js",
+    "list-users": "node listUsers.js",
+    "deploy-prep": "node deployPrep.js",
+    "reset-to-local": "cp .env.local .env && echo 'Configuración cambiada a local'",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.13.1",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.6.2"
+    "mongoose": "^8.6.2",
+    "multer": "^2.0.2"
   }
 }

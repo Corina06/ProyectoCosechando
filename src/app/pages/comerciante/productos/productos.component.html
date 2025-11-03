@@ -1,160 +1,322 @@
 <app-navcomer></app-navcomer>
 
-  <div class="text-center mb-4">
-    <h2 class="display-4 font-weight-bold ">Productos</h2>
-    <p class="lead text-muted">Gestiona y agrega productos fácilmente a tu inventario.</p>
-  </div>
+<div class="text-center mb-4">
+  <h2 class="display-4 font-weight-bold ">Productos</h2>
+  <p class="lead text-muted">Gestiona y agrega productos fácilmente a tu inventario.</p>
+</div>
 
-  <div class="row mb-3 align-items-center">
-    <div class="col-md-4">
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar producto..." class="form-control" />
-    </div>
-    <div class="col-md-4">
-      <select [(ngModel)]="selectedCategory" class="form-control">
-        <option value="">Todas las categorías</option>
-        <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
-      </select>
-    </div>
-    <div class="col-md-3 text-end">
-      <button (click)="mostrarFormulario = !mostrarFormulario" class="btn btn-success">
-        {{ mostrarFormulario ? 'Ocultar Formulario' : 'Agregar Producto' }}
+<!-- Mensajes de estado -->
+<div *ngIf="loading" class="alert alert-info">
+  <i class="fas fa-spinner fa-spin"></i> Cargando...
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+  <i class="fas fa-exclamation-triangle"></i> {{ error }}
+  <button type="button" class="btn-close" (click)="error = ''"></button>
+</div>
+
+<div *ngIf="success" class="alert alert-success alert-dismissible fade show">
+  <i class="fas fa-check-circle"></i> {{ success }}
+  <button type="button" class="btn-close" (click)="success = ''"></button>
+</div>
+
+<div class="row mb-3 align-items-center">
+  <div class="col-md-4">
+    <div class="input-group">
+      <span class="input-group-text"><i class="fas fa-search"></i></span>
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Buscar"
+        class="form-control" />
+      <button *ngIf="searchTerm" class="btn btn-outline-secondary" (click)="searchTerm = ''; onSearchChange()">
+        <i class="fas fa-times"></i>
       </button>
     </div>
   </div>
+  <div class="col-md-4">
+    <div class="input-group">
+      <span class="input-group-text"><i class="fas fa-filter"></i></span>
+      <select [(ngModel)]="selectedCategory" (ngModelChange)="onCategoryChange()" class="form-control">
+        <option value="">Todas las categorías</option>
+        <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+      </select>
+      <button *ngIf="selectedCategory" class="btn btn-outline-secondary"
+        (click)="selectedCategory = ''; onCategoryChange()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <div class="col-md-4 text-end">
+    <button (click)="mostrarFormulario = !mostrarFormulario" class="btn btn-success">
+      <i class="fas fa-plus" *ngIf="!mostrarFormulario" style="margin-right: 8px;"></i>
+      <i class="fas fa-minus" *ngIf="mostrarFormulario" style="margin-right: 8px;"></i>
+      {{ mostrarFormulario ? 'Ocultar Formulario' : 'Agregar Producto' }}
+    </button>
+  </div>
+</div>
 
-  <div *ngIf="mostrarFormulario" class="mt-4">
-    <h3 class="mb-4">Agregar Nuevo Producto</h3>
-    <form (ngSubmit)="agregarProducto()" class="border p-4 rounded shadow-sm bg-light">
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="name" class="form-label">Nombre</label>
-          <input type="text" id="name" [(ngModel)]="nuevoProducto.name" name="name" class="form-control" placeholder="Nombre del producto" required />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="name" class="form-label">Detalles</label>
-          <input type="text" id="name" [(ngModel)]="nuevoProducto.description" name="description" class="form-control" placeholder="Descripción del producto" required />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="price" class="form-label">Precio</label>
-          <input type="number" id="price" [(ngModel)]="nuevoProducto.price" name="price" class="form-control" placeholder="Precio" required />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="price" class="form-label">Cantidad</label>
-          <input type="number" id="stock" [(ngModel)]="nuevoProducto.stock" name="stock" class="form-control" placeholder="stock" required />
+<div *ngIf="mostrarFormulario" class="mt-4">
+  <h3 class="mb-4">Agregar Nuevo Producto</h3>
+  <form (ngSubmit)="agregarProducto()" #productForm="ngForm" class="border p-4 rounded shadow-sm bg-light">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="name" class="form-label">Nombre<span class="text-danger">*</span></label>
+        <input type="text" id="name" [(ngModel)]="nuevoProducto.name" name="name" class="form-control"
+          placeholder="Nombre del producto" required minlength="2" #nameField="ngModel"
+          [class.is-invalid]="productForm.submitted && nameField.invalid" />
+        <div *ngIf="productForm.submitted && nameField.invalid" class="invalid-feedback">
+          <small *ngIf="nameField.errors?.['required']">El nombre es requerido</small>
+          <small *ngIf="nameField.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</small>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="category" class="form-label">Categoría</label><br>
-          <select [(ngModel)]="nuevoProducto.category" name="category" required>
-            <option value="" disabled selected>Selecciona una categoría</option>
-            <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
-          </select>
+      <div class="col-md-6 mb-3">
+        <label for="description" class="form-label">Detalles<span class="text-danger">*</span></label>
+        <input type="text" id="description" [(ngModel)]="nuevoProducto.description" name="description"
+          class="form-control" placeholder="Descripción del producto" required minlength="10" #descField="ngModel"
+          [class.is-invalid]="productForm.submitted && descField.invalid" />
+        <div *ngIf="productForm.submitted && descField.invalid" class="invalid-feedback">
+          <small *ngIf="descField.errors?.['required']">La descripción es requerida</small>
+          <small *ngIf="descField.errors?.['minlength']">La descripción debe tener al menos 10 caracteres</small>
         </div>
-        <div class="col-md-6 mb-3">
-          <label for="image" class="form-label">Imagen</label>
-          <input type="file" id="image" (change)="onImageSelected($event)" class="form-control" accept="image/*" required />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="price" class="form-label">Precio por Unidad<span class="text-danger">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text">$</span>
+          <input type="number" id="price" [(ngModel)]="nuevoProducto.price" name="price" class="form-control"
+            placeholder="2.50" required min="0.01" step="0.01" #priceField="ngModel"
+            [class.is-invalid]="productForm.submitted && priceField.invalid" />
         </div>
-        <div class="col-md-6 mb-3" *ngIf="imagePreview">
+        <div *ngIf="productForm.submitted && priceField.invalid" class="invalid-feedback">
+          <small *ngIf="priceField.errors?.['required']">El precio es requerido</small>
+          <small *ngIf="priceField.errors?.['min']">El precio debe ser mayor a $0.01</small>
+        </div>
+        <small class="text-muted">Ejemplo: 2.50 para $2.50</small>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="unit" class="form-label">Unidad de Medida<span class="text-danger">*</span></label>
+        <select [(ngModel)]="nuevoProducto.unit" name="unit" class="form-control" required #unitField="ngModel"
+          [class.is-invalid]="productForm.submitted && unitField.invalid">
+          <option value="" disabled selected>Selecciona unidad</option>
+          <option value="unidad">Unidad (c/u)</option>
+          <option value="libra">Libra (lb)</option>
+          <option value="kilo">Kilogramo (kg)</option>
+          <option value="gramo">Gramo (g)</option>
+          <option value="onza">Onza (oz)</option>
+          <option value="docena">Docena (12 unidades)</option>
+          <option value="paquete">Paquete</option>
+          <option value="bolsa">Bolsa</option>
+          <option value="caja">Caja</option>
+          <option value="litro">Litro (L)</option>
+          <option value="galon">Galón</option>
+        </select>
+        <div *ngIf="productForm.submitted && unitField.invalid" class="invalid-feedback">
+          <small *ngIf="unitField.errors?.['required']">La unidad de medida es requerida</small>
+        </div>
+        <small class="text-muted">¿Cómo vendes este producto?</small>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="quantity" class="form-label">Cantidad en Stock<span class="text-danger">*</span></label>
+        <input type="number" id="quantity" [(ngModel)]="nuevoProducto.quantity" name="quantity" class="form-control"
+          placeholder="Ej: 50" required min="0" step="0.1" #quantityField="ngModel"
+          [class.is-invalid]="productForm.submitted && quantityField.invalid" />
+        <div *ngIf="productForm.submitted && quantityField.invalid" class="invalid-feedback">
+          <small *ngIf="quantityField.errors?.['required']">La cantidad es requerida</small>
+          <small *ngIf="quantityField.errors?.['min']">La cantidad no puede ser negativa</small>
+        </div>
+        <small class="text-muted">Cantidad que tienes disponible</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="category" class="form-label">Categoría<span class="text-danger">*</span></label>
+        <select [(ngModel)]="nuevoProducto.category" name="category" class="form-control" required
+          #categoryField="ngModel" [class.is-invalid]="productForm.submitted && categoryField.invalid">
+          <option value="" disabled selected>Selecciona una categoría</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+        </select>
+        <div *ngIf="productForm.submitted && categoryField.invalid" class="invalid-feedback">
+          <small *ngIf="categoryField.errors?.['required']">La categoría es requerida</small>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="image" class="form-label">Imagen<span class="text-danger">*</span></label>
+        <input type="file" id="image" (change)="onImageSelected($event)" class="form-control" accept="image/*" required
+          [class.is-invalid]="productForm.submitted && !imagePreview" />
+        <div *ngIf="productForm.submitted && !imagePreview" class="invalid-feedback">
+          <small>La imagen es requerida</small>
+        </div>
+        <small class="text-muted">
+          <i class="fas fa-info-circle" style="color: #385723;"></i>
+          Formatos: JPG, PNG, GIF. Máximo 2MB
+        </small>
+      </div>
+      <div class="col-md-6 mb-3" *ngIf="imagePreview">
+        <label class="form-label">Vista Previa</label>
+        <div class="text-center">
           <img [src]="imagePreview" alt="Vista previa" class="img-thumbnail" />
+          <br>
+          <small class="text-muted mt-2">
+            <i class="fas fa-check-circle" style="color: #28a745;"></i>
+            Imagen cargada correctamente
+          </small>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="location" class="form-label">Ubicación</label>
-          <input type="text" id="location" [(ngModel)]="nuevoProducto.location" name="location" class="form-control" placeholder="Ubicación del producto" required />
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="CName" class="form-label">
+          <i class="fas fa-user" style="color: #385723;"></i>
+          Nombre del Comerciante<span class="text-danger">*</span>
+        </label>
+        <input type="text" id="CName" [(ngModel)]="nuevoProducto.CName" name="CName" class="form-control"
+          placeholder="Tu nombre completo" required minlength="2" #cnameField="ngModel"
+          [class.is-invalid]="productForm.submitted && cnameField.invalid" readonly
+          style="background-color: #f8f9fa;" />
+        <div *ngIf="productForm.submitted && cnameField.invalid" class="invalid-feedback">
+          <small *ngIf="cnameField.errors?.['required']">El nombre del comerciante es requerido</small>
+          <small *ngIf="cnameField.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</small>
         </div>
-        <div class="col-md-6 mb-3">
-          <label for="CName" class="form-label">Nombre del Comerciante</label>
-          <input type="text" id="CName" [(ngModel)]="nuevoProducto.CName" name="CName" class="form-control" placeholder="Nombre del comerciante" required />
-        </div>
+        <small class="text-muted">Información de tu perfil</small>
       </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="Contact" class="form-label">Contacto</label>
-          <input type="text" id="Contact" [(ngModel)]="nuevoProducto.Contact" name="Contact" class="form-control" placeholder="Número de contacto" required />
+      <div class="col-md-4 mb-3">
+        <label for="location" class="form-label">
+          <i class="fas fa-store" style="color: #385723;"></i>
+          Nombre del Local<span class="text-danger">*</span>
+        </label>
+        <input type="text" id="location" [(ngModel)]="nuevoProducto.location" name="location" class="form-control"
+          placeholder="Nombre de tu negocio" required minlength="5" #locationField="ngModel"
+          [class.is-invalid]="productForm.submitted && locationField.invalid" readonly
+          style="background-color: #f8f9fa;" />
+        <div *ngIf="productForm.submitted && locationField.invalid" class="invalid-feedback">
+          <small *ngIf="locationField.errors?.['required']">El nombre del local es requerido</small>
+          <small *ngIf="locationField.errors?.['minlength']">El nombre debe tener al menos 5 caracteres</small>
         </div>
+        <small class="text-muted">Información de tu perfil</small>
       </div>
-      <button type="submit" class="btn btn-success">Agregar Producto</button>
-    </form>
+      <div class="col-md-4 mb-3">
+        <label for="Contact" class="form-label">
+          <i class="fas fa-phone" style="color: #385723;"></i>
+          Contacto<span class="text-danger">*</span>
+        </label>
+        <input type="tel" id="Contact" [(ngModel)]="nuevoProducto.Contact" name="Contact" class="form-control"
+          placeholder="Tu número de contacto" required pattern="^[0-9]{8}$" #contactField="ngModel"
+          [class.is-invalid]="productForm.submitted && contactField.invalid" readonly
+          style="background-color: #f8f9fa;" />
+        <div *ngIf="productForm.submitted && contactField.invalid" class="invalid-feedback">
+          <small *ngIf="contactField.errors?.['required']">El contacto es requerido</small>
+          <small *ngIf="contactField.errors?.['pattern']">El número debe tener 8 dígitos</small>
+        </div>
+        <small class="text-muted">Información de tu perfil</small>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success" [disabled]="productForm.invalid">
+      <i class="fas fa-plus"></i> Agregar Producto
+    </button>
+  </form>
+</div>
+
+<div class="product-summary">
+  <div class="summary-card">
+    <i class="fas fa-boxes"></i>
+    <h4>Total de productos</h4>
+    <p>{{ getTotalProducts() }}</p>
   </div>
-    
-    <div class="product-summary">
-      <div class="summary-card">
-        <h4>Total de productos</h4>
-        <p>{{ getTotalProducts() }}</p>
-      </div>
-      <div class="summary-card">
-        <h4>Disponibles</h4>
-        <p>{{ getAvailableProducts() }}</p>
-      </div>
-      <div class="summary-card">
-        <h4>Agotados</h4>
-        <p>{{ getOutOfStockProducts() }}</p>
-      </div>
-    </div>
-
-
-  <div class="card shadow border-0 mb-7">
-    <div class="table-responsive">
-      <table class="table table-hover table-nowrap" id="ordersTable">
-          <thead class="thead-light">
-              <tr>
-                  <th>Imagen</th>
-                  <th>Nombre</th>
-                  <th>Categoria</th>
-                  <th>Precio</th>
-                  <th>Estado</th>
-                  <th>Acciones</th> 
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let product of productosPaginados">
-                  <td><img src="images/{{ product.image }}" alt="{{ product.name }}" class="product-image"></td>
-                  <td>{{ product.name }}</td>
-                  <td>{{ product.category }}</td>
-                  <td>{{ product.price | currency }}</td>
-                  
-                  <td>
-      
-                  <span [ngClass]="{ 'text-success': product.stock, 'text-danger': !product.stock }">
-                    {{ product.stock ? 'Disponible' : 'Agotado' }}
-                </span>
-                  </td>
-                  <td>
-                    <div class="btn-group">
-                      <button class="btn btn-edit square-btn" (click)="openEditModal(product)">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button class="btn btn-delete square-btn" (click)="openDeleteModal(product)">
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                  </td>
-                  
-                  
-                  
-              </tr>
-              
-              <!-- Agrega más productos según sea necesario -->
-              
-          </tbody>
-      </table>
-    </div>
-    <div class="card-footer border-0 py-5">
-      <span class="text-muted text-sm">Mostrar 10 de {{ totalProductos }} productos</span>
-    </div>
+  <div class="summary-card">
+    <i class="fas fa-check-circle"></i>
+    <h4>Disponibles</h4>
+    <p>{{ getAvailableProducts() }}</p>
   </div>
+  <div class="summary-card">
+    <i class="fas fa-exclamation-triangle"></i>
+    <h4>Agotados</h4>
+    <p>{{ getOutOfStockProducts() }}</p>
+  </div>
+</div>
 
+<div class="card shadow border-0 mb-7">
+  <div class="table-responsive">
+    <table class="table table-hover table-nowrap" id="ordersTable">
+      <thead class="thead-light">
+        <tr>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of productosPaginados">
+          <td>
+            <div class="image-container" style="position: relative;">
+              <img [src]="product.image" alt="{{ product.name }}" class="product-image" (error)="onImageError($event)"
+                [title]="product.name">
+            </div>
+          </td>
+          <td>
+            <strong>{{ product.name }}</strong>
+            <br>
+            <small class="text-muted">{{ product.description | slice:0:50 }}...</small>
+          </td>
+          <td>
+            <span class="badge bg-primary">{{ product.category }}</span>
+          </td>
+          <td>
+            <strong>${{ product.price | number:'1.2-2' }}</strong>
+            <br>
+            <small class="text-muted">por {{ getUnitName(product.unit || '') }}</small>
+          </td>
+          <td>
+            <span class="badge" [class.bg-success]="(product.quantity || 0) > 10"
+              [class.bg-warning]="(product.quantity || 0) <= 10 && (product.quantity || 0) > 0"
+              [class.bg-danger]="(product.quantity || 0) === 0">
+              {{ product.quantity || 0 }} {{ getUnitAbbreviation(product.unit || '') }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [class.bg-success]="product.stock" [class.bg-danger]="!product.stock">
+              {{ product.stock ? 'Disponible' : 'Agotado' }}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-outline-primary" (click)="openEditModal(product)" title="Editar producto">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="openDeleteModal(product)"
+                title="Eliminar producto">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
 
-
+        <tr *ngIf="productosPaginados.length === 0">
+          <td colspan="7" class="text-center py-4">
+            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No se encontraron productos</p>
+            <button class="btn btn-success" (click)="mostrarFormulario = true">
+              <i class="fas fa-plus"></i> Agregar primer producto
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer border-0 py-5">
+    <span class="text-muted text-sm">Mostrar 10 de {{ totalProductos }} productos</span>
+  </div>
+</div>
 
 <script src="script.js"></script>
-<app-paginacion [totalItems]="totalProductos" [itemsPerPage]="itemsPerPage" (pageChange)="onPageChange($event)"></app-paginacion>
+<app-paginacion [totalItems]="totalProductos" [itemsPerPage]="itemsPerPage"
+  (pageChange)="onPageChange($event)"></app-paginacion>
 <br>
 
 <!-- Modal de Confirmación de Eliminar -->
-<div class="modal" tabindex="-1" [ngClass]="{ 'show': showDeleteModal }" style="display: block;" *ngIf="showDeleteModal">
+<div class="modal" tabindex="-1" [ngClass]="{ 'show': showDeleteModal }" style="display: block;"
+  *ngIf="showDeleteModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -172,49 +334,98 @@
   </div>
 </div>
 
-
 <!-- Modal de Modificar Producto -->
 <div class="modal" tabindex="-1" [ngClass]="{ 'show': showEditModal }" style="display: block;" *ngIf="showEditModal">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Modificar Producto</h5>
         <button type="button" class="btn-close" (click)="closeEditModal()"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="saveChanges()">
-          <div class="mb-3">
-            <label for="editName" class="form-label">Nombre</label>
-            <input type="text" id="editName" [(ngModel)]="editedProduct.name" class="form-control" name="editName" required />
+        <!-- Fila 1: Nombre y Descripción -->
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <label for="editName" class="form-label">Nombre<span class="text-danger">*</span></label>
+            <input type="text" id="editName" [(ngModel)]="editedProduct.name" class="form-control" name="editName"
+              required minlength="2" #editNameField="ngModel" />
           </div>
-          <div class="mb-3">
-            <label for="editDescription" class="form-label">Descripción</label>
-            <input type="text" id="editDescription" [(ngModel)]="editedProduct.description" class="form-control" name="editDescription" required />
+          <div class="col-md-6 mb-2">
+            <label for="editDescription" class="form-label">Descripción<span class="text-danger">*</span></label>
+            <input type="text" id="editDescription" [(ngModel)]="editedProduct.description" class="form-control"
+              name="editDescription" required minlength="10" #editDescField="ngModel" />
           </div>
-          <div class="mb-3">
-            <label for="editPrice" class="form-label">Precio</label>
-            <input type="number" id="editPrice" [(ngModel)]="editedProduct.price" class="form-control" name="editPrice" required />
+        </div>
+
+        <!-- Fila 2: Precio, Cantidad y Unidad -->
+        <div class="row">
+          <div class="col-md-4 mb-2">
+            <label for="editPrice" class="form-label">Precio<span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number" id="editPrice" [(ngModel)]="editedProduct.price" class="form-control"
+                name="editPrice" required min="0.01" step="0.01" #editPriceField="ngModel" />
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="editStock" class="form-label">Stock</label>
-            <input type="number" id="editStock" [(ngModel)]="editedProduct.stock" class="form-control" name="editStock" required />
+          <div class="col-md-4 mb-2">
+            <label for="editQuantity" class="form-label">Cantidad<span class="text-danger">*</span></label>
+            <input type="number" id="editQuantity" [(ngModel)]="editedProduct.quantity" class="form-control"
+              name="editQuantity" required min="0" #editQuantityField="ngModel" />
           </div>
-          <div class="mb-3">
-            <label for="editCategory" class="form-label">Categoría</label>
-            <select id="editCategory" [(ngModel)]="editedProduct.category" class="form-control" name="editCategory" required>
+          <div class="col-md-4 mb-2">
+            <label for="editUnit" class="form-label">Unidad<span class="text-danger">*</span></label>
+            <select id="editUnit" [(ngModel)]="editedProduct.unit" class="form-control" name="editUnit" required
+              #editUnitField="ngModel">
+              <option value="unidad">Unidad</option>
+              <option value="libra">Libra</option>
+              <option value="kilo">Kilogramo</option>
+              <option value="docena">Docena</option>
+              <option value="paquete">Paquete</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Fila 3: Categoría -->
+        <div class="row">
+          <div class="col-md-12 mb-2">
+            <label for="editCategory" class="form-label">Categoría<span class="text-danger">*</span></label>
+            <select id="editCategory" [(ngModel)]="editedProduct.category" class="form-control" name="editCategory"
+              required #editCategoryField="ngModel">
+              <option value="">Selecciona una categoría</option>
               <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
             </select>
           </div>
-          <div class="mb-3">
-            <label for="editLocation" class="form-label">Ubicación</label>
-            <input type="text" id="editLocation" [(ngModel)]="editedProduct.location" class="form-control" name="editLocation" required />
+        </div>
+
+        <!-- Fila 4: Imagen -->
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <label class="form-label">Imagen Actual</label>
+            <div class="text-center">
+              <img [src]="editedProduct.image" alt="Imagen actual" class="img-thumbnail"
+                style="max-width: 100px; max-height: 100px;" (error)="onImageError($event)">
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="editCName" class="form-label">Nombre del Comerciante</label>
-            <input type="text" id="editCName" [(ngModel)]="editedProduct.CName" class="form-control" name="editCName" required />
+          <div class="col-md-6 mb-2">
+            <label for="editImage" class="form-label">Cambiar Imagen</label>
+            <input type="file" id="editImage" (change)="onEditImageSelected($event)" class="form-control"
+              accept="image/*" />
+            <div *ngIf="editImagePreview" class="mt-2 text-center">
+              <img [src]="editImagePreview" alt="Nueva imagen" class="img-thumbnail"
+                style="max-width: 100px; max-height: 100px;">
+              <br><small class="text-success">✓ Nueva imagen</small>
+            </div>
           </div>
-          <button type="submit" class="btn btn-success">Guardar Cambios</button>
-        </form>
+        </div>
+
+        <div class="text-end mt-3">
+          <button type="button" class="btn btn-secondary me-2" (click)="closeEditModal()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+          <button type="button" class="btn btn-success" (click)="saveChangesDirectly()">
+            <i class="fas fa-save"></i> Guardar Cambios
+          </button>
+        </div>
       </div>
     </div>
   </div>

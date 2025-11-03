@@ -17,26 +17,40 @@
     <a routerLink="/inicio" routerLinkActive="router-link-active">
       <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="60px">
     </a>
-    <h1 class="h2 mb-0 ls-tight">Bienvenido Comerciante</h1>
+    <h1 class="h2 mb-0 ls-tight">Bienvenido {{ currentUser?.name || 'Comerciante' }}</h1>
     
     <div class="iconos">
       <!-- Ícono de notificación con dropdown -->
       <div class="cart-link" (click)="toggleNotifications()">
         <i class="fas fa-bell"></i>
+        <span class="notification-badge" *ngIf="notifications.length > 0">{{ notifications.length }}</span>
       </div>
   
       <!-- Panel de notificaciones que se muestra/oculta -->
       <div class="notifications-panel" *ngIf="notificationsVisible">
+        <div class="notifications-header">
+          <h6 style="margin: 0; color: #385723; font-weight: 600;">
+            <i class="fas fa-bell me-2"></i>Notificaciones
+          </h6>
+          <small class="text-muted">{{ notifications.length }} nuevas</small>
+        </div>
         <ul>
-          <li *ngFor="let notification of notifications">
-            <div class="notification-item">
-              <div class="notification-content">
-                <i class="fas fa-info-circle"></i> 
-                {{ notification }}
-              </div>
+          <li *ngFor="let notification of notifications" class="notification-item-enhanced">
+            <div class="notification-icon">
+              <i [class]="notification.icon" [style.color]="notification.color"></i>
+            </div>
+            <div class="notification-content-enhanced">
+              <div class="notification-message">{{ notification.message }}</div>
+              <div class="notification-detail">{{ notification.detail }}</div>
+              <div class="notification-time">{{ notification.time }}</div>
             </div>
           </li>
         </ul>
+        <div class="notifications-footer">
+          <small class="text-muted">
+            <i class="fas fa-eye me-1"></i>Ver todas las notificaciones
+          </small>
+        </div>
       </div>
   
       <!-- Ícono de perfil con dropdown -->
@@ -67,7 +81,7 @@
             <a class="" routerLink="/panel" ng-reflect-router-link="panel" href="/panel">Reporte</a>
         </li>
         <li class="nav-link">
-            <a  routerLink="/producto" ng-reflect-router-link="producto" href="/productos">Productos</a>
+            <a  routerLink="/productos" ng-reflect-router-link="productos" href="/productos">Productos</a>
         </li>
         <li class="nav-link">
             <a  routerLink="/orden" ng-reflect-router-link="orden" href="/orden">Venta</a>

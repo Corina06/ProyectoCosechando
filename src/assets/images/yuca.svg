@@ -1,0 +1,36 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="yucaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A0522D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pulpGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5DC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFFACD;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo -->
+  <rect width="400" height="300" fill="#E8F5E8"/>
+  
+  <!-- Yuca principal -->
+  <ellipse cx="200" cy="150" rx="120" ry="40" fill="url(#yucaGradient)"/>
+  
+  <!-- Textura de la cáscara -->
+  <ellipse cx="200" cy="150" rx="120" ry="40" fill="none" stroke="#654321" stroke-width="2"/>
+  <line x1="100" y1="140" x2="300" y2="140" stroke="#654321" stroke-width="1"/>
+  <line x1="110" y1="160" x2="290" y2="160" stroke="#654321" stroke-width="1"/>
+  <line x1="120" y1="130" x2="280" y2="130" stroke="#654321" stroke-width="1"/>
+  
+  <!-- Corte mostrando la pulpa -->
+  <ellipse cx="150" cy="120" rx="30" ry="15" fill="url(#pulpGradient)" stroke="#DDD" stroke-width="2"/>
+  
+  <!-- Raíces pequeñas -->
+  <ellipse cx="320" cy="150" rx="15" ry="8" fill="url(#yucaGradient)"/>
+  <ellipse cx="80" cy="150" rx="12" ry="6" fill="url(#yucaGradient)"/>
+  
+  <!-- Texto -->
+  <text x="200" y="250" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2F4F2F" text-anchor="middle">Yuca Fresca</text>
+  <text x="200" y="275" font-family="Arial, sans-serif" font-size="14" fill="#666" text-anchor="middle">Perfecta para hervir, freír o hacer puré</text>
+</svg>

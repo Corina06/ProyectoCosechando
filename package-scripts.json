@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm start",
+    "frontend": "ng serve",
+    "build": "ng build --configuration production",
+    "seed": "cd backend && node seedProducts.js",
+    "start": "cd backend && npm start"
+  }
+}

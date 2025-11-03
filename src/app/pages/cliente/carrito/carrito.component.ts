@@ -13,7 +13,7 @@ import { CartItem } from '../../../models/cart-item.model';
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })
-export class CarritoComponent {
+export class CarritoComponent implements OnInit {
   cart: CartItem[] = [];
   quantity: number = 1; // Inicializa el contador
   notificationMessage: string = '';
@@ -23,14 +23,23 @@ export class CarritoComponent {
   ) {}
 
   ngOnInit() {
+    this.loadCart();
+  }
+
+  ionViewWillEnter() {
+    this.loadCart(); // Recargar cuando se entra a la página
+  }
+
+  loadCart() {
     this.cart = this.cartService.getCart();
     this.cart.forEach(item => {
       if (!item.quantity) {
         item.quantity = 1; 
       }
     });
-    
-}
+    console.log('Carrito cargado:', this.cart);
+    console.log('Número de productos en carrito:', this.cart.length);
+  }
 
   clearCart(): void {
     this.cartService.clearCart();
@@ -52,20 +61,21 @@ export class CarritoComponent {
   //Cantidad
   increment(item: CartItem): void {
     item.quantity++;
+    console.log('Cantidad incrementada:', item.quantity);
   }
 
   decrement(item: CartItem): void {
     if (item.quantity > 1) {
         item.quantity--;
+        console.log('Cantidad decrementada:', item.quantity);
     }
-    
   }
 
   //Totales
   total(): number {
     const totalValue = this.cart.reduce((sum, item) => {
       const itemTotal = item.product.price * item.quantity;
-      console.log(`Producto: ${item.product.name}, Precio: ${item.product.price}, Cantidad: ${item.quantity}, Total: ${itemTotal}`);
+      console.log(`Producto: ${item.product.name}, Precio: ${item.product.price}, Cantidad: ${item.quantity}, Unidad: ${item.product.unit}, Total: ${itemTotal}`);
       return sum + itemTotal;
     }, 0);
     
@@ -83,4 +93,41 @@ export class CarritoComponent {
     console.log('Navegando a inicio');
     this.router.navigate(['/inicio']);
   }
+
+  // Métodos para unidades de medida
+  getUnitName(unit: string): string {
+    const units: { [key: string]: string } = {
+      'unidad': 'unidad',
+      'libra': 'libra',
+      'kilo': 'kilo',
+      'gramo': 'gramo',
+      'onza': 'onza',
+      'docena': 'docena',
+      'paquete': 'paquete',
+      'bolsa': 'bolsa',
+      'caja': 'caja',
+      'litro': 'litro',
+      'galon': 'galón'
+    };
+    return units[unit] || unit || 'unidad';
+  }
+
+  getUnitAbbreviation(unit: string): string {
+    const abbreviations: { [key: string]: string } = {
+      'unidad': 'u',
+      'libra': 'lb',
+      'kilo': 'kg',
+      'gramo': 'g',
+      'onza': 'oz',
+      'docena': 'doc',
+      'paquete': 'paq',
+      'bolsa': 'bolsa',
+      'caja': 'caja',
+      'litro': 'L',
+      'galon': 'gal'
+    };
+    return abbreviations[unit] || unit || 'u';
+  }
+
+
 }

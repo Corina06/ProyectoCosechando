@@ -7,27 +7,37 @@
             <div class="col-lg-6 col-md-6">
                 <div class="product__details__pic">
                     <div class="product__details__pic__item">
-                        <img class="product__details__pic__item--large"
-                            src="images/{{ product?.image }}" alt="{{ product?.name }}" width="100%" height="100%">
+                        <img class="product__details__pic__item--large" [src]="product?.image" alt="{{ product?.name }}"
+                            width="100%" height="100%" onerror="this.src='assets/images/placeholder.svg'">
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-lg-6 col-md-6">
                 <div *ngIf="product" class="product__details__text">
                     <h3>{{ product.name }}</h3>
-                    <div class="product__details__price">${{ product.price.toFixed(2) }}</div>
+                    <div class="product__details__price">
+                        ${{ product.price.toFixed(2) }}
+                        <small class="text-muted"> por {{ getUnitName(product.unit || 'unidad') }}</small>
+                    </div>
                     <p>{{ product.description }}</p>
                     <div class="product__details__quantity">
-                    
-                        <div class="quantity">
-                            <div class="pro-qty">
-                                <input type="text" value="1">
-                            </div>
+                        <p><strong>Cantidad:</strong></p>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+
+                            <input type="number" [(ngModel)]="quantity" min="1" max="99" (change)="validateQuantity()"
+                                style="width: 60px; height: 35px; text-align: center; border: 2px solid #385723; border-radius: 4px; font-size: 16px; font-weight: bold;">
+                            
+                            <span class="text-muted">{{ getUnitAbbreviation(product.unit || 'unidad') }}</span>
+
+                            <button (click)="addToCart()" class="primary-btn"
+                                style="margin-left: 10px; border-radius: 6px;">AÑADIR</button>
                         </div>
+                        <small class="text-muted mt-2 d-block">
+                            Selecciona {{ quantity }} {{ quantity === 1 ? getUnitName(product.unit || 'unidad') : getUnitName(product.unit || 'unidad') + 's' }} de {{ product.name }}
+                        </small>
                     </div>
-                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal" class="primary-btn">AÑADIR</a>
-                    
+
                 </div>
                 <div *ngIf="!product">
                     <p>No se encontraron detalles del producto.</p>
@@ -35,49 +45,30 @@
             </div>
             <div class="col-lg-12">
                 <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                          <h5 class="card-title">Información del Comerciante</h5>
-                          <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Nombre: {{ product?.CName }}</li>
-                            <li class="list-group-item">Celular: {{ product?.Contact }}</li>
-                            <li class="list-group-item">Dirección: {{ product?.location }}</li>
-                          </ul>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Información del Comerciante</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Nombre: {{ product?.CName }}</li>
+                                    <li class="list-group-item">Celular: {{ product?.Contact }}</li>
+                                    <li class="list-group-item">Dirección: {{ product?.location }}</li>
+                                </ul>
+                            </div>
                         </div>
-                      </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="product__details__text">
-                    <ul>
-                        <li><b>Disponibilidad</b> <span>In Stock</span></li>
-                        <li><b>Envío</b> <span>Según el cliente</span></li>
-                        <li><b>Peso</b> <span>0.5 kg</span></li>
-                    </ul>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="product__details__text">
+                            <ul>
+                                <li><b>Disponibilidad</b> <span>In Stock</span></li>
+                                <li><b>Envío</b> <span>Según el cliente</span></li>
+                                <li><b>Peso</b> <span>0.5 kg</span></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
 </section>
 <!-- Product Details Section End -->
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Mensaje</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <p>Se ha añadido el producto al carrito</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Continuar Comprando</button>
-          <a class="btn btn-success" routerLink="/carrito" ng-reflect-router-link="carrito" href="/carrito">Ver Carrito</a>
-        </div>
-      </div>
-    </div>
-  </div>

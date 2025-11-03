@@ -203,3 +203,100 @@ small {
 }
 
 
+/* Estilos para el selector de código de país */
+.input-group .form-select {
+  border-radius: 5px 0 0 5px;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 140px;
+  max-width: 140px;
+}
+
+.input-group .form-select option {
+  background-color: white;
+  color: #333;
+  padding: 8px;
+}
+
+.input-group .form-control {
+  border-radius: 0 5px 5px 0;
+}
+
+/* Mejorar la apariencia del selector en diferentes navegadores */
+.form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.25rem;
+}
+
+/* Estilo para el grupo de entrada del teléfono */
+.input-group {
+  display: flex;
+  align-items: stretch;
+}
+
+.input-group > .form-select:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group > .form-control:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Responsive para móviles */
+@media (max-width: 576px) {
+  .input-group .form-select {
+    min-width: 120px;
+    max-width: 120px;
+    font-size: 13px;
+  }
+}/* Es
+tilos para el campo de fecha */
+input[type="date"] {
+  position: relative;
+  color-scheme: light;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+  color: #999;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #333;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #385723;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* Placeholder personalizado para el campo de fecha */
+input[type="date"]:invalid::-webkit-datetime-edit {
+  color: #999;
+}
+
+input[type="date"]:focus::-webkit-datetime-edit {
+  color: #333;
+}
+
+/* Estilo cuando el campo está vacío */
+input[type="date"]:not(:focus):not(:valid) {
+  color: #999;
+}
+
+input[type="date"]:not(:focus):not(:valid):before {
+  content: attr(placeholder);
+  color: #999;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

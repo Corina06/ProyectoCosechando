@@ -1,118 +1,369 @@
 <app-navcomer></app-navcomer>
 
-    <div class="row jumbotron box8">
-      <!-- Parte superior con foto y nombre completo -->
-      <div class="col-12 text-center">
-        <!-- Foto del Comerciante -->
-        <div class="profile-photo mb-3">
-            <!-- Mostrar la foto del comerciante si existe, de lo contrario, mostrar la foto por defecto -->
-            <img *ngIf="comerciante.foto; else defaultImage" [src]="comerciante.foto" alt="Foto de perfil" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
-            
-            <ng-template #defaultImage>
-              <!-- Foto predeterminada si no hay foto -->
-              <img src="/images/avatar.jpg" alt="Foto de perfil por defecto" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
-            </ng-template>
-        </div>
-          
-        <!-- Nombre completo -->
-        <h2 style="margin-top: 10px;">{{ comerciante.nombre }} {{ comerciante.apellido }}</h2>
+<div class="main-content">
+  <!-- Encabezado del Perfil -->
+  <div class="text-center mb-4">
+    <h2 class="display-4 font-weight-bold" style="color: #385723;">Mi Perfil</h2>
+    <p class="lead" style="color: #572C1A;">Gestiona tu información personal y configuración de cuenta</p>
+  </div>
+
+  <!-- Mensajes de estado -->
+  <div *ngIf="loading" class="alert alert-info">
+    <i class="fas fa-spinner fa-spin"></i> Cargando perfil...
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+    <i class="fas fa-exclamation-triangle"></i> {{ error }}
+    <button type="button" class="btn-close" (click)="error = ''"></button>
+  </div>
+
+  <div *ngIf="changesSaved" class="alert alert-success alert-dismissible fade show">
+    <i class="fas fa-check-circle"></i> {{ successMessage }}
+    <button type="button" class="btn-close" (click)="changesSaved = false"></button>
+  </div>
+
+  <!-- Mostrar mensaje si no hay datos del comerciante -->
+  <div *ngIf="!loading && !comerciante" class="alert alert-warning">
+    <i class="fas fa-exclamation-triangle"></i> No se pudieron cargar los datos del perfil. 
+    <button type="button" class="btn btn-sm btn-outline-warning ms-2" (click)="loadUserProfile()">
+      <i class="fas fa-refresh"></i> Reintentar
+    </button>
+  </div>
+
+  <!-- Información del Perfil -->
+  <div *ngIf="comerciante" class="mb-4">
+    
+    <!-- Información Personal (Compacta) -->
+    <div class="card shadow border-0 mb-4">
+      <div style="background-color: #385723 !important; color: white !important; padding: 12px 16px; font-weight: 600; border-radius: 0.5rem 0.5rem 0 0;">
+        <h5 style="color: white !important; margin: 0; font-size: 18px;">
+          <i class="fas fa-user me-2"></i>Información Personal
+        </h5>
       </div>
-  
-      <h5 class="col-12">Datos Personales</h5>
+      <div class="card-body py-3">
+        <div class="row align-items-center">
+          <!-- Datos básicos -->
+          <div class="col-md-8">
+            <!-- Nombre y Estado -->
+            <h4 style="color: #385723; margin-bottom: 5px;">{{ comerciante?.nombre }} {{ comerciante?.apellido }}</h4>
+            <p class="text-muted mb-2">{{ comerciante?.local }}</p>
+            
+            <!-- Badge de Estado y Verificación -->
+            <div class="mb-2">
+              <span class="badge me-2" 
+                    [style.background-color]="comerciante?.estado === 'Activo' ? '#7fad39' : '#572C1A'"
+                    style="color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase;">
+                {{ comerciante?.estado }}
+              </span>
+              
+              <span *ngIf="comerciante?.verificado" class="badge bg-success">
+                <i class="fas fa-check-circle"></i> Verificada
+              </span>
+              <span *ngIf="!comerciante?.verificado" class="badge bg-warning">
+                <i class="fas fa-exclamation-circle"></i> Pendiente
+              </span>
+            </div>
+
+            <!-- Información Adicional -->
+            <div class="text-muted small">
+              <span class="me-3">
+                <i class="fas fa-calendar-alt me-1" style="color: #385723;"></i>
+                Desde: {{ comerciante?.fechaRegistro }}
+              </span>
+              <span class="me-3">
+                <i class="fas fa-clock me-1" style="color: #7fad39;"></i>
+                {{ getTimeAsMerchant() }}
+              </span>
+              <span>
+                <i class="fas fa-birthday-cake me-1" style="color: #7F6000;"></i>
+                {{ getAge() }} años
+              </span>
+            </div>
+          </div>
+
+          <!-- Estadísticas -->
+          <div class="col-md-4">
+            <div class="row text-center">
+              <div class="col-6">
+                <div class="p-2 bg-light rounded">
+                  <small class="text-muted d-block">Ventas</small>
+                  <strong style="color: #385723; font-size: 16px;">${{ comerciante?.totalVentas?.toFixed(2) || '0.00' }}</strong>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 bg-light rounded">
+                  <small class="text-muted d-block">Productos</small>
+                  <strong style="color: #7fad39; font-size: 16px;">{{ comerciante?.productosActivos || 0 }}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario de Datos -->
+    <div>
       <form #perfilForm="ngForm" (ngSubmit)="saveChanges(perfilForm)">
-        <div class="row">
-          <!-- Nombre -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" class="form-control" [(ngModel)]="comerciante.nombre" name="nombre" id="nombre" [readonly]="!isEditing" placeholder="Ingrese su nombre" required #nombre="ngModel" (ngModelChange)="onFormChange()">
+        <!-- Datos Personales -->
+        <div class="card shadow border-0 mb-3">
+          <div style="background-color: #7fad39 !important; color: white !important; padding: 12px 16px; font-weight: 600; border-radius: 0.5rem 0.5rem 0 0;">
+            <h5 style="color: white !important; margin: 0; font-size: 16px;">
+              <i class="fas fa-id-card me-2"></i>Datos Personales
+            </h5>
           </div>
-  
-          <!-- Apellido -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="apellido">Apellido</label>
-            <input type="text" class="form-control" [(ngModel)]="comerciante.apellido" name="apellido" id="apellido" [readonly]="!isEditing" placeholder="Ingrese su apellido" required #apellido="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Correo Electrónico -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="email">Correo Electrónico</label>
-            <input type="email" class="form-control" [(ngModel)]="comerciante.email" name="email" id="email" [readonly]="!isEditing" placeholder="Ingrese su correo electrónico" required email #emailField="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Dirección -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="direccion">Dirección</label>
-            <input type="text" class="form-control" [(ngModel)]="comerciante.direccion" name="direccion" id="direccion" [readonly]="!isEditing" placeholder="Distrito, Corregimiento, Calle, Casa" required #direccion="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Nombre del Puesto -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="local">Nombre del Puesto</label>
-            <input type="text" class="form-control" [(ngModel)]="comerciante.local" name="local" id="local" [readonly]="!isEditing" placeholder="Nombre de su local" required #local="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Ubicación -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="puesto">Ubicación del Puesto</label>
-            <input type="text" class="form-control" [(ngModel)]="comerciante.puesto" name="puesto" id="puesto" [readonly]="!isEditing" placeholder="¿Cómo llegar a su local?" required #puesto="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Celular -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="celular">Celular</label>
-            <input type="tel" class="form-control" [(ngModel)]="comerciante.celular" name="celular" id="celular" [readonly]="!isEditing" placeholder="Número de Contacto" required pattern="^[0-9]{8}$" #celularField="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Fecha de Nacimiento -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="fecha">Fecha de Nacimiento</label>
-            <input type="date" class="form-control" [(ngModel)]="comerciante.fecha" name="fecha" id="fecha" [readonly]="!isEditing" required #fechaField="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-        </div>
-  
-        <h5 class="col-12">Datos Bancarios</h5>
-        <div class="row">
-          <!-- Nombre del Banco -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="banco">Nombre del Banco</label>
-            <input type="text" class="form-control" [(ngModel)]="comerciante.banco" name="banco" id="banco" [readonly]="!isEditing" placeholder="Ingrese el nombre del banco" required #bancoField="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Tipo de Cuenta -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="tipo">Tipo de Cuenta</label>
-            <select id="tipo" class="form-control" [(ngModel)]="comerciante.tipo" name="tipo" [disabled]="!isEditing" #tipoField="ngModel" (ngModelChange)="onFormChange()">
-              <option value="ahorro">Ahorro</option>
-              <option value="corriente">Corriente</option>
-            </select>
-          </div>
-  
-          <!-- Número de Cuenta -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="cuenta">Número de Cuenta</label>
-            <input type="text" class="form-control" [(ngModel)]="comerciante.cuenta" name="cuenta" id="cuenta" [readonly]="!isEditing" placeholder="Ingrese su número de cuenta" required pattern="^[0-9]+$" #cuentaField="ngModel" (ngModelChange)="onFormChange()">
-          </div>
-  
-          <!-- Contraseña -->
-          <div class="col-sm-12 col-md-6 form-group">
-            <label for="password">Contraseña</label>
-            <input type="password" class="form-control" [(ngModel)]="comerciante.password" name="password" id="password" [readonly]="!isEditing" placeholder="Ingrese su contraseña" required #passwordField="ngModel" (ngModelChange)="onFormChange()">
+          <div class="card-body">
+            <div class="row">
+              <!-- Nombre -->
+              <div class="col-md-6 mb-3">
+                <label for="nombre" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-user" style="margin-right: 6px;"></i>Nombre *
+                </label>
+                <input type="text" id="nombre" [(ngModel)]="comercianteEdit.nombre" name="nombre" 
+                       class="form-control" [readonly]="!isEditing" required minlength="2"
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+
+              <!-- Apellido -->
+              <div class="col-md-6 mb-3">
+                <label for="apellido" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-user" style="margin-right: 6px;"></i>Apellido *
+                </label>
+                <input type="text" id="apellido" [(ngModel)]="comercianteEdit.apellido" name="apellido" 
+                       class="form-control" [readonly]="!isEditing" required minlength="2"
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-envelope" style="margin-right: 6px;"></i>Correo Electrónico *
+                </label>
+                <input type="email" id="email" [(ngModel)]="comercianteEdit.email" name="email" 
+                       class="form-control" [readonly]="!isEditing" required
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+
+              <!-- Celular -->
+              <div class="col-md-6 mb-3">
+                <label for="celular" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-phone" style="margin-right: 6px;"></i>Celular *
+                </label>
+                <input type="tel" id="celular" [(ngModel)]="comercianteEdit.celular" name="celular" 
+                       class="form-control" [readonly]="!isEditing" required
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+
+              <!-- Fecha de Nacimiento -->
+              <div class="col-md-6 mb-3">
+                <label for="fechaNacimiento" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-calendar" style="margin-right: 6px;"></i>Fecha de Nacimiento *
+                </label>
+                <input type="text" id="fechaNacimiento" [(ngModel)]="comercianteEdit.fechaNacimiento" name="fechaNacimiento" 
+                       class="form-control" [readonly]="true" 
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px; background-color: #f8f9fa;" />
+                <small class="text-muted">Contacta soporte para cambiar tu fecha de nacimiento</small>
+              </div>
+
+              <!-- Dirección -->
+              <div class="col-md-6 mb-3">
+                <label for="direccion" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-map-marker-alt" style="margin-right: 6px;"></i>Dirección *
+                </label>
+                <input type="text" id="direccion" [(ngModel)]="comercianteEdit.direccion" name="direccion" 
+                       class="form-control" [readonly]="!isEditing" required
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+            </div>
           </div>
         </div>
-  
-        <!-- Botón Guardar/Actualizar -->
-        <div class="col-sm-12 form-group mb-0 text-center">
-          <br>
-          <button *ngIf="isEditing" type="submit" class="btn btn-save" [disabled]="!perfilForm.dirty">Guardar Cambios</button>
-          <button *ngIf="!isEditing" type="button" class="btn btn-edit" (click)="toggleEdit()">Editar</button>
+
+        <!-- Información del Negocio -->
+        <div class="card shadow border-0 mb-3">
+          <div style="background-color: #7F6000 !important; color: white !important; padding: 12px 16px; font-weight: 600; border-radius: 0.5rem 0.5rem 0 0;">
+            <h5 style="color: white !important; margin: 0; font-size: 16px;">
+              <i class="fas fa-store me-2"></i>Información del Negocio
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Nombre del Local -->
+              <div class="col-md-6 mb-3">
+                <label for="local" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-store" style="margin-right: 6px;"></i>Nombre del Local *
+                </label>
+                <input type="text" id="local" [(ngModel)]="comercianteEdit.local" name="local" 
+                       class="form-control" [readonly]="!isEditing" required
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+
+              <!-- Ubicación del Puesto -->
+              <div class="col-md-6 mb-3">
+                <label for="puesto" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-map-pin" style="margin-right: 6px;"></i>Ubicación del Puesto *
+                </label>
+                <textarea id="puesto" [(ngModel)]="comercianteEdit.puesto" name="puesto" 
+                          class="form-control" [readonly]="!isEditing" required rows="3"
+                          style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                          [style.background-color]="!isEditing ? '#f8f9fa' : 'white'"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información Bancaria -->
+        <div class="card shadow border-0 mb-3">
+          <div style="background-color: #572C1A !important; color: white !important; padding: 12px 16px; font-weight: 600; border-radius: 0.5rem 0.5rem 0 0;">
+            <h5 style="color: white !important; margin: 0; font-size: 16px;">
+              <i class="fas fa-university me-2"></i>Información Bancaria
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Banco -->
+              <div class="col-md-4 mb-3">
+                <label for="banco" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-university" style="margin-right: 6px;"></i>Banco *
+                </label>
+                <input type="text" id="banco" [(ngModel)]="comercianteEdit.banco" name="banco" 
+                       class="form-control" [readonly]="!isEditing" required
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+
+              <!-- Tipo de Cuenta -->
+              <div class="col-md-4 mb-3">
+                <label for="tipoCuenta" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-credit-card" style="margin-right: 6px;"></i>Tipo de Cuenta *
+                </label>
+                <select id="tipoCuenta" [(ngModel)]="comercianteEdit.tipoCuenta" name="tipoCuenta" 
+                        class="form-control" [disabled]="!isEditing" required
+                        style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                        [style.background-color]="!isEditing ? '#f8f9fa' : 'white'">
+                  <option value="Ahorro">Ahorro</option>
+                  <option value="Corriente">Corriente</option>
+                </select>
+              </div>
+
+              <!-- Número de Cuenta -->
+              <div class="col-md-4 mb-3">
+                <label for="numeroCuenta" class="form-label" style="font-weight: 600; color: #385723;">
+                  <i class="fas fa-hashtag" style="margin-right: 6px;"></i>Número de Cuenta *
+                </label>
+                <input type="text" id="numeroCuenta" [(ngModel)]="comercianteEdit.numeroCuenta" name="numeroCuenta" 
+                       class="form-control" [readonly]="!isEditing" required
+                       style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;"
+                       [style.background-color]="!isEditing ? '#f8f9fa' : 'white'" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="card shadow border-0 mb-3">
+          <div class="card-body text-center">
+            <div *ngIf="!isEditing" class="d-flex justify-content-center gap-3 flex-wrap">
+              <button type="button" (click)="toggleEdit()" 
+                      style="color: #385723 !important; border: 2px solid #385723 !important; background-color: transparent !important; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all 0.2s ease;"
+                      onmouseover="this.style.backgroundColor='#385723'; this.style.color='white';"
+                      onmouseout="this.style.backgroundColor='transparent'; this.style.color='#385723';">
+                <i class="fas fa-edit" style="color: inherit; margin-right: 6px;"></i> Editar Perfil
+              </button>
+              
+              <button type="button" (click)="togglePasswordSection()" 
+                      style="color: #7F6000 !important; border: 2px solid #7F6000 !important; background-color: transparent !important; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all 0.2s ease;"
+                      onmouseover="this.style.backgroundColor='#7F6000'; this.style.color='white';"
+                      onmouseout="this.style.backgroundColor='transparent'; this.style.color='#7F6000';">
+                <i class="fas fa-key" style="color: inherit; margin-right: 6px;"></i> Cambiar Contraseña
+              </button>
+            </div>
+
+            <div *ngIf="isEditing" class="d-flex justify-content-center gap-3 flex-wrap">
+              <button type="submit" [disabled]="!perfilForm.valid || loading"
+                      style="background-color: #385723 !important; color: white !important; border: 1px solid #385723 !important; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500;"
+                      onmouseover="this.style.backgroundColor='#2c441a';"
+                      onmouseout="this.style.backgroundColor='#385723';">
+                <i class="fas fa-save" style="margin-right: 6px;"></i> 
+                <span *ngIf="!loading">Guardar Cambios</span>
+                <span *ngIf="loading">Guardando...</span>
+              </button>
+              
+              <button type="button" (click)="toggleEdit()" [disabled]="loading"
+                      style="color: #572C1A !important; border: 2px solid #572C1A !important; background-color: transparent !important; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all 0.2s ease;"
+                      onmouseover="this.style.backgroundColor='#572C1A'; this.style.color='white';"
+                      onmouseout="this.style.backgroundColor='transparent'; this.style.color='#572C1A';">
+                <i class="fas fa-times" style="color: inherit; margin-right: 6px;"></i> Cancelar
+              </button>
+            </div>
+          </div>
         </div>
       </form>
     </div>
-
-  <br><br>
-
-  <!-- Mensaje de confirmación -->
-<div *ngIf="changesSaved" class="alert alert-success text-center mt-3">
-    <strong>{{ successMessage }}</strong>
   </div>
-  
+
+  <!-- Sección de Cambio de Contraseña -->
+  <div *ngIf="showPasswordSection" class="mb-4">
+      <div class="card shadow border-0">
+        <div style="background-color: #7F6000 !important; color: white !important; padding: 12px 16px; font-weight: 600; border-radius: 0.5rem 0.5rem 0 0;">
+          <h5 style="color: white !important; margin: 0; font-size: 16px;">
+            <i class="fas fa-key me-2"></i>Cambiar Contraseña
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="currentPassword" class="form-label" style="font-weight: 600; color: #385723;">
+                <i class="fas fa-lock" style="margin-right: 6px;"></i>Contraseña Actual *
+              </label>
+              <input type="password" id="currentPassword" [(ngModel)]="passwordData.currentPassword" 
+                     class="form-control" required
+                     style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;" />
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label for="newPassword" class="form-label" style="font-weight: 600; color: #385723;">
+                <i class="fas fa-key" style="margin-right: 6px;"></i>Nueva Contraseña *
+              </label>
+              <input type="password" id="newPassword" [(ngModel)]="passwordData.newPassword" 
+                     class="form-control" required minlength="6"
+                     style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;" />
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <label for="confirmPassword" class="form-label" style="font-weight: 600; color: #385723;">
+                <i class="fas fa-check" style="margin-right: 6px;"></i>Confirmar Contraseña *
+              </label>
+              <input type="password" id="confirmPassword" [(ngModel)]="passwordData.confirmPassword" 
+                     class="form-control" required
+                     style="border: 2px solid #ddd; border-radius: 6px; padding: 10px;" />
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button type="button" (click)="changePassword()" [disabled]="loading"
+                    style="background-color: #7F6000 !important; color: white !important; border: 1px solid #7F6000 !important; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; margin-right: 10px;"
+                    onmouseover="this.style.backgroundColor='#5a4400';"
+                    onmouseout="this.style.backgroundColor='#7F6000';">
+              <i class="fas fa-save" style="margin-right: 6px;"></i> 
+              <span *ngIf="!loading">Cambiar Contraseña</span>
+              <span *ngIf="loading">Cambiando...</span>
+            </button>
+            
+            <button type="button" (click)="togglePasswordSection()" [disabled]="loading"
+                    style="color: #572C1A !important; border: 2px solid #572C1A !important; background-color: transparent !important; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; transition: all 0.2s ease;"
+                    onmouseover="this.style.backgroundColor='#572C1A'; this.style.color='white';"
+                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#572C1A';">
+              <i class="fas fa-times" style="color: inherit; margin-right: 6px;"></i> Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+  </div> <!-- Cierre de comerciante -->
+
+</div> <!-- Cierre de main-content -->
