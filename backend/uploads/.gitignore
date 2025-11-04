@@ -1,0 +1,6 @@
+# Ignorar todas las imágenes subidas pero mantener la estructura de carpetas
+*
+!.gitignore
+!profiles/
+profiles/*
+!profiles/.gitkeep
