@@ -14,10 +14,12 @@ declare global {
   }
 }
 
+import { NavComponent } from '../nav/nav.component';
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavComponent],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })

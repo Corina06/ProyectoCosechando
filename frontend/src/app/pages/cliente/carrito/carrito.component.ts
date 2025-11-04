@@ -6,10 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../services/cart.service';
 import { CartItem } from '../../../models/cart-item.model';
 
+import { NavComponent } from '../nav/nav.component';
+
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavComponent],
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })

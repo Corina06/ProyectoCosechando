@@ -2,8 +2,13 @@
   background-color: #385723;
   color: white;
   padding: 20px 0;
-  margin-top: auto;
+  margin: 0;
   text-align: center;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+  bottom: 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .footer p {
