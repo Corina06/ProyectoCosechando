@@ -1,0 +1,152 @@
+<header>
+  <!-- Comerciante-->
+  <nav class="header"> 
+        <ul class="nav">
+            
+            <li><a href="https://www.cadenadefrio.com.pa/Merca-Panama-1"><img src="images/Merca.png" width="15px"></a></li>
+                    <li><a href="https://www.facebook.com/cadenadefriopa/"><i class="bi bi-facebook"></i></a></li>
+                    <li><a href="https://www.instagram.com/cadenadefriopa/"><i class="bi bi-instagram"></i></a></li>
+                    <li><a href="https://twitter.com/cadenadefriopa"><i class="bi bi-twitter"></i></a></li>
+                    <li><a href="https://www.youtube.com/channel/UCsTuabeM_mAcdWnPRxXKicQ"><i class="bi bi-youtube"></i></a></li>
+                    <li><a href=""><i class="bi bi-envelope-fill"></i> cosechando&#64;gmail.com</a></li>
+        </ul>
+  </nav>
+
+  <div class="container">
+    <!-- logo -->
+    <a routerLink="/inicio" routerLinkActive="router-link-active">
+      <img src="images/Icono.png" (click)="navigateToInicio()" alt="Logotipo" width="60px">
+    </a>
+    <h1 class="h2 mb-0 ls-tight">Bienvenido {{ currentUser?.name || 'Comerciante' }}</h1>
+    
+    <div class="iconos">
+      <!-- Ícono de notificación con dropdown -->
+      <div class="cart-link" (click)="toggleNotifications()">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+      </div>
+  
+      <!-- Panel de notificaciones que se muestra/oculta -->
+      <div class="notifications-panel" *ngIf="notificationsVisible">
+        <div class="notifications-header">
+          <h6 style="margin: 0; color: #385723; font-weight: 600;">
+            <i class="fas fa-bell me-2"></i>Notificaciones
+          </h6>
+          <div class="d-flex justify-content-between align-items-center">
+            <small class="text-muted">{{ notifications.length }} total</small>
+            <div>
+              <button class="btn btn-sm btn-link text-muted p-0 me-2" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
+                <i class="fas fa-check-double"></i> Marcar todas
+              </button>
+              <button class="btn btn-sm btn-link text-danger p-0" (click)="clearAllNotifications()" *ngIf="notifications.length > 0">
+                <i class="fas fa-trash"></i> Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <li *ngFor="let notification of notifications" 
+              class="notification-item-enhanced"
+              [class.unread]="!notification.read"
+              (click)="markAsRead(notification)">
+            <div class="notification-icon">
+              <i [class]="notification.icon" [style.color]="notification.color"></i>
+            </div>
+            <div class="notification-content-enhanced">
+              <div class="notification-message">{{ notification.message }}</div>
+              <div class="notification-detail">{{ notification.detail }}</div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="notification-time">{{ notification.time }}</div>
+                <button class="btn btn-sm btn-link text-muted p-0" (click)="removeNotification(notification); $event.stopPropagation()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="notification-status" *ngIf="!notification.read">
+              <div class="unread-dot"></div>
+            </div>
+          </li>
+          <li *ngIf="notifications.length === 0" class="text-center py-3 text-muted">
+            <i class="fas fa-bell-slash fa-2x mb-2"></i>
+            <div>No hay notificaciones</div>
+          </li>
+        </ul>
+        <div class="notifications-footer" *ngIf="notifications.length > 0">
+          <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i>Haz clic en una notificación para marcarla como leída
+          </small>
+        </div>
+      </div>
+  
+      <!-- Ícono de perfil con dropdown -->
+      <div class="cart-link" (click)="toggleProfileMenu()">
+        <i class="fas fa-user"></i>
+      </div>
+  
+      <!-- Panel de opciones de perfil -->
+      <div class="profile-panel" *ngIf="profileMenuVisible">
+        <ul>
+          <li (click)="goToProfile()">
+            <i class="fas fa-user-circle"></i> Perfil
+          </li>
+          <li (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+
+  <nav class="nav-categories"> 
+    <ul class="nav">
+        <li class="nav-link">
+            <a class="" routerLink="/panel" ng-reflect-router-link="panel" href="/panel">Reporte</a>
+        </li>
+        <li class="nav-link">
+            <a  routerLink="/productos" ng-reflect-router-link="productos" href="/productos">Productos</a>
+        </li>
+        <li class="nav-link">
+            <a  routerLink="/orden" ng-reflect-router-link="orden" href="/orden">Venta</a>
+        </li>
+      <li class="nav-link">
+        <a  routerLink="/compra" ng-reflect-router-link="compra" href="/compra">Compra</a>
+       </li>
+        <li class="nav-link">
+            <a  routerLink="/inventario" ng-reflect-router-link="inventario" href="/inventario">Inventario</a>
+        </li>
+    </ul>
+  </nav>
+</header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

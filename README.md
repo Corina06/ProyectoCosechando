@@ -1,4 +1,16 @@
 # Cosechando
+# Proyecto Cosechando
+
+Aplicación web para gestión de productos agrícolas.
+
+## 🚀 Cómo ejecutar
+
+### Backend
+```bash
+cd backend
+npm install
+npm start
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
 

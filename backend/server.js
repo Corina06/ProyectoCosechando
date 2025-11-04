@@ -37,11 +37,13 @@ mongoose.connect(mongoUri)
 const productRoutes = require('./routes/product');
 const dashboardRoutes = require('./routes/dashboard');
 const comercianteRoutes = require('./routes/comerciante');
+const expenseRoutes = require('./routes/expense');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/comerciante', comercianteRoutes);
+app.use('/api/expenses', expenseRoutes);
 
 // Rutas de administración (solo desarrollo)
 if (process.env.NODE_ENV === 'development') {
@@ -58,6 +60,5 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`🌐 CORS configurado para desarrollo`);
+  console.log(`🚀 Server running on ${PORT}`);
 });

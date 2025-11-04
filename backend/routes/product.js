@@ -74,4 +74,17 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// GET productos por usuario (usando contacto como identificador único)
+router.get('/user/:contact', async (req, res) => {
+  try {
+    console.log('🔍 Buscando productos para usuario con contacto:', req.params.contact);
+    const products = await Product.find({ Contact: req.params.contact });
+    console.log(`📦 Encontrados ${products.length} productos para el usuario`);
+    res.json(products);
+  } catch (err) {
+    console.error('❌ Error obteniendo productos por usuario:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

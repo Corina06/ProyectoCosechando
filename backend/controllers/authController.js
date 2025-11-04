@@ -50,7 +50,16 @@ const registerUser = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        apellido: user.apellido,
+        email: user.email,
+        celular: user.celular,
+        direccion: user.direccion,
+        local: user.local,
+        puesto: user.puesto,
+        fecha: user.fecha,
+        banco: user.banco,
+        tipo: user.tipo,
+        cuenta: user.cuenta
       }
     });
     console.log('✅ Respuesta de registro enviada exitosamente');
@@ -97,7 +106,16 @@ const loginUser = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        apellido: user.apellido,
+        email: user.email,
+        celular: user.celular,
+        direccion: user.direccion,
+        local: user.local,
+        puesto: user.puesto,
+        fecha: user.fecha,
+        banco: user.banco,
+        tipo: user.tipo,
+        cuenta: user.cuenta
       }
     });
   } catch (error) {
