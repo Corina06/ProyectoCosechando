@@ -29,6 +29,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   cart: CartItem[] = [];
   shippingCost: number = 0; 
   additionalCost: number = 3.00;
+  shippingMethod: string = 'local'; // 'local' o 'delivery'
 
   // Datos del cliente (invitado)
   guestData = {
@@ -199,6 +200,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   }
 
   onShippingChange(event: any): void {
+    this.shippingMethod = event.target.value;
     if (event.target.value === 'delivery') {
       this.shippingCost = this.additionalCost; // Agregar costo adicional
     } else {
@@ -245,24 +247,27 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
       isValid = false;
     }
 
-    if (!this.guestData.province.trim()) {
-      this.formErrors.province = 'La provincia es requerida';
-      isValid = false;
-    }
+    // Validar campos de dirección solo si el método de envío es 'delivery'
+    if (this.shippingMethod === 'delivery') {
+      if (!this.guestData.province.trim()) {
+        this.formErrors.province = 'La provincia es requerida';
+        isValid = false;
+      }
 
-    if (!this.guestData.district.trim()) {
-      this.formErrors.district = 'El distrito es requerido';
-      isValid = false;
-    }
+      if (!this.guestData.district.trim()) {
+        this.formErrors.district = 'El distrito es requerido';
+        isValid = false;
+      }
 
-    if (!this.guestData.corregimiento.trim()) {
-      this.formErrors.corregimiento = 'El corregimiento es requerido';
-      isValid = false;
-    }
+      if (!this.guestData.corregimiento.trim()) {
+        this.formErrors.corregimiento = 'El corregimiento es requerido';
+        isValid = false;
+      }
 
-    if (!this.guestData.address.trim()) {
-      this.formErrors.address = 'La dirección es requerida';
-      isValid = false;
+      if (!this.guestData.address.trim()) {
+        this.formErrors.address = 'La dirección es requerida';
+        isValid = false;
+      }
     }
 
     if (this.createAccount && !this.password.trim()) {
