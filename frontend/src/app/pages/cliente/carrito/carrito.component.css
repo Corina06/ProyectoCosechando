@@ -1,5 +1,4 @@
-/
-* Botón de eliminar producto mejorado */
+/* Botón de eliminar producto mejorado */
 .btn-remove-item {
   background: none;
   border: none;
@@ -113,8 +112,9 @@ ntrar contenido de la tabla */
 .table p {
   margin: 0;
   text-align: center;
-}/
-* Estilos para el selector de unidades */
+}
+
+/* Estilos para el selector de unidades */
 .unit-selector {
   margin-top: 8px;
 }
