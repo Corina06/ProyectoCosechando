@@ -105,3 +105,6 @@ Render debería:
 4. Compilar el frontend
 5. Iniciar el backend correctamente
 
+
+
+

@@ -58,3 +58,6 @@ const PORT = process.env.PORT || 3002;  // Cambiar de 3001 a 3002
 
 El código del servidor ahora mostrará un mensaje útil cuando detecte este error, indicando cómo solucionarlo.
 
+
+
+

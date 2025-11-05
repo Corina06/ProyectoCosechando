@@ -86,3 +86,6 @@
 - Todas las rutas están protegidas correctamente
 - El frontend puede ser servido por el backend en producción
 
+
+
+
