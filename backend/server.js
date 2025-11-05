@@ -54,13 +54,30 @@ app.use('/uploads', express.static('uploads'));
 // Configurar ruta del frontend compilado (solo en producción)
 let frontendPath = null;
 if (process.env.NODE_ENV === 'production') {
-  frontendPath = path.join(__dirname, '../frontend/dist/cosechando/browser');
-  console.log(`📁 Frontend path: ${frontendPath}`);
+  // Intentar múltiples rutas posibles según la versión de Angular
+  const possiblePaths = [
+    path.join(__dirname, '../frontend/dist/cosechando/browser'), // Angular 17+ con application builder
+    path.join(__dirname, '../frontend/dist/cosechando'),         // Angular tradicional
+    path.join(__dirname, '../../frontend/dist/cosechando/browser'), // Alternativa
+    path.join(__dirname, '../../frontend/dist/cosechando')       // Alternativa
+  ];
   
-  // Verificar que el frontend esté compilado
-  if (!fs.existsSync(frontendPath)) {
+  // Buscar la primera ruta que exista
+  for (const possiblePath of possiblePaths) {
+    if (fs.existsSync(possiblePath)) {
+      frontendPath = possiblePath;
+      console.log(`📁 Frontend encontrado en: ${frontendPath}`);
+      break;
+    }
+  }
+  
+  // Si no se encontró, usar la ruta por defecto
+  if (!frontendPath) {
+    frontendPath = path.join(__dirname, '../frontend/dist/cosechando/browser');
+    console.log(`📁 Frontend path configurado: ${frontendPath}`);
     console.error(`\n⚠️⚠️⚠️ ERROR CRÍTICO: Frontend no encontrado ⚠️⚠️⚠️`);
-    console.error(`   Ruta esperada: ${frontendPath}`);
+    console.error(`   Rutas verificadas:`);
+    possiblePaths.forEach(p => console.error(`   - ${p}`));
     console.error('\n   CAUSA: El frontend no fue compilado durante el build');
     console.error('\n   SOLUCIÓN:');
     console.error('   1. Ve a Render Dashboard → Tu servicio');
