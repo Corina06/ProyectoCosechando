@@ -1,8 +1,16 @@
 # 🔧 CONFIGURACIÓN PARA RENDER - BUILD COMMAND
 
-## ⚠️ PROBLEMA DETECTADO
+## ⚠️ ERROR CRÍTICO: Root Directory
 
-El error `cd: backend: No such file or directory` indica que Render no está ejecutando el comando desde el directorio raíz del proyecto.
+**IMPORTANTE:** El Root Directory en Render **DEBE ESTAR VACÍO**. No configure `/backend` ni ningún otro valor.
+
+### Cómo corregir:
+1. Render Dashboard → Tu servicio → Settings
+2. Busca "Root Directory"
+3. **BÓRRALO COMPLETAMENTE** (debe estar vacío)
+4. Guarda los cambios
+
+---
 
 ## ✅ SOLUCIÓN 1: Usar el script de build (RECOMENDADO)
 
@@ -17,6 +25,11 @@ bash build.sh
 ```
 
 ### Start Command en Render:
+```bash
+npm start
+```
+
+O:
 ```bash
 cd backend && npm start
 ```
@@ -46,7 +59,7 @@ if [ -d "backend" ] && [ -d "frontend" ]; then cd backend && npm install && cd .
 
 ### Start Command en Render:
 ```bash
-cd backend && npm start
+npm start
 ```
 
 ---
@@ -55,8 +68,8 @@ cd backend && npm start
 
 1. Ve a Render Dashboard → Tu servicio
 2. Click en **Settings**
-3. Verifica que **Root Directory** esté **VACÍO** (no debe tener ningún valor)
-4. Si Root Directory tiene un valor, **bórralo** y deja vacío
+3. Verifica que **Root Directory** esté **COMPLETAMENTE VACÍO** (sin ningún valor)
+4. Si Root Directory tiene un valor (como `/backend` o `/backend `), **bórralo completamente**
 5. Guarda los cambios
 
 ---
@@ -84,4 +97,13 @@ Después de configurar, los logs deberían mostrar:
 🔨 Compilando frontend...
 ✅ Build completado exitosamente
 ```
+
+## ⚠️ ERROR COMÚN
+
+Si ves este error:
+```
+Service Root Directory "/opt/render/project/src/backend " is missing.
+```
+
+**Solución:** Ve a Settings → Root Directory → Bórralo completamente → Guarda
 

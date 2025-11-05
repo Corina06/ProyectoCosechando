@@ -284,4 +284,20 @@ const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on ${PORT}`);
+})
+.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌❌❌ ERROR: Puerto ${PORT} ya está en uso ❌❌❌`);
+    console.error('\n   SOLUCIÓN:');
+    console.error('   Opción 1: Cerrar el proceso que está usando el puerto');
+    console.error('   Opción 2: Usar otro puerto configurando PORT en variables de entorno');
+    console.error('\n   En Windows PowerShell:');
+    console.error(`   netstat -ano | findstr :${PORT}`);
+    console.error('   taskkill /PID <PID> /F');
+    console.error('\n   O simplemente cierra la otra instancia del servidor\n');
+    process.exit(1);
+  } else {
+    console.error(`\n❌ Error iniciando servidor: ${err.message}\n`);
+    process.exit(1);
+  }
 });
