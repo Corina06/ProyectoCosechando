@@ -60,12 +60,27 @@ if (process.env.NODE_ENV === 'production') {
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/cosechando';
 
 // Logging detallado para debugging en Render
-console.log('🔍 CONFIGURACIÓN DE MONGODB:');
+console.log('\n🔍 CONFIGURACIÓN DE MONGODB:');
 console.log(`   NODE_ENV: ${process.env.NODE_ENV || 'no definido'}`);
 console.log(`   MONGO_URI existe: ${!!process.env.MONGO_URI}`);
 console.log(`   MONGO_URI (primeros 50 chars): ${process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 50) + '...' : 'NO DEFINIDA'}`);
 console.log(`   URI usada: ${mongoUri.includes('localhost') ? 'LOCAL' : 'ATLAS (NUBE)'}`);
-console.log(`   Conectando a: ${mongoUri.includes('localhost') ? 'Base de datos LOCAL' : 'Base de datos EN LA NUBE'}`);
+console.log(`   Conectando a: ${mongoUri.includes('localhost') ? 'Base de datos LOCAL' : 'Base de datos EN LA NUBE'}\n`);
+
+// ⚠️ ADVERTENCIA CRÍTICA si MONGO_URI no está configurada en producción
+if (!process.env.MONGO_URI && process.env.NODE_ENV === 'production') {
+  console.error('\n⚠️⚠️⚠️ ERROR CRÍTICO: MONGO_URI NO ESTÁ CONFIGURADA ⚠️⚠️⚠️');
+  console.error('   El backend está intentando conectarse a MongoDB LOCAL (localhost:27017)');
+  console.error('   pero está en PRODUCCIÓN. Debes configurar MONGO_URI en Render.');
+  console.error('\n   PASOS PARA CORREGIR:');
+  console.error('   1. Ve a Render Dashboard → Tu servicio');
+  console.error('   2. Click en "Environment"');
+  console.error('   3. Agrega la variable:');
+  console.error('      Key: MONGO_URI');
+  console.error('      Value: mongodb+srv://usuario:password@cluster0.xxxxx.mongodb.net/cosechando?retryWrites=true&w=majority');
+  console.error('   4. Guarda los cambios');
+  console.error('   5. Render reiniciará automáticamente\n');
+}
 
 mongoose.connect(mongoUri, {
   serverSelectionTimeoutMS: 10000, // Aumentado a 10 segundos para Render
@@ -80,11 +95,25 @@ mongoose.connect(mongoUri, {
     console.log(`🌐 Host: ${mongoose.connection.host}`);
   })
   .catch(err => {
-    console.error('❌ Error conectando a MongoDB:', err.message);
-    console.error('❌ Error completo:', err);
-    console.log('💡 Verifica que MongoDB esté ejecutándose localmente o que la URL de Atlas sea correcta');
-    console.log('💡 Verifica MONGO_URI en Render Dashboard → Environment');
-    console.log('⚠️ El servidor continuará ejecutándose, pero las operaciones de base de datos fallarán');
+    console.error('\n❌❌❌ ERROR CONECTANDO A MONGODB ❌❌❌');
+    console.error('   Mensaje:', err.message);
+    console.error('\n   CAUSA PROBABLE:');
+    if (mongoUri.includes('localhost')) {
+      console.error('   ⚠️ MONGO_URI no está configurada en Render');
+      console.error('   ⚠️ Está usando MongoDB LOCAL (localhost:27017)');
+      console.error('   ⚠️ En producción necesitas MongoDB Atlas');
+    } else {
+      console.error('   ⚠️ La URL de MongoDB Atlas puede ser incorrecta');
+      console.error('   ⚠️ Verifica que MONGO_URI sea correcta');
+    }
+    console.error('\n   SOLUCIÓN:');
+    console.error('   1. Ve a Render Dashboard → Tu servicio');
+    console.error('   2. Click en "Environment"');
+    console.error('   3. Agrega/verifica la variable MONGO_URI:');
+    console.error('      Formato: mongodb+srv://usuario:password@cluster0.xxxxx.mongodb.net/cosechando?retryWrites=true&w=majority');
+    console.error('   4. Guarda los cambios');
+    console.error('   5. Render reiniciará automáticamente\n');
+    console.error('⚠️ El servidor continuará ejecutándose, pero las operaciones de base de datos fallarán\n');
     // NO salir del proceso - permitir que el servidor inicie
   });
 
