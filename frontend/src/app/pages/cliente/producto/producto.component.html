@@ -37,7 +37,7 @@
                 </div>
                 <div class="featured__item__text">
                     <h6>{{ product.name}}</h6>
-                    <h5>${{ product.price.toFixed(2) }}</h5>
+                    <h5>${{ (product.price || 0).toFixed(2) }}</h5>
                     <small class="text-muted">por {{ getUnitName(product.unit || 'unidad') }}</small>
                 </div>
             </div>
@@ -45,7 +45,11 @@
     </div>
 
     <!-- Mensaje cuando no hay resultados -->
-    <div *ngIf="filteredProducts.length === 0" class="no-results">
+    <div *ngIf="filteredProducts.length === 0 && products.length === 0" class="no-results">
+        <h3><i class="fas fa-box-open"></i> No se encontraron productos</h3>
+        <p>No hay productos disponibles en este momento.</p>
+    </div>
+    <div *ngIf="filteredProducts.length === 0 && products.length > 0" class="no-results">
         <h3><i class="fas fa-search"></i> No se encontraron productos</h3>
         <p *ngIf="shouldShowSearchInfo()">No hay productos que coincidan con "{{ searchTerm }}"</p>
         <p *ngIf="!searchExecuted && selectedFilter !== 'Todos'">No hay productos en la categoría "{{ selectedFilter }}"

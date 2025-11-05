@@ -27,17 +27,21 @@ export class ProductoComponent implements OnInit{
   quantity: number = 1;
 
   get filteredProducts() {
-    let filtered = this.selectedFilter === 'Todos' 
-     ? this.products
-     : this.products.filter(product => product.category === this.selectedFilter);
+    // Empezar con todos los productos
+    let filtered = this.products;
+
+    // Aplicar filtro por categoría
+    if (this.selectedFilter !== 'Todos') {
+      filtered = filtered.filter(product => product.category === this.selectedFilter);
+    }
 
     // Aplicar filtro de búsqueda
     if (this.searchTerm.trim()) {
       const searchLower = this.searchTerm.toLowerCase();
       filtered = filtered.filter(product => 
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description.toLowerCase().includes(searchLower) ||
-        product.category.toLowerCase().includes(searchLower)
+        (product.name || '').toLowerCase().includes(searchLower) ||
+        (product.description || '').toLowerCase().includes(searchLower) ||
+        (product.category || '').toLowerCase().includes(searchLower)
       );
     }
 
@@ -87,29 +91,41 @@ export class ProductoComponent implements OnInit{
               private router: Router) { } 
 
   ngOnInit(): void {
-  this.productService.getProducts().subscribe(
-    (data: Product[]) => {
-      this.products = data;
-      console.log('Productos cargados:', this.products);
-    },
-    (error: any) => {
-      console.error('Error al cargar productos:', error);
-    }
-  );
+    this.loadProducts();
 
-  // Suscribirse a cambios en el término de búsqueda
-  this.searchService.searchTerm$.subscribe(term => {
-    this.searchTerm = term;
-    this.currentPage = 1; // Reiniciar a la primera página al buscar
-  });
+    // Suscribirse a cambios en el término de búsqueda
+    this.searchService.searchTerm$.subscribe(term => {
+      this.searchTerm = term;
+      this.currentPage = 1; // Reiniciar a la primera página al buscar
+    });
 
-  // Suscribirse a cambios en el estado de búsqueda ejecutada
-  this.searchService.searchExecuted$.subscribe(executed => {
-    this.searchExecuted = executed;
-  });
+    // Suscribirse a cambios en el estado de búsqueda ejecutada
+    this.searchService.searchExecuted$.subscribe(executed => {
+      this.searchExecuted = executed;
+    });
 
-  console.log('ProductoComponent inicializado');
-}
+    console.log('ProductoComponent inicializado');
+  }
+
+  loadProducts(): void {
+    this.productService.getProducts().subscribe({
+      next: (data: Product[]) => {
+        this.products = data || [];
+        console.log('Productos cargados:', this.products.length, this.products);
+        if (this.products.length === 0) {
+          console.warn('No se encontraron productos en la base de datos');
+        }
+      },
+      error: (error: any) => {
+        console.error('Error al cargar productos:', error);
+        this.products = [];
+        // Mostrar mensaje de error al usuario si es necesario
+        if (error.status === 0) {
+          console.error('No se pudo conectar con el servidor. Verifica que el backend esté ejecutándose.');
+        }
+      }
+    });
+  }
 
   //Detalle del producto
   viewDetails(product: Product): void {
@@ -123,7 +139,7 @@ export class ProductoComponent implements OnInit{
     this.cartService.addToCart(product, this.quantity);
     
     // Mostrar notificación sutil
-    this.showAddedToCartNotification(product.name);
+    this.showAddedToCartNotification(product.name || 'Producto');
   }
 
   showAddedToCartNotification(productName: string): void {
