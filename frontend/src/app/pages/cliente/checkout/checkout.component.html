@@ -26,6 +26,7 @@
                                         type="text" 
                                         [(ngModel)]="guestData.firstName"
                                         name="firstName"
+                                        placeholder="Ingresa tu nombre"
                                         required
                                         [class.error]="formErrors.firstName"
                                     >
@@ -39,6 +40,7 @@
                                         type="text" 
                                         [(ngModel)]="guestData.lastName"
                                         name="lastName"
+                                        placeholder="Ingresa tu apellido"
                                         required
                                         [class.error]="formErrors.lastName"
                                     >
@@ -56,6 +58,7 @@
                                         type="email" 
                                         [(ngModel)]="guestData.email"
                                         name="email"
+                                        placeholder="ejemplo@correo.com"
                                         required
                                         [class.error]="formErrors.email"
                                     >
@@ -69,6 +72,7 @@
                                         type="tel" 
                                         [(ngModel)]="guestData.phone"
                                         name="phone"
+                                        placeholder="1234-5678"
                                         required
                                         [class.error]="formErrors.phone"
                                     >
@@ -86,6 +90,8 @@
                                 (change)="onProvinceChange()"
                                 [required]="shippingMethod === 'delivery'"
                                 [class.error]="formErrors.province"
+                                aria-label="Selecciona una provincia"
+                                title="Provincia"
                             >
                                 <option value="">Selecciona una provincia</option>
                                 <option *ngFor="let province of provinces" [value]="province.value">
@@ -106,6 +112,8 @@
                                         [required]="shippingMethod === 'delivery'"
                                         [class.error]="formErrors.district"
                                         [disabled]="!guestData.province"
+                                        aria-label="Selecciona un distrito"
+                                        title="Distrito"
                                     >
                                         <option value="">Selecciona un distrito</option>
                                         <option *ngFor="let district of availableDistricts" [value]="district">
@@ -124,6 +132,8 @@
                                         [required]="shippingMethod === 'delivery'"
                                         [class.error]="formErrors.corregimiento"
                                         [disabled]="!guestData.district"
+                                        aria-label="Selecciona un corregimiento"
+                                        title="Corregimiento"
                                     >
                                         <option value="">Selecciona un corregimiento</option>
                                         <option *ngFor="let corregimiento of availableCorregimientos" [value]="corregimiento">
@@ -150,7 +160,7 @@
                                 [(ngModel)]="guestData.apartment"
                                 name="apartment"
                                 placeholder="Apartamento, Casa, Edificio (Opcional)"
-                                style="margin-top: 10px;"
+                                class="apartment-input"
                             >
                             <span class="error-message" *ngIf="formErrors.address">{{ formErrors.address }}</span>
                         </div>
@@ -229,7 +239,7 @@
                                 <i class="fas fa-check"></i> Procesar Orden
                             </button>
                             
-                            <div id="paypal-button-container" style="display: none;">
+                            <div id="paypal-button-container" class="paypal-container-hidden">
                             </div>
                         </div>
                     </div>

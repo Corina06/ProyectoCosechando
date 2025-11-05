@@ -299,7 +299,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
     const processBtn = document.querySelector('.process-order-btn') as HTMLElement;
     
     if (paypalContainer && processBtn) {
-      paypalContainer.style.display = 'block';
+      paypalContainer.classList.remove('paypal-container-hidden');
       processBtn.style.display = 'none';
     }
 
