@@ -178,9 +178,16 @@ app.get('/api', (req, res) => {
 // Servir el frontend Angular (debe ir al final, después de todas las rutas de API)
 if (process.env.NODE_ENV === 'production' && frontendPath && fs.existsSync(frontendPath)) {
   // Servir archivos estáticos del frontend (JS, CSS, imágenes, etc.)
-  app.use(express.static(frontendPath));
+  // IMPORTANTE: Debe ir ANTES del catch-all para que los archivos estáticos se sirvan primero
+  app.use(express.static(frontendPath, {
+    maxAge: '1y', // Cache por 1 año para archivos estáticos
+    etag: true
+  }));
+  
+  console.log('✅ Archivos estáticos del frontend configurados');
   
   // Catch-all: Todas las rutas que no sean /api/* o /health van al frontend Angular
+  // Esto permite que Angular maneje el routing del lado del cliente
   app.get('*', (req, res) => {
     // Si es una ruta de API o health, ya fue manejada arriba
     if (req.path.startsWith('/api') || req.path === '/health') {
@@ -188,13 +195,19 @@ if (process.env.NODE_ENV === 'production' && frontendPath && fs.existsSync(front
     }
     
     // Para cualquier otra ruta, servir index.html del frontend
+    // Angular Router manejará las rutas del lado del cliente
     const indexPath = path.join(frontendPath, 'index.html');
     res.sendFile(indexPath);
   });
   
   console.log('✅ Frontend Angular configurado para servir en producción');
+  console.log(`   Rutas API: /api/*`);
+  console.log(`   Health check: /health`);
+  console.log(`   Frontend: todas las demás rutas`);
 } else if (process.env.NODE_ENV === 'production') {
   // Frontend no compilado - mostrar mensaje útil
+  console.warn('⚠️ Frontend no compilado - solo API disponible');
+  
   app.get('*', (req, res) => {
     if (req.path.startsWith('/api') || req.path === '/health') {
       return res.status(404).json({ error: 'Endpoint not found' });
@@ -212,6 +225,10 @@ Build Command: npm run build
 o
 Build Command: bash build.sh
           </pre>
+          <p style="margin-top: 20px;">
+            <strong>API disponible en:</strong><br>
+            <a href="/api">/api</a> | <a href="/health">/health</a>
+          </p>
         </body>
       </html>
     `);
