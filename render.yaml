@@ -1,0 +1,32 @@
+services:
+  # Backend API Service
+  - type: web
+    name: cosechando-backend
+    env: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        sync: false  # Se configurará manualmente en Render Dashboard
+      - key: FRONTEND_URL
+        sync: false  # Se configurará después de desplegar el frontend
+    healthCheckPath: /health
+
+  # Frontend Web Service
+  - type: web
+    name: cosechando-frontend
+    env: node
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build:prod
+    startCommand: cd frontend && npm run serve:prod
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+

@@ -8,8 +8,29 @@ const bodyParser = require('body-parser');
 const app = express();
 
 // Middleware CORS (DEBE IR PRIMERO, antes de las rutas)
+const allowedOrigins = [
+  'http://localhost:4200',
+  'http://localhost:4201',
+  process.env.FRONTEND_URL // URL del frontend en producción
+].filter(Boolean); // Elimina valores undefined/null
+
 app.use(cors({
-  origin: ['http://localhost:4200', 'http://localhost:4201'],
+  origin: function (origin, callback) {
+    // Permitir requests sin origin (como mobile apps o curl)
+    if (!origin) return callback(null, true);
+    
+    // En desarrollo, permitir cualquier origen local
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    // En producción, verificar contra la lista de orígenes permitidos
+    if (allowedOrigins.some(allowed => origin.includes(allowed.replace('https://', '').replace('http://', '')))) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Temporalmente permitir todos para facilitar el despliegue
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
@@ -80,7 +101,7 @@ app.get('/health', (req, res) => {
 });
 
 // Inicia el servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on ${PORT}`);
