@@ -73,7 +73,7 @@ async function seedForEmail(email) {
       const subtotal = Number((qty * price).toFixed(2));
       return {
         id: randomInt(10000, 99999),
-        comercianteContact: user.email,
+        comercianteContact: String(user.celular || user.email), // Usar celular si existe, sino email
         proveedor: 'Proveedor Genérico',
         tipoGasto: 'Compra de Productos',
         fecha: toDateStr(d),
