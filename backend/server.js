@@ -6,6 +6,8 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 const User = require('./models/user'); 
 const authRoutes = require('./routes/auth');
 const bodyParser = require('body-parser');
@@ -49,11 +51,20 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 // Servir archivos estáticos (fotos de perfil)
 app.use('/uploads', express.static('uploads'));
 
-// Servir el frontend compilado (solo en producción)
+// Configurar ruta del frontend compilado (solo en producción)
+let frontendPath = null;
 if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  const frontendPath = path.join(__dirname, '../frontend/dist/cosechando/browser');
-  app.use(express.static(frontendPath));
+  frontendPath = path.join(__dirname, '../frontend/dist/cosechando/browser');
+  console.log(`📁 Frontend path: ${frontendPath}`);
+  
+  // Verificar que el frontend esté compilado
+  if (!fs.existsSync(frontendPath)) {
+    console.error(`⚠️ ADVERTENCIA: Frontend no encontrado en ${frontendPath}`);
+    console.error('   Asegúrate de ejecutar el build del frontend antes de iniciar el backend');
+    console.error('   Comando: cd frontend && npm run build:prod\n');
+  } else {
+    console.log('✅ Frontend compilado encontrado\n');
+  }
 }
 
 // Conectar a MongoDB con opciones mejoradas
@@ -156,20 +167,27 @@ app.get('/api', (req, res) => {
 });
 
 // Servir el frontend Angular (debe ir al final, después de todas las rutas de API)
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  const frontendPath = path.join(__dirname, '../frontend/dist/cosechando/browser');
+if (process.env.NODE_ENV === 'production' && frontendPath) {
+  // Servir archivos estáticos del frontend (JS, CSS, imágenes, etc.)
+  app.use(express.static(frontendPath));
   
-  // Todas las rutas que no sean /api/* o /health van al frontend
+  // Catch-all: Todas las rutas que no sean /api/* o /health van al frontend Angular
   app.get('*', (req, res) => {
     // Si es una ruta de API o health, ya fue manejada arriba
     if (req.path.startsWith('/api') || req.path === '/health') {
       return res.status(404).json({ error: 'Endpoint not found' });
     }
     
-    // Para cualquier otra ruta, servir index.html del frontend
-    res.sendFile(path.join(frontendPath, 'index.html'));
+    // Verificar que index.html existe antes de servirlo
+    const indexPath = path.join(frontendPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res.status(404).send('Frontend no encontrado. Asegúrate de compilar el frontend primero.');
+    }
   });
+  
+  console.log('✅ Frontend Angular configurado para servir en producción');
 } else {
   // En desarrollo, solo mostrar mensaje
   app.get('/', (req, res) => {
