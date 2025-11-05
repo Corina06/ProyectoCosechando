@@ -3,7 +3,14 @@ const jwt = require('jsonwebtoken');
 
 const registerUser = async (req, res) => {
   try {
-    console.log('📝 Intento de registro recibido:', req.body);
+    // No loguear contraseña ni datos sensibles
+    console.log('📝 Intento de registro recibido (sanitizado):', {
+      name: req.body?.name,
+      apellido: req.body?.apellido,
+      email: req.body?.email,
+      celular: req.body?.celular,
+      hasPassword: Boolean(req.body?.password)
+    });
     const { name, apellido, email, direccion, local, puesto, celular, fecha, banco, tipo, cuenta, password } = req.body;
 
     // Validar datos requeridos
@@ -41,6 +48,13 @@ const registerUser = async (req, res) => {
     console.log('✅ Usuario guardado exitosamente:', user._id);
 
     // Crear token (extendido a 24 horas)
+    if (!process.env.JWT_SECRET) {
+      console.error('❌ JWT_SECRET no está definido en el entorno. Configúralo en Render → Environment');
+      return res.status(500).json({
+        message: 'Error del servidor',
+        error: 'Configuración faltante: JWT_SECRET'
+      });
+    }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     console.log('🔑 Token JWT creado para usuario:', user._id);
 
@@ -64,8 +78,14 @@ const registerUser = async (req, res) => {
     });
     console.log('✅ Respuesta de registro enviada exitosamente');
   } catch (error) {
+    // Manejo específico de errores comunes
+    if (error && (error.code === 11000 || error.code === 'E11000')) {
+      console.warn('⚠️ Intento de registro con email duplicado:', req.body?.email);
+      return res.status(400).json({ message: 'El usuario ya existe' });
+    }
+
     console.error('❌ Error en registerUser:', error);
-    res.status(500).json({ message: 'Error del servidor', error: error.message });
+    res.status(500).json({ message: 'Error del servidor', error: error?.message || String(error) });
   }
 };
 
@@ -120,7 +140,7 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error en loginUser:', error);
-    res.status(500).json({ message: 'Error del servidor', error });
+    res.status(500).json({ message: 'Error del servidor', error: error?.message || String(error) });
   }
 };
 
