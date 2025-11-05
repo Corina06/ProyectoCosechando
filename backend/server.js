@@ -1,4 +1,8 @@
-require('dotenv').config();
+// Cargar variables de entorno desde archivo .env solo en desarrollo
+// En producción (Render), las variables vienen del sistema (process.env)
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -45,12 +49,26 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 // Servir archivos estáticos (fotos de perfil)
 app.use('/uploads', express.static('uploads'));
 
+// Servir el frontend compilado (solo en producción)
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  const frontendPath = path.join(__dirname, '../frontend/dist/cosechando/browser');
+  app.use(express.static(frontendPath));
+}
+
 // Conectar a MongoDB con opciones mejoradas
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/cosechando';
-console.log(`Conectando a MongoDB: ${mongoUri.includes('localhost') ? 'Base de datos LOCAL' : 'Base de datos EN LA NUBE'}`);
+
+// Logging detallado para debugging en Render
+console.log('🔍 CONFIGURACIÓN DE MONGODB:');
+console.log(`   NODE_ENV: ${process.env.NODE_ENV || 'no definido'}`);
+console.log(`   MONGO_URI existe: ${!!process.env.MONGO_URI}`);
+console.log(`   MONGO_URI (primeros 50 chars): ${process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 50) + '...' : 'NO DEFINIDA'}`);
+console.log(`   URI usada: ${mongoUri.includes('localhost') ? 'LOCAL' : 'ATLAS (NUBE)'}`);
+console.log(`   Conectando a: ${mongoUri.includes('localhost') ? 'Base de datos LOCAL' : 'Base de datos EN LA NUBE'}`);
 
 mongoose.connect(mongoUri, {
-  serverSelectionTimeoutMS: 5000, // Timeout de 5 segundos
+  serverSelectionTimeoutMS: 10000, // Aumentado a 10 segundos para Render
   socketTimeoutMS: 45000,
   maxPoolSize: 10,
   retryWrites: true
@@ -58,10 +76,14 @@ mongoose.connect(mongoUri, {
   .then(() => {
     console.log('✅ Conectado exitosamente a MongoDB');
     console.log(`📍 Tipo: ${mongoUri.includes('localhost') ? 'LOCAL (desarrollo)' : 'NUBE (producción)'}`);
+    console.log(`📊 Base de datos: ${mongoose.connection.name}`);
+    console.log(`🌐 Host: ${mongoose.connection.host}`);
   })
   .catch(err => {
     console.error('❌ Error conectando a MongoDB:', err.message);
+    console.error('❌ Error completo:', err);
     console.log('💡 Verifica que MongoDB esté ejecutándose localmente o que la URL de Atlas sea correcta');
+    console.log('💡 Verifica MONGO_URI en Render Dashboard → Environment');
     console.log('⚠️ El servidor continuará ejecutándose, pero las operaciones de base de datos fallarán');
     // NO salir del proceso - permitir que el servidor inicie
   });
@@ -84,12 +106,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use('/api/admin', adminRoutes);
 }
 
-// Ruta para la raíz
-app.get('/', (req, res) => {
-  res.send('API is running');
-});
-
-// Health check endpoint
+// Health check endpoint (antes del catch-all del frontend)
 app.get('/health', (req, res) => {
   const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
   res.json({
@@ -99,6 +116,37 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Ruta para la raíz - API info
+app.get('/api', (req, res) => {
+  res.json({ 
+    message: 'API is running',
+    status: 'ok',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  });
+});
+
+// Servir el frontend Angular (debe ir al final, después de todas las rutas de API)
+if (process.env.NODE_ENV === 'production') {
+  const path = require('path');
+  const frontendPath = path.join(__dirname, '../frontend/dist/cosechando/browser');
+  
+  // Todas las rutas que no sean /api/* o /health van al frontend
+  app.get('*', (req, res) => {
+    // Si es una ruta de API o health, ya fue manejada arriba
+    if (req.path.startsWith('/api') || req.path === '/health') {
+      return res.status(404).json({ error: 'Endpoint not found' });
+    }
+    
+    // Para cualquier otra ruta, servir index.html del frontend
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+} else {
+  // En desarrollo, solo mostrar mensaje
+  app.get('/', (req, res) => {
+    res.send('API is running (Development Mode)');
+  });
+}
 
 // Inicia el servidor
 const PORT = process.env.PORT || 3001;

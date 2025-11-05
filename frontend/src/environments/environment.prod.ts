@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
-  // IMPORTANTE: Actualiza esta URL con la URL de tu backend en Render
-  // Ejemplo: 'https://cosechando-backend.onrender.com/api'
-  apiUrl: 'https://cosechando-backend.onrender.com/api' // Cambiar por tu URL de producción en Render
+  // IMPORTANTE: Como backend y frontend están en el mismo servicio, usar ruta relativa
+  // O usar la URL completa del servicio en Render
+  apiUrl: '/api' // Ruta relativa - funciona si frontend y backend están en el mismo dominio
+  // Si prefieres usar URL absoluta, descomenta la siguiente línea y comenta la de arriba:
+  // apiUrl: 'https://tu-servicio.onrender.com/api'
 };
