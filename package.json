@@ -1,0 +1,10 @@
+{
+  "name": "proyecto-cosechando",
+  "version": "1.0.0",
+  "description": "Proyecto Cosechando - Aplicación web para gestión de productos agrícolas",
+  "private": true,
+  "scripts": {
+    "install": "echo 'Use cd frontend && npm install or cd backend && npm install'"
+  }
+}
+
