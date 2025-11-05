@@ -179,35 +179,57 @@ app.get('/api', (req, res) => {
 if (process.env.NODE_ENV === 'production' && frontendPath && fs.existsSync(frontendPath)) {
   // Servir archivos estáticos del frontend (JS, CSS, imágenes, etc.)
   // IMPORTANTE: Debe ir ANTES del catch-all para que los archivos estáticos se sirvan primero
+  // Solo archivos físicos (JS, CSS, imágenes) son estáticos, el resto es dinámico
   app.use(express.static(frontendPath, {
     maxAge: '1y', // Cache por 1 año para archivos estáticos
-    etag: true
+    etag: true,
+    // No servir index.html como archivo estático, el catch-all lo manejará
+    index: false
   }));
   
   console.log('✅ Archivos estáticos del frontend configurados');
   
-  // Catch-all: Todas las rutas que no sean /api/* o /health van al frontend Angular
-  // Esto permite que Angular maneje el routing del lado del cliente
+  // Catch-all SOLO para GET requests de rutas del frontend Angular
+  // IMPORTANTE: Solo captura GET, las rutas API (POST, PUT, DELETE, etc.) ya fueron manejadas arriba
+  // Las rutas API dinámicas con GET también fueron manejadas antes de este catch-all
   app.get('*', (req, res) => {
-    // Si es una ruta de API o health, ya fue manejada arriba
-    if (req.path.startsWith('/api') || req.path === '/health') {
+    // Verificar que NO sea una ruta de API (ya fueron manejadas arriba)
+    if (req.path.startsWith('/api')) {
+      // Esta ruta debería haber sido manejada por las rutas API
+      // Si llegamos aquí, es un endpoint no encontrado
       return res.status(404).json({ error: 'Endpoint not found' });
     }
     
-    // Para cualquier otra ruta, servir index.html del frontend
-    // Angular Router manejará las rutas del lado del cliente
+    // Verificar que NO sea health check
+    if (req.path === '/health') {
+      return res.status(404).json({ error: 'Endpoint not found' });
+    }
+    
+    // Verificar que NO sea uploads (archivos estáticos del backend)
+    if (req.path.startsWith('/uploads')) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+    
+    // Para cualquier otra ruta GET, servir index.html del frontend
+    // Angular Router manejará las rutas del lado del cliente (dinámicamente)
     const indexPath = path.join(frontendPath, 'index.html');
-    res.sendFile(indexPath);
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res.status(404).send('Frontend index.html not found');
+    }
   });
   
   console.log('✅ Frontend Angular configurado para servir en producción');
-  console.log(`   Rutas API: /api/*`);
+  console.log(`   Rutas API dinámicas: /api/* (GET, POST, PUT, DELETE)`);
   console.log(`   Health check: /health`);
-  console.log(`   Frontend: todas las demás rutas`);
+  console.log(`   Archivos estáticos: JS, CSS, imágenes del frontend`);
+  console.log(`   Frontend SPA: todas las demás rutas GET → Angular Router`);
 } else if (process.env.NODE_ENV === 'production') {
   // Frontend no compilado - mostrar mensaje útil
   console.warn('⚠️ Frontend no compilado - solo API disponible');
   
+  // Manejar todas las rutas que no sean API
   app.get('*', (req, res) => {
     if (req.path.startsWith('/api') || req.path === '/health') {
       return res.status(404).json({ error: 'Endpoint not found' });
