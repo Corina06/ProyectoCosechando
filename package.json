@@ -4,7 +4,8 @@
   "description": "Proyecto Cosechando - Aplicación web para gestión de productos agrícolas",
   "private": true,
   "scripts": {
-    "install": "echo 'Use cd frontend && npm install or cd backend && npm install'"
+    "install": "cd frontend && npm install && npm run build:prod",
+    "start": "cd frontend && npm run serve:dist"
   }
 }
 
