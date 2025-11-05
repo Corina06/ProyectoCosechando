@@ -31,6 +31,7 @@ mongoose.connect(mongoUri)
   .catch(err => {
     console.error('❌ Error conectando a MongoDB:', err);
     console.log('💡 Verifica que MongoDB esté ejecutándose localmente o que la URL de Atlas sea correcta');
+    process.exit(1); // Salir del proceso si no se puede conectar
   });
 
 // Rutas
