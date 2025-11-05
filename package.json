@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "install": "cd backend && npm install && cd ../frontend && npm install && cd ../frontend && npm run build:prod",
+    "build": "cd backend && npm install && cd ../frontend && npm install && cd ../frontend && npm run build:prod",
     "start": "cd backend && npm start"
   }
 }
