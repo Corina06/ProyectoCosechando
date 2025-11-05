@@ -14,12 +14,12 @@
 
   <div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
     <i class="fas fa-exclamation-triangle"></i> {{ error }}
-    <button type="button" class="btn-close" (click)="error = ''"></button>
+    <button type="button" class="btn-close" (click)="error = ''" aria-label="Cerrar mensaje de error"></button>
   </div>
 
   <div *ngIf="changesSaved" class="alert alert-success alert-dismissible fade show">
     <i class="fas fa-check-circle"></i> {{ successMessage }}
-    <button type="button" class="btn-close" (click)="changesSaved = false"></button>
+    <button type="button" class="btn-close" (click)="changesSaved = false" aria-label="Cerrar mensaje de éxito"></button>
   </div>
 
   <!-- Mostrar mensaje si no hay datos del comerciante -->
