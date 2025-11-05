@@ -13,6 +13,12 @@ const registerUser = async (req, res) => {
     });
     const { name, apellido, email, direccion, local, puesto, celular, fecha, banco, tipo, cuenta, password } = req.body;
 
+    // Forzar error para diagnóstico si se envía el header X-Force-Error: register
+    if (req.headers['x-force-error'] === 'register') {
+      console.warn('⚠️ Forzando error de diagnóstico en registro por cabecera X-Force-Error');
+      throw new Error('Forced register diagnostic error');
+    }
+
     // Validar datos requeridos
     if (!name || !apellido || !email || !password) {
       console.log('❌ Datos faltantes en el registro');
@@ -44,6 +50,20 @@ const registerUser = async (req, res) => {
     });
 
     console.log('💾 Guardando usuario en la base de datos...');
+    console.log('🧪 Tipos de campos recibidos:', {
+      name: typeof name,
+      apellido: typeof apellido,
+      email: typeof email,
+      direccion: typeof direccion,
+      local: typeof local,
+      puesto: typeof puesto,
+      celular: typeof celular,
+      fecha: typeof fecha,
+      banco: typeof banco,
+      tipo: typeof tipo,
+      cuenta: typeof cuenta,
+      password: typeof password
+    });
     await user.save();
     console.log('✅ Usuario guardado exitosamente:', user._id);
 
@@ -55,7 +75,13 @@ const registerUser = async (req, res) => {
         error: 'Configuración faltante: JWT_SECRET'
       });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    let token;
+    try {
+      token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    } catch (jwtErr) {
+      console.error('❌ Error generando JWT:', jwtErr);
+      return res.status(500).json({ message: 'Error del servidor', error: 'Fallo al generar token' });
+    }
     console.log('🔑 Token JWT creado para usuario:', user._id);
 
     res.status(201).json({
@@ -78,10 +104,20 @@ const registerUser = async (req, res) => {
     });
     console.log('✅ Respuesta de registro enviada exitosamente');
   } catch (error) {
-    // Manejo específico de errores comunes
+    // Duplicado de clave (índice único: email)
     if (error && (error.code === 11000 || error.code === 'E11000')) {
       console.warn('⚠️ Intento de registro con email duplicado:', req.body?.email);
       return res.status(400).json({ message: 'El usuario ya existe' });
+    }
+
+    // Error de validación de Mongoose
+    if (error && error.name === 'ValidationError') {
+      const detalles = Object.keys(error.errors || {}).reduce((acc, key) => {
+        acc[key] = error.errors[key]?.message || 'invalid';
+        return acc;
+      }, {});
+      console.error('❌ ValidationError en registro:', detalles);
+      return res.status(400).json({ message: 'Datos inválidos', details: detalles });
     }
 
     console.error('❌ Error en registerUser:', error);
