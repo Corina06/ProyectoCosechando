@@ -301,3 +301,14 @@ app.listen(PORT, () => {
     process.exit(1);
   }
 });
+
+// En tu archivo de rutas o server.js
+app.get('/test-db', async (req, res) => {
+  try {
+    // Si usas Mongoose
+    await mongoose.connection.db.admin().ping();
+    res.json({ ok: true, message: '¡Conexión a MongoDB exitosa!' });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
