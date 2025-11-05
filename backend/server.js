@@ -120,6 +120,8 @@ if (!process.env.MONGO_URI && process.env.NODE_ENV === 'production') {
 }
 
 mongoose.connect(mongoUri, {
+  // Forzar base de datos objetivo (evita caer en "test" cuando la URI no trae path)
+  dbName: process.env.DB_NAME || 'cosechando',
   serverSelectionTimeoutMS: 10000, // Aumentado a 10 segundos para Render
   socketTimeoutMS: 45000,
   maxPoolSize: 10,
