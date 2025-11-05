@@ -59,9 +59,18 @@ if (process.env.NODE_ENV === 'production') {
   
   // Verificar que el frontend esté compilado
   if (!fs.existsSync(frontendPath)) {
-    console.error(`⚠️ ADVERTENCIA: Frontend no encontrado en ${frontendPath}`);
-    console.error('   Asegúrate de ejecutar el build del frontend antes de iniciar el backend');
-    console.error('   Comando: cd frontend && npm run build:prod\n');
+    console.error(`\n⚠️⚠️⚠️ ERROR CRÍTICO: Frontend no encontrado ⚠️⚠️⚠️`);
+    console.error(`   Ruta esperada: ${frontendPath}`);
+    console.error('\n   CAUSA: El frontend no fue compilado durante el build');
+    console.error('\n   SOLUCIÓN:');
+    console.error('   1. Ve a Render Dashboard → Tu servicio');
+    console.error('   2. Click en "Settings"');
+    console.error('   3. Cambia el Build Command a uno de estos:');
+    console.error('      Opción A: bash build.sh');
+    console.error('      Opción B: npm run build');
+    console.error('      Opción C: cd backend && npm install && cd ../frontend && npm install && npm run build:prod');
+    console.error('   4. Guarda los cambios');
+    console.error('   5. Render reiniciará automáticamente\n');
   } else {
     console.log('✅ Frontend compilado encontrado\n');
   }
@@ -167,7 +176,7 @@ app.get('/api', (req, res) => {
 });
 
 // Servir el frontend Angular (debe ir al final, después de todas las rutas de API)
-if (process.env.NODE_ENV === 'production' && frontendPath) {
+if (process.env.NODE_ENV === 'production' && frontendPath && fs.existsSync(frontendPath)) {
   // Servir archivos estáticos del frontend (JS, CSS, imágenes, etc.)
   app.use(express.static(frontendPath));
   
@@ -178,16 +187,35 @@ if (process.env.NODE_ENV === 'production' && frontendPath) {
       return res.status(404).json({ error: 'Endpoint not found' });
     }
     
-    // Verificar que index.html existe antes de servirlo
+    // Para cualquier otra ruta, servir index.html del frontend
     const indexPath = path.join(frontendPath, 'index.html');
-    if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath);
-    } else {
-      res.status(404).send('Frontend no encontrado. Asegúrate de compilar el frontend primero.');
-    }
+    res.sendFile(indexPath);
   });
   
   console.log('✅ Frontend Angular configurado para servir en producción');
+} else if (process.env.NODE_ENV === 'production') {
+  // Frontend no compilado - mostrar mensaje útil
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api') || req.path === '/health') {
+      return res.status(404).json({ error: 'Endpoint not found' });
+    }
+    
+    res.status(503).send(`
+      <html>
+        <head><title>Frontend no disponible</title></head>
+        <body style="font-family: Arial, sans-serif; padding: 40px; text-align: center;">
+          <h1>⚠️ Frontend no compilado</h1>
+          <p>El frontend necesita ser compilado durante el build.</p>
+          <p>Por favor, configura el Build Command en Render para compilar el frontend.</p>
+          <pre style="background: #f5f5f5; padding: 20px; border-radius: 5px; text-align: left; display: inline-block;">
+Build Command: npm run build
+o
+Build Command: bash build.sh
+          </pre>
+        </body>
+      </html>
+    `);
+  });
 } else {
   // En desarrollo, solo mostrar mensaje
   app.get('/', (req, res) => {
