@@ -13,6 +13,7 @@
     "check-data": "node checkData.js",
     "list-users": "node listUsers.js",
     "deploy-prep": "node deployPrep.js",
+    "clone-test-to-cosechando": "node scripts/database/clone-test-to-cosechando.js",
     "seed-user-data": "node scripts/database/seed-user-data.js",
     "reset-to-local": "cp .env.local .env && echo 'Configuración cambiada a local'",
     "test": "echo \"Error: no test specified\" && exit 1"
